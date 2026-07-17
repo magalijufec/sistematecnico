@@ -1,38 +1,135 @@
-<h2>Trabajos</h2>
+<div class="toolbar">
 
-<div class="acciones">
+    <button mat-raised-button color="primary" routerLink="/trabajos/nuevo">
 
-    <button
-    mat-raised-button
-    color="primary"
-    (click)="nuevo()">
+        <mat-icon>add</mat-icon>
 
-    <mat-icon>add</mat-icon>
+        Nuevo Trabajo
 
-    Nuevo Trabajo
-
-</button>
+    </button>
 
 </div>
 
-<table>
+<mat-card>
 
-    <tr *ngFor="let trabajo of trabajos">
+    <mat-card-header>
 
-        <td>{{trabajo.id}}</td>
+        <mat-card-title>
 
-        <td>{{trabajo.cliente}}</td>
+            Trabajos
 
-        <td>{{trabajo.tecnico}}</td>
+        </mat-card-title>
 
-        <td>{{trabajo.tarea}}</td>
+    </mat-card-header>
 
-        <td>
-            <span class="estado" [style.background-color]="trabajo.estadoColor">
-                {{ trabajo.estado }}
-            </span>
-        </td>
+    <mat-card-content>
 
-    </tr>
+        <table mat-table [dataSource]="trabajos">
 
-</table>
+            <!-- ID -->
+
+            <ng-container matColumnDef="id">
+
+                <th mat-header-cell *matHeaderCellDef>N°</th>
+
+                <td mat-cell *matCellDef="let t">
+
+                    {{t.id}}
+
+                </td>
+
+            </ng-container>
+
+            <!-- Cliente -->
+
+            <ng-container matColumnDef="cliente">
+
+                <th mat-header-cell *matHeaderCellDef>Cliente</th>
+
+                <td mat-cell *matCellDef="let t">
+
+                    {{t.cliente}}
+
+                </td>
+
+            </ng-container>
+
+            <!-- Técnico -->
+
+            <ng-container matColumnDef="tecnico">
+
+                <th mat-header-cell *matHeaderCellDef>Técnico</th>
+
+                <td mat-cell *matCellDef="let t">
+
+                    {{t.tecnico}}
+
+                </td>
+
+            </ng-container>
+
+            <!-- Tarea -->
+
+            <ng-container matColumnDef="tarea">
+
+                <th mat-header-cell *matHeaderCellDef>Tarea</th>
+
+                <td mat-cell *matCellDef="let t">
+
+                    {{t.tarea}}
+
+                </td>
+
+            </ng-container>
+
+            <!-- Estado -->
+
+            <ng-container matColumnDef="estado">
+
+                <th mat-header-cell *matHeaderCellDef>Estado</th>
+
+                <td mat-cell *matCellDef="let t">
+
+                    <span class="estado" [style.background]="t.estadoColor">
+
+                        {{t.estado}}
+
+                    </span>
+
+                </td>
+
+            </ng-container>
+
+            <!-- Acciones -->
+
+            <ng-container matColumnDef="acciones">
+
+                <th mat-header-cell *matHeaderCellDef></th>
+
+                <td mat-cell *matCellDef="let t">
+
+                    <button mat-icon-button color="primary" [routerLink]="['/trabajos', t.id]">
+
+                        <mat-icon>visibility</mat-icon>
+
+                    </button>
+
+                    <button mat-icon-button color="accent" [routerLink]="['/trabajos', t.id, 'editar']">
+
+                        <mat-icon>edit</mat-icon>
+
+                    </button>
+
+                </td>
+
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+        </table>
+
+    </mat-card-content>
+
+</mat-card>

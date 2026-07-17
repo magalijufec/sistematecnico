@@ -1,15 +1,24 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatTableModule } from '@angular/material/table';
 
 import { TrabajoService } from '../../../core/services/trabajo.service';
 import { Trabajo } from '../../../core/models/trabajo';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
 @Component({
   selector: 'app-trabajos-list',
   standalone: true,
-  imports: [CommonModule, MatButtonModule, MatIconModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    MatTableModule,
+    MatButtonModule,
+    MatIconModule,
+    MatCardModule
+  ],
   templateUrl: './trabajos-list.html',
   styleUrl: './trabajos-list.scss'
 })
@@ -19,24 +28,27 @@ export class TrabajosListComponent implements OnInit {
 
   trabajos: Trabajo[] = [];
 
+  displayedColumns = [
+    'id',
+    'cliente',
+    'tecnico',
+    'tarea',
+    'estado',
+    'acciones'
+  ];
+
   constructor() {
-  console.log('Constructor Trabajos');
-}
+  }
 
-ngOnInit() {
-  console.log('OnInit Trabajos');
-  this.cargarTrabajos();
-}
+  ngOnInit() {
+    this.cargarTrabajos();
+  }
 
-ngOnDestroy() {
-  console.log('Destroy Trabajos');
-}
+  private router = inject(Router);
 
-private router = inject(Router);
-
-nuevo() {
+  nuevo() {
     this.router.navigate(['/trabajos/nuevo']);
-}
+  }
 
   cargarTrabajos() {
     this.trabajoService.obtenerTodos().subscribe({

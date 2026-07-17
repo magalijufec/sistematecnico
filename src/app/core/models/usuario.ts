@@ -2,7 +2,7 @@ export interface Usuario {
 
   id: number;
 
-  usuario: string;
+  userName: string;
 
   nombreApellido: string;
 
