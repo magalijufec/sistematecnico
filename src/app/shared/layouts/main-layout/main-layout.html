@@ -1,0 +1,70 @@
+<mat-sidenav-container class="container">
+
+  <mat-sidenav #drawer mode="side" opened>
+
+    <div class="logo">
+
+      <mat-icon>engineering</mat-icon>
+
+      <span>Sistema Técnico</span>
+
+    </div>
+
+    <mat-nav-list>
+
+      @for(item of menu; track item.route){
+
+      <a
+        mat-list-item
+        [routerLink]="item.route"
+        routerLinkActive="active-link">
+
+        <mat-icon>{{item.icon}}</mat-icon>
+
+        <span> {{item.text}}</span>
+
+      </a>
+
+      }
+
+    </mat-nav-list>
+
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+
+    <mat-toolbar color="primary">
+
+      <button mat-icon-button>
+
+        <mat-icon>menu</mat-icon>
+
+      </button>
+
+      <span>Sistema Técnico</span>
+
+      <span class="spacer"></span>
+
+      <button mat-icon-button>
+
+        <mat-icon>notifications</mat-icon>
+
+      </button>
+
+      <button mat-icon-button>
+
+        <mat-icon>account_circle</mat-icon>
+
+      </button>
+
+    </mat-toolbar>
+
+    <div class="contenido">
+
+      <router-outlet></router-outlet>
+
+    </div>
+
+  </mat-sidenav-content>
+
+</mat-sidenav-container>

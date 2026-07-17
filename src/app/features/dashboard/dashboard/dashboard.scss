@@ -1,0 +1,73 @@
+.cards{
+
+    display:flex;
+
+    gap:20px;
+
+    margin-bottom:25px;
+
+    flex-wrap:wrap;
+
+}
+
+.card{
+
+    flex:1;
+
+    min-width:180px;
+
+    border-radius:12px;
+
+    color:white;
+
+    padding:25px;
+
+    box-shadow:0 5px 15px rgba(0,0,0,.15);
+
+}
+
+.card h2{
+
+    font-size:40px;
+
+    margin:0;
+
+}
+
+.card span{
+
+    font-size:15px;
+
+}
+
+.pendiente{
+
+    background:#FB8C00;
+
+}
+
+.proceso{
+
+    background:#1E88E5;
+
+}
+
+.pago{
+
+    background:#FDD835;
+
+    color:black;
+
+}
+
+.finalizado{
+
+    background:#43A047;
+
+}
+
+.total{
+
+    background:#5E35B1;
+
+}

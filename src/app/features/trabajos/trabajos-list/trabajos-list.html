@@ -1,0 +1,38 @@
+<h2>Trabajos</h2>
+
+<div class="acciones">
+
+    <button
+    mat-raised-button
+    color="primary"
+    (click)="nuevo()">
+
+    <mat-icon>add</mat-icon>
+
+    Nuevo Trabajo
+
+</button>
+
+</div>
+
+<table>
+
+    <tr *ngFor="let trabajo of trabajos">
+
+        <td>{{trabajo.id}}</td>
+
+        <td>{{trabajo.cliente}}</td>
+
+        <td>{{trabajo.tecnico}}</td>
+
+        <td>{{trabajo.tarea}}</td>
+
+        <td>
+            <span class="estado" [style.background-color]="trabajo.estadoColor">
+                {{ trabajo.estado }}
+            </span>
+        </td>
+
+    </tr>
+
+</table>

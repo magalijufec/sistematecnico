@@ -1,0 +1,65 @@
+<h2>Usuarios </h2>
+
+<table>
+
+    <thead>
+
+        <tr>
+
+            <th>Usuario</th>
+
+            <th>Nombre</th>
+
+            <th>Perfil</th>
+
+            <th>Sector</th>
+
+            <th>Provincia</th>
+
+            <th>Ciudad</th>
+
+            <th>Activo</th>
+
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+        @for(usuario of usuarios; track usuario.id){
+
+        <tr>
+
+            <td>{{usuario.usuario}}</td>
+
+            <td>{{usuario.nombreApellido}}</td>
+
+            <td>{{usuario.perfil}}</td>
+
+            <td>{{usuario.sector}}</td>
+
+            <td>{{usuario.provincia}}</td>
+
+            <td>{{usuario.ciudad}}</td>
+
+            <td>
+
+                @if(usuario.activo){
+
+                    ✅
+
+                }@else{
+
+                    ❌
+
+                }
+
+            </td>
+
+        </tr>
+
+        }
+
+    </tbody>
+
+</table>

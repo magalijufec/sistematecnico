@@ -1,0 +1,65 @@
+mat-card {
+
+    max-width: 1000px;
+
+    margin: 30px auto;
+
+}
+
+.formulario{
+
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:20px;
+
+}
+
+.comentarios{
+
+    grid-column:1 / 3;
+
+}
+
+.botones{
+
+    grid-column:1 / 3;
+
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:15px;
+
+}
+
+mat-form-field{
+
+    width:100%;
+
+}
+
+@media(max-width:768px){
+
+    .formulario{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .comentarios{
+
+        grid-column:auto;
+
+    }
+
+    .botones{
+
+        grid-column:auto;
+
+        flex-direction:column;
+
+    }
+
+}

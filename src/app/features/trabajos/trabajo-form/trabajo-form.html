@@ -1,0 +1,109 @@
+<mat-card>
+
+    <mat-card-header>
+
+        <mat-card-title>
+
+            Nueva Solicitud de Trabajo
+
+        </mat-card-title>
+
+    </mat-card-header>
+
+    <mat-card-content>
+
+        <form [formGroup]="form" class="formulario">
+
+            <mat-form-field appearance="outline">
+
+                <mat-label>Cliente</mat-label>
+
+                <mat-select formControlName="idCliente">
+
+                    <mat-option>
+
+                        <ngx-mat-select-search [formControl]="clienteFiltro">
+                        </ngx-mat-select-search>
+
+                    </mat-option>
+
+                    <mat-option *ngFor="let cliente of clientesFiltrados" [value]="cliente.id">
+
+                        {{cliente.nombre}}
+
+                    </mat-option>
+
+                </mat-select>
+
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+
+                <mat-label>Técnico</mat-label>
+
+                <mat-select formControlName="idTecnico">
+
+                    <mat-option *ngFor="let t of tecnicos" [value]="t.id">
+
+                        {{ t.nombre }}
+
+                    </mat-option>
+
+                </mat-select>
+
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+
+                <mat-label>Tarea</mat-label>
+
+                <mat-select formControlName="idTarea">
+
+                    <mat-option *ngFor="let t of tareas" [value]="t.id">
+
+                        {{ t.nombre }}
+
+                    </mat-option>
+
+                </mat-select>
+
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+
+                <mat-label>Fecha del trabajo</mat-label>
+
+                <input matInput type="date" formControlName="fechaTrabajo">
+
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="comentarios">
+
+                <mat-label>Comentarios</mat-label>
+
+                <textarea matInput rows="5" formControlName="comentarios">
+
+                </textarea>
+
+            </mat-form-field>
+
+            <div class="botones">
+
+                <button mat-stroked-button color="warn">
+
+                    Cancelar
+
+                </button>
+
+                <button mat-raised-button color="primary" (click)="guardar()">
+
+                    Guardar
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </mat-card-content>
+
+</mat-card>
