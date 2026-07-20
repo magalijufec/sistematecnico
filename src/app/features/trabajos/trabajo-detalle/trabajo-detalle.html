@@ -1,1 +1,115 @@
-<p>trabajo-detalle works!</p>
+@if(trabajo){
+
+<mat-card>
+
+    <mat-card-header>
+
+        <mat-card-title>
+
+            Trabajo #{{trabajo.id}}
+
+        </mat-card-title>
+
+    </mat-card-header>
+
+    <mat-card-content>
+
+        <div class="info">
+
+            <div>
+
+                <strong>Cliente</strong>
+
+                <p>{{trabajo.cliente}}</p>
+
+            </div>
+
+            <div>
+
+                <strong>Técnico</strong>
+
+                <p>{{trabajo.tecnico}}</p>
+
+            </div>
+
+            <div>
+
+                <strong>Tarea</strong>
+
+                <p>{{trabajo.tarea}}</p>
+
+            </div>
+
+            <div>
+
+                <strong>Estado</strong>
+
+                <span class="estado" [style.background]="trabajo.estadoColor">
+
+                    {{trabajo.estado}}
+
+                </span>
+
+                <button mat-raised-button color="primary" (click)="cambiarEstado()">
+
+                    <mat-icon>sync</mat-icon>
+
+                    Cambiar Estado
+
+                </button>
+
+            </div>
+
+            <div>
+
+                <strong>Fecha solicitud</strong>
+
+                <p>{{trabajo.fechaSolicitud | date:'dd/MM/yyyy'}}</p>
+
+            </div>
+
+            <div>
+
+                <strong>Fecha trabajo</strong>
+
+                <p>{{trabajo.fechaTrabajo | date:'dd/MM/yyyy'}}</p>
+
+            </div>
+
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <h3>Comentarios</h3>
+
+        <p>{{trabajo.comentarios || 'Sin comentarios'}}</p>
+
+        <mat-divider></mat-divider>
+
+        <h3>Trabajo realizado</h3>
+
+        <p>{{trabajo.trabajoRealizado || 'Pendiente de completar'}}</p>
+
+        <mat-divider></mat-divider>
+
+        <h3>Factura</h3>
+
+        <p>
+
+            {{trabajo.tieneFactura ? 'Factura cargada' : 'Sin factura'}}
+
+        </p>
+
+        <h3>Imágenes</h3>
+
+        <p>
+
+            {{trabajo.cantidadImagenes}}
+
+        </p>
+
+    </mat-card-content>
+
+</mat-card>
+
+}

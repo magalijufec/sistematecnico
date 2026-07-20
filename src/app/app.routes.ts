@@ -28,21 +28,20 @@ component:DashboardComponent
 },
 
 {
-path:'trabajos',
-component:TrabajosListComponent
+    path: 'trabajos',
+    component: TrabajosListComponent
 },
-
 {
     path: 'trabajos/nuevo',
     component: TrabajoFormComponent
 },
 {
     path: 'trabajos/:id',
-    component: TrabajoFormComponent
+    component: TrabajoDetalleComponent
 },
 {
-    path:'trabajos/:id/editar',
-    component: TrabajoDetalleComponent
+    path: 'trabajos/:id/editar',
+    component: TrabajoFormComponent
 },
 
 {

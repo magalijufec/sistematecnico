@@ -1,0 +1,63 @@
+<h2 mat-dialog-title>Cambiar estado del trabajo</h2>
+
+<mat-dialog-content>
+
+    <form [formGroup]="form">
+
+        <mat-form-field appearance="outline" class="w-100">
+
+            <mat-label>Nuevo estado</mat-label>
+
+            <mat-select formControlName="idEstado">
+
+                <mat-option
+                    *ngFor="let estado of estados"
+                    [value]="estado.id">
+
+                    {{ estado.nombre }}
+
+                </mat-option>
+
+            </mat-select>
+
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-100">
+
+            <mat-label>Comentario</mat-label>
+
+            <textarea
+                matInput
+                rows="4"
+                formControlName="comentario">
+            </textarea>
+
+        </mat-form-field>
+
+    </form>
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+
+    <button
+        mat-button
+        type="button"
+        (click)="cerrar()">
+
+        Cancelar
+
+    </button>
+
+    <button
+        mat-raised-button
+        color="primary"
+        type="button"
+        [disabled]="form.invalid"
+        (click)="guardar()">
+
+        Guardar
+
+    </button>
+
+</mat-dialog-actions>

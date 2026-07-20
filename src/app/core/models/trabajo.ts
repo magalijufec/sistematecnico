@@ -1,12 +1,16 @@
-import { EstadoTrabajo } from "./estado-trabajo";
-
 export interface Trabajo {
 
   id: number;
 
+  idCliente: number;
+
+  idTecnico: number;
+
+  idTarea: number;
+
   fechaSolicitud: Date;
 
-  fechaTrabajo: Date;
+  fechaTrabajo: string;
 
   cliente: string;
 
@@ -15,6 +19,7 @@ export interface Trabajo {
   tarea: string;
 
   estado: string;
-  estadoColor: string;
+
+  comentarios: string;
 
 }

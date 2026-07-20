@@ -4,7 +4,15 @@
 
         <mat-card-title>
 
+            @if (!esEdicion) {
+
             Nueva Solicitud de Trabajo
+
+            } @else {
+
+            Editar Trabajo #{{ idTrabajo }}
+
+            }
 
         </mat-card-title>
 
@@ -96,7 +104,15 @@
 
                 <button mat-raised-button color="primary" (click)="guardar()">
 
-                    Guardar
+                    @if (!esEdicion) {
+
+                    Crear Trabajo
+
+                    } @else {
+
+                    Guardar Cambios
+
+                    }
 
                 </button>
 

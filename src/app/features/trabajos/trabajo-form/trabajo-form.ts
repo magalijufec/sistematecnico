@@ -15,6 +15,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { CommonModule } from '@angular/common';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-trabajo-form',
@@ -37,6 +38,7 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 export class TrabajoFormComponent implements OnInit {
 
   private fb = inject(FormBuilder);
+  private route = inject(ActivatedRoute);
 
   private clienteService = inject(ClienteService);
 
@@ -69,6 +71,10 @@ export class TrabajoFormComponent implements OnInit {
 
   });
 
+  idTrabajo = 0;
+
+  esEdicion = false;
+
   ngOnInit(): void {
 
     this.cargarClientes();
@@ -76,6 +82,36 @@ export class TrabajoFormComponent implements OnInit {
     this.cargarTecnicos();
 
     this.cargarTareas();
+
+    this.idTrabajo = Number(this.route.snapshot.paramMap.get('id'));
+
+    this.esEdicion = this.idTrabajo > 0;
+
+    if (this.esEdicion) {
+      this.cargarTrabajo();
+    }
+
+  }
+
+  cargarTrabajo() {
+
+    this.trabajoService.obtenerPorId(this.idTrabajo).subscribe({
+
+      next: trabajo => {
+
+        this.form.patchValue({
+
+          idCliente: trabajo.idCliente,
+          idTecnico: trabajo.idTecnico,
+          idTarea: trabajo.idTarea,
+          fechaTrabajo: trabajo.fechaTrabajo.substring(0, 10),
+          comentarios: trabajo.comentarios
+
+        });
+
+      }
+
+    });
 
   }
 
@@ -139,30 +175,38 @@ export class TrabajoFormComponent implements OnInit {
 
     const trabajo: TrabajoCreate = this.form.getRawValue();
 
-    this.trabajoService.crear(trabajo).subscribe({
+    if (this.idTrabajo === 0) {
 
-      next: () => {
+      this.trabajoService.crear(trabajo).subscribe({
 
-        alert('Trabajo creado correctamente');
+        next: () => {
 
-        this.form.reset({
-          idCliente: 0,
-          idTecnico: 0,
-          idTarea: 0,
-          fechaTrabajo: '',
-          comentarios: ''
-        });
+          alert('Trabajo creado correctamente');
 
-      },
+        },
 
-      error: err => {
+        error: err => console.error(err)
 
-        console.error(err);
+      });
 
-      }
+    } else {
 
-    });
+      this.trabajoService.actualizar(this.idTrabajo, trabajo).subscribe({
+
+        next: () => {
+
+          alert('Trabajo actualizado correctamente');
+
+        },
+
+        error: err => console.error(err)
+
+      });
+
+    }
 
   }
+
+
 
 }
