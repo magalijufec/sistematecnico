@@ -10,6 +10,40 @@
 
 </div>
 
+<mat-form-field appearance="outline">
+    <mat-label>Buscar</mat-label>
+
+    <input matInput [(ngModel)]="buscar" (input)="filtrar()" placeholder="Cliente, técnico o tarea">
+</mat-form-field>
+
+<mat-form-field appearance="outline">
+  <mat-label>Estado</mat-label>
+
+  <mat-select
+    [(ngModel)]="estadoSeleccionado"
+    (selectionChange)="filtrar()">
+
+    <mat-option value="">
+      Todos
+    </mat-option>
+
+    @for (estado of estados; track estado.id) {
+      <mat-option [value]="estado.id">
+        {{ estado.nombre }}
+      </mat-option>
+    }
+
+  </mat-select>
+</mat-form-field>
+
+<button mat-stroked-button (click)="limpiarFiltros()">
+
+    <mat-icon>filter_alt_off</mat-icon>
+
+    Limpiar
+
+</button>
+
 <mat-card>
 
     <mat-card-header>
@@ -24,7 +58,7 @@
 
     <mat-card-content>
 
-        <table mat-table [dataSource]="trabajos">
+        <table mat-table [dataSource]="trabajosFiltrados">
 
             <!-- ID -->
 

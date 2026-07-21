@@ -5,6 +5,7 @@ export interface Trabajo {
   idCliente: number;
 
   idTecnico: number;
+  idEstado: number;
 
   idTarea: number;
 

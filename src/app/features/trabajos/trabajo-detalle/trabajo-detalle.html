@@ -84,7 +84,10 @@
 
         <p>{{trabajo.comentarios || 'Sin comentarios'}}</p>
 
-        <mat-divider></mat-divider>
+        <!-- Trabajo en proceso -->
+        @if (trabajo.estado === 'En proceso') {
+
+
 
         <h3>Imágenes Antes</h3>
 
@@ -112,19 +115,25 @@
 
         <mat-form-field appearance="outline" class="w-100">
 
-            <mat-label>Trabajo realizado</mat-label>
+            <mat-label>Detalle del trabajo realizado</mat-label>
 
-            <textarea matInput rows="6" [(ngModel)]="trabajo.trabajoRealizado"></textarea>
+            <textarea matInput rows="6" [(ngModel)]="trabajo.trabajoRealizado">
+        </textarea>
 
         </mat-form-field>
 
         <button mat-raised-button color="primary" (click)="guardarTrabajoRealizado()">
-            Guardar
+
+            <mat-icon>save</mat-icon>
+
+            Guardar trabajo realizado
+
         </button>
+        }
 
         <mat-divider></mat-divider>
 
-        <h3>Factura</h3>
+        @if (trabajo.estado === 'Pendiente pago') {
 
         <mat-divider></mat-divider>
 
@@ -132,23 +141,42 @@
 
         @if (trabajo.factura) {
 
-        <p>
-            Factura cargada correctamente.
-        </p>
+        <p>Factura cargada</p>
 
         <a mat-raised-button color="primary" [href]="'https://localhost:44306' + trabajo.factura" target="_blank">
-            <mat-icon>visibility</mat-icon>
+
+            <mat-icon>picture_as_pdf</mat-icon>
+
             Ver factura
+
         </a>
+
+        } @else {
+
+        <p>No hay factura cargada.</p>
+
+        <button mat-raised-button color="primary">
+
+            <mat-icon>upload_file</mat-icon>
+
+            Cargar factura
+
+        </button>
         }
 
-        <div class="factura-upload">
-            <input type="file" accept=".pdf,.jpg,.jpeg,.png" (change)="subirFactura($event)">
-        </div>
+        }
+
+        @if (trabajo.estado === 'Finalizado') {
+
+        <mat-divider></mat-divider>
+
+        <h3>Trabajo finalizado</h3>
 
         <p>
-            {{trabajo.cantidadImagenes}}
+            Este trabajo se encuentra finalizado.
         </p>
+
+        }
 
     </mat-card-content>
 
