@@ -126,9 +126,25 @@
 
         <h3>Factura</h3>
 
+        <mat-divider></mat-divider>
+
+        <h3>Factura</h3>
+
+        @if (trabajo.factura) {
+
         <p>
-            {{trabajo.tieneFactura ? 'Factura cargada' : 'Sin factura'}}
+            Factura cargada correctamente.
         </p>
+
+        <a mat-raised-button color="primary" [href]="'https://localhost:44306' + trabajo.factura" target="_blank">
+            <mat-icon>visibility</mat-icon>
+            Ver factura
+        </a>
+        }
+
+        <div class="factura-upload">
+            <input type="file" accept=".pdf,.jpg,.jpeg,.png" (change)="subirFactura($event)">
+        </div>
 
         <p>
             {{trabajo.cantidadImagenes}}

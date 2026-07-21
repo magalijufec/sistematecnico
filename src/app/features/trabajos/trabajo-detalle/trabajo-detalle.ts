@@ -38,16 +38,13 @@ export class TrabajoDetalleComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private dialog = inject(MatDialog);
   private trabajoService = inject(TrabajoService);
-
-  trabajo?: TrabajoDetalle;
   private imagenService = inject(ImagenService);
 
+  trabajo?: TrabajoDetalle;
+  factura?: string | null;
   imagenes: Imagen[] = [];
-
   imagenesAntes: Imagen[] = [];
-
   imagenesDespues: Imagen[] = [];
-
   ngOnInit(): void {
     this.cargarTrabajo();
   }
@@ -96,7 +93,7 @@ export class TrabajoDetalleComponent implements OnInit {
     });
   }
 
-  subirImagenes(event: any,antes: boolean
+  subirImagenes(event: any, antes: boolean
   ) {
     const archivos: File[] =
       Array.from(event.target.files);
@@ -119,18 +116,49 @@ export class TrabajoDetalleComponent implements OnInit {
   }
 
   guardarTrabajoRealizado() {
-
     this.trabajoService
       .guardarTrabajoRealizado(
         this.trabajo!.id,
         this.trabajo!.trabajoRealizado
       )
       .subscribe(() => {
-
         alert('Trabajo actualizado');
-
       });
+  }
 
+  subirFactura(event: Event) {
+    const input =
+      event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0) {
+      return;
+    }
+    if (!this.trabajo) {
+      return;
+    }
+    const archivo = input.files[0];
+
+    this.trabajoService
+      .subirFactura(
+        this.trabajo.id,
+        archivo
+      )
+      .subscribe({
+        next: () => {
+          alert(
+            'Factura cargada correctamente'
+          );
+          this.cargarTrabajo();
+        },
+        error: err => {
+          console.error(
+            'Error al cargar factura',
+            err
+          );
+          alert(
+            'No se pudo cargar la factura'
+          );
+        }
+      });
   }
 
 }

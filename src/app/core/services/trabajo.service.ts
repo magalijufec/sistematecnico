@@ -81,10 +81,17 @@ export class TrabajoService {
     );
   }
 
-  // obtenerImagenes(idTrabajo: number) {
-  //   return this.http.get<ImagenTrabajo[]>(
-  //     `${this.api}/${idTrabajo}/imagenes`
-  //   );
-  // }
+  subirFactura(
+    idTrabajo: number,
+    archivo: File
+  ) {
+    const formData = new FormData();
+    formData.append('archivo', archivo);
+
+    return this.http.post(
+      `${this.api}/${idTrabajo}/factura`,
+      formData
+    );
+  }
 
 }
