@@ -161,4 +161,42 @@ export class TrabajoDetalleComponent implements OnInit {
       });
   }
 
+  registrarPago(): void {
+
+    if (!this.trabajo) {
+      return;
+    }
+
+    if (!confirm('¿Confirmar que el trabajo fue pagado?')) {
+      return;
+    }
+
+    this.trabajoService
+      .registrarPago(this.trabajo.id)
+      .subscribe({
+
+        next: () => {
+
+          alert('Pago registrado correctamente');
+
+          this.cargarTrabajo();
+
+        },
+
+        error: error => {
+
+          console.error(
+            'Error al registrar el pago',
+            error
+          );
+
+          alert(
+            'No se pudo registrar el pago'
+          );
+
+        }
+
+      });
+  }
+
 }

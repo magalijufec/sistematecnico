@@ -178,6 +178,21 @@
 
         }
 
+        @if (trabajo.estado === 'Pendiente pago') {
+
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="registrarPago()">
+
+    <mat-icon>payments</mat-icon>
+
+    Registrar pago
+
+  </button>
+
+}
+
     </mat-card-content>
 
 </mat-card>

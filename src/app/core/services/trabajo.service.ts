@@ -94,4 +94,11 @@ export class TrabajoService {
     );
   }
 
+  registrarPago(id: number): Observable<void> {
+    return this.http.put<void>(
+      `${this.api}/${id}/registrar-pago`,
+      {}
+    );
+  }
+
 }
