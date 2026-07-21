@@ -44,12 +44,47 @@ export class TrabajoService {
   }
 
   guardarTrabajoRealizado(id: number, texto: string) {
-  return this.http.put(
-    `${this.api}/${id}/trabajo-realizado`,
-    {
-      trabajoRealizado: texto
-    }
-  );
-}
+    return this.http.put(
+      `${this.api}/${id}/trabajo-realizado`,
+      {
+        trabajoRealizado: texto
+      }
+    );
+  }
+
+  subirImagenes(idTrabajo: number, archivos: File[], tipo: number) {
+    const formData = new FormData();
+    formData.append("tipo", tipo.toString());
+    archivos.forEach(x => {
+      formData.append("files", x);
+    });
+
+    return this.http.post(
+      `${this.api}/${idTrabajo}/imagenes`,
+      formData
+    );
+  }
+
+  subirImagen(
+    idTrabajo: number,
+    archivo: File,
+    esAntes: boolean) {
+
+    const form = new FormData();
+
+    form.append('archivo', archivo);
+    form.append('esAntes', esAntes.toString());
+
+    return this.http.post(
+      `${this.api}/${idTrabajo}/imagenes`,
+      form
+    );
+  }
+
+  // obtenerImagenes(idTrabajo: number) {
+  //   return this.http.get<ImagenTrabajo[]>(
+  //     `${this.api}/${idTrabajo}/imagenes`
+  //   );
+  // }
 
 }

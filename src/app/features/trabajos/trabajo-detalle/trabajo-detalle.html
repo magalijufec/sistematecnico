@@ -86,26 +86,52 @@
 
         <mat-divider></mat-divider>
 
+        <h3>Imágenes Antes</h3>
+
+        <input type="file" multiple (change)="subirImagenes($event,true)">
+
+        <div class="galeria">
+            @for(img of imagenesAntes; track img.id){
+            <img [src]="'https://localhost:44306/'+img.ruta" width="150">
+            }
+        </div>
+
+        <h3>Imágenes Después</h3>
+
+        <input type="file" multiple (change)="subirImagenes($event,false)">
+
+        <div class="galeria">
+            @for(img of imagenesDespues; track img.id){
+            <img [src]="'https://localhost:44306/'+img.ruta" width="150">
+            }
+        </div>
+
+        <mat-divider></mat-divider>
+
         <h3>Trabajo realizado</h3>
 
-        <p>{{trabajo.trabajoRealizado || 'Pendiente de completar'}}</p>
+        <mat-form-field appearance="outline" class="w-100">
+
+            <mat-label>Trabajo realizado</mat-label>
+
+            <textarea matInput rows="6" [(ngModel)]="trabajo.trabajoRealizado"></textarea>
+
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" (click)="guardarTrabajoRealizado()">
+            Guardar
+        </button>
 
         <mat-divider></mat-divider>
 
         <h3>Factura</h3>
 
         <p>
-
             {{trabajo.tieneFactura ? 'Factura cargada' : 'Sin factura'}}
-
         </p>
 
-        <h3>Imágenes</h3>
-
         <p>
-
             {{trabajo.cantidadImagenes}}
-
         </p>
 
     </mat-card-content>

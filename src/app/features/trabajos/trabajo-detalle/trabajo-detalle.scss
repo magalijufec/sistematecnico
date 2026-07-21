@@ -1,0 +1,16 @@
+.galeria{
+
+display:flex;
+gap:15px;
+flex-wrap:wrap;
+
+}
+
+
+.galeria img{
+
+border-radius:8px;
+object-fit:cover;
+height:150px;
+
+}
