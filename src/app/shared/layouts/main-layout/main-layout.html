@@ -80,7 +80,8 @@
       <!-- Usuario -->
 
       <button
-        mat-icon-button>
+        mat-icon-button
+        [matMenuTriggerFor]="menuUsuario">
 
         <mat-icon>
           account_circle
@@ -100,3 +101,24 @@
   </mat-sidenav-content>
 
 </mat-sidenav-container>
+
+
+<!-- Menú de usuario -->
+
+<mat-menu #menuUsuario="matMenu">
+
+  <button
+    mat-menu-item
+    (click)="cerrarSesion()">
+
+    <mat-icon>
+      logout
+    </mat-icon>
+
+    <span>
+      Cerrar sesión
+    </span>
+
+  </button>
+
+</mat-menu>

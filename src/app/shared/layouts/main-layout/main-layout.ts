@@ -14,6 +14,8 @@ import { MatListModule } from '@angular/material/list';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 import { MENU } from '../../../core/constants/menu';
+import { AuthService } from '../../../core/services/auth.service';
+import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
   selector: 'app-main-layout',
@@ -27,7 +29,8 @@ import { MENU } from '../../../core/constants/menu';
     MatToolbarModule,
     MatIconModule,
     MatButtonModule,
-    MatListModule
+    MatListModule,
+    MatMenuModule
   ],
   templateUrl: './main-layout.html',
   styleUrls: ['./main-layout.scss']
@@ -38,7 +41,7 @@ export class MainLayoutComponent implements OnInit {
 
   @ViewChild('drawer')
   drawer!: MatSidenav;
-
+  private authService = inject(AuthService);
   private breakpointObserver = inject(BreakpointObserver);
 
   esMovil = false;
@@ -62,14 +65,14 @@ export class MainLayoutComponent implements OnInit {
   }
 
   navegar(): void {
-
     // En celular cerramos el menú
     if (this.esMovil) {
-
       this.drawer.close();
-
     }
+  }
 
+  cerrarSesion(): void {
+    this.authService.logout();
   }
 
 }
