@@ -1,6 +1,9 @@
 <mat-sidenav-container class="container">
 
-  <mat-sidenav #drawer mode="side" opened>
+  <mat-sidenav
+    #drawer
+    [mode]="esMovil ? 'over' : 'side'"
+    [opened]="!esMovil">
 
     <div class="logo">
 
@@ -12,18 +15,23 @@
 
     <mat-nav-list>
 
-      @for(item of menu; track item.route){
+      @for(item of menu; track item.route) {
 
-      <a
-        mat-list-item
-        [routerLink]="item.route"
-        routerLinkActive="active-link">
+        <a
+          mat-list-item
+          [routerLink]="item.route"
+          routerLinkActive="active-link"
+          (click)="navegar()">
 
-        <mat-icon>{{item.icon}}</mat-icon>
+          <mat-icon>
+            {{ item.icon }}
+          </mat-icon>
 
-        <span> {{item.text}}</span>
+          <span>
+            {{ item.text }}
+          </span>
 
-      </a>
+        </a>
 
       }
 
@@ -31,39 +39,63 @@
 
   </mat-sidenav>
 
+
   <mat-sidenav-content>
 
     <mat-toolbar color="primary">
 
-      <button mat-icon-button>
+      <!-- Botón menú -->
 
-        <mat-icon>menu</mat-icon>
+      <button
+        mat-icon-button
+        (click)="toggleMenu()">
+
+        <mat-icon>
+          menu
+        </mat-icon>
 
       </button>
 
-      <span>Sistema Técnico</span>
+
+      <span class="titulo">
+        Sistema Técnico
+      </span>
+
 
       <span class="spacer"></span>
 
-      <button mat-icon-button>
 
-        <mat-icon>notifications</mat-icon>
+      <!-- Notificaciones -->
+
+      <button
+        mat-icon-button>
+
+        <mat-icon>
+          notifications
+        </mat-icon>
 
       </button>
 
-      <button mat-icon-button>
 
-        <mat-icon>account_circle</mat-icon>
+      <!-- Usuario -->
+
+      <button
+        mat-icon-button>
+
+        <mat-icon>
+          account_circle
+        </mat-icon>
 
       </button>
 
     </mat-toolbar>
 
-    <div class="contenido">
+
+    <main class="contenido">
 
       <router-outlet></router-outlet>
 
-    </div>
+    </main>
 
   </mat-sidenav-content>
 

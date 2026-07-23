@@ -13,23 +13,15 @@ mat-sidenav {
   align-items: center;
   gap: 10px;
   padding: 20px;
+
   font-size: 20px;
   font-weight: bold;
+
+  white-space: nowrap;
 }
 
-.spacer {
-  flex: 1;
-}
-
-.contenido {
-  padding: 20px;
-  background: #f5f7fa;
-  min-height: calc(100vh - 64px);
-}
-
-.active-link {
-  background: rgba(255,255,255,.15);
-  border-radius: 8px;
+.logo mat-icon {
+  color: white;
 }
 
 mat-nav-list a {
@@ -40,23 +32,43 @@ mat-nav-list mat-icon {
   color: white !important;
 }
 
-mat-sidenav {
-  background: #263238;
-  color: white;
-}
-
 mat-sidenav .mdc-list-item__primary-text {
   color: white;
 }
 
-mat-sidenav mat-icon {
-  color: white;
-}
-
 mat-sidenav a:hover {
-  background: rgba(255,255,255,.08);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .active-link {
-  background: rgba(255,255,255,.15);
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.titulo {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.contenido {
+  padding: 20px;
+  background: #f5f7fa;
+  min-height: calc(100vh - 64px);
+  box-sizing: border-box;
+}
+
+@media (max-width: 599px) {
+
+  .contenido {
+    padding: 12px;
+  }
+
+  .titulo {
+    font-size: 17px;
+  }
+
 }
