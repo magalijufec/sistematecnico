@@ -5,78 +5,71 @@ import { Observable, tap } from 'rxjs';
 import { Login } from '../models/login';
 import { LoginResponse } from '../models/login-response';
 import { Router } from '@angular/router';
+import { CambiarPassword } from '../models/cambiar-password';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class AuthService {
 
-  private http = inject(HttpClient);
-  private router = inject(Router);
+    private http = inject(HttpClient);
+    private router = inject(Router);
 
-  private api =
-    'https://localhost:7122/api/auth';
+    private api = 'https://localhost:7122/api/auth';
 
-  login(dto: Login): Observable<LoginResponse> {
+    login(dto: Login): Observable<LoginResponse> {
 
-    return this.http
-      .post<LoginResponse>(
-        `${this.api}/login`,
-        dto
-      )
-      .pipe(
+        return this.http
+            .post<LoginResponse>(
+                `${this.api}/login`,
+                dto
+            )
+            .pipe(
 
-        tap(response => {
+                tap(response => {
 
-          localStorage.setItem(
-            'token',
-            response.token
-          );
+                    localStorage.setItem(
+                        'token',
+                        response.token
+                    );
 
-          localStorage.setItem(
-            'usuario',
-            JSON.stringify(response)
-          );
+                    localStorage.setItem(
+                        'usuario',
+                        JSON.stringify(response)
+                    );
 
-        })
+                })
 
-      );
-  }
+            );
+    }
 
-  logout(): void {
+    logout(): void {
+        localStorage.removeItem('token');
+        localStorage.removeItem('usuario');
+        this.router.navigate(
+            ['/login']
+        );
+    }
 
-    localStorage.removeItem('token');
+    obtenerToken(): string | null {
+        return localStorage.getItem('token');
+    }
 
-    localStorage.removeItem('usuario');
+    obtenerUsuario(): LoginResponse | null {
+        const usuario = localStorage.getItem('usuario');
+        if (!usuario)
+            return null;
+        return JSON.parse(usuario);
+    }
 
-    this.router.navigate(
-      ['/login']
-    );
+    estaLogueado(): boolean {
+        return !!this.obtenerToken();
+    }
 
-  }
-
-  obtenerToken(): string | null {
-
-    return localStorage.getItem('token');
-
-  }
-
-  obtenerUsuario(): LoginResponse | null {
-
-    const usuario =
-      localStorage.getItem('usuario');
-
-    if (!usuario)
-      return null;
-
-    return JSON.parse(usuario);
-
-  }
-
-  estaLogueado(): boolean {
-
-    return !!this.obtenerToken();
-
-  }
-
+    cambiarPassword(datos: CambiarPassword): Observable<any> {
+        return this.http.post(
+            `${this.api}/cambiar-password`,
+            datos
+        );
+    }
 }

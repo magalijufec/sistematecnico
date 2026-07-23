@@ -10,6 +10,7 @@ import { TrabajoDetalleComponent } from './features/trabajos/trabajo-detalle/tra
 import { LoginComponent } from './features/auth/login/login';
 import { authGuard } from './core/guards/auth.guard';
 import { guestGuard } from './core/guards/guest.guard';
+import { CambiarPasswordComponent } from './features/usuarios/cambiar-password/cambiar-password';
 
 export const routes: Routes = [
 
@@ -32,6 +33,12 @@ export const routes: Routes = [
                 path: '',
                 redirectTo: 'dashboard',
                 pathMatch: 'full'
+            },
+
+            {
+                path: 'cambiar-password',
+                component: CambiarPasswordComponent,
+                canActivate: [authGuard]
             },
 
             {
