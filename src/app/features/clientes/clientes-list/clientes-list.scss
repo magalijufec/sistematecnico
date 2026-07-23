@@ -1,0 +1,106 @@
+.clientes-container {
+  width: 100%;
+}
+
+
+// Encabezado
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.toolbar h2 {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 600;
+}
+
+.toolbar p {
+  margin: 5px 0 0;
+  color: #6b7280;
+}
+
+
+// Card
+mat-card {
+  width: 100%;
+}
+
+mat-card-content {
+  padding-top: 20px;
+}
+
+
+// Tabla
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.clientes-table {
+  width: 100%;
+}
+
+
+// Encabezado tabla
+th {
+  font-weight: 600;
+}
+
+
+// Nombre cliente
+.cliente-nombre {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cliente-nombre mat-icon {
+  color: #1976d2;
+}
+
+
+// Ubicación
+.ubicacion {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ubicacion mat-icon {
+  font-size: 20px;
+}
+
+
+// Responsive
+@media (max-width: 768px) {
+
+  .toolbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .toolbar button {
+    width: 100%;
+  }
+
+  mat-card-header {
+    padding: 16px;
+  }
+
+  mat-card-content {
+    padding: 0;
+  }
+
+  .table-container {
+    overflow-x: auto;
+  }
+
+  .clientes-table {
+    min-width: 650px;
+  }
+
+}

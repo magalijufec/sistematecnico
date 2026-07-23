@@ -14,6 +14,4 @@ export interface Cliente{
 
     direccion:string;
 
-    empresa:string;
-
 }

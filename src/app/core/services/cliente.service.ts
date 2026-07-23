@@ -13,16 +13,14 @@ export class ClienteService {
 
   //private api = 'https://localhost:44306/api/cliente';
 
-  private api = 'https://localhost:7721/api/cliente';
+  private api = 'https://localhost:7122/api/cliente';
 
   obtenerTodos(): Observable<Cliente[]>{
-      return this.http.get<Cliente[]>(this.api);
+    return this.http.get<Cliente[]>(this.api);
   }
 
   obtenerCombo() {
-
     return this.http.get<Combo[]>(`${this.api}/combo`);
-
   }
 
 }
