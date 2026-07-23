@@ -11,7 +11,8 @@ export class UsuarioService {
 
   private http = inject(HttpClient);
 
-  private api = 'https://localhost:44306/api/usuario';
+  //private api = 'https://localhost:44306/api/usuario';
+  private api = 'https://localhost:7122/api/usuario';
 
   obtenerTodos(): Observable<Usuario[]> {
     return this.http.get<Usuario[]>(this.api);

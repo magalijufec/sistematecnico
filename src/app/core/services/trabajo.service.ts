@@ -14,7 +14,9 @@ export class TrabajoService {
 
   private http = inject(HttpClient);
 
-  private api = 'https://localhost:44306/api/trabajo';
+  //private api = 'https://localhost:44306/api/trabajo';
+  private api = 'https://localhost:7122/api/trabajo';
+   //private api = 'http://localhost:5010/api/trabajo';
 
   obtenerTodos(): Observable<Trabajo[]> {
     return this.http.get<Trabajo[]>(this.api);

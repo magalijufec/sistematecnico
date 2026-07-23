@@ -10,7 +10,8 @@ export class DashboardService {
 
   private http = inject(HttpClient);
 
-  private api = 'https://localhost:44306/api/dashboard';
+  private api = 'https://localhost:7122/api/dashboard';
+  //private api = 'https://localhost:44306/api/dashboard';
 
   obtenerDashboard(): Observable<Dashboard> {
 

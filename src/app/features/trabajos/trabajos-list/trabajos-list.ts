@@ -46,6 +46,8 @@ export class TrabajosListComponent implements OnInit {
   displayedColumns = [
     'id',
     'cliente',
+    'provincia',
+    'ciudad',
     'tecnico',
     'tarea',
     'estado',

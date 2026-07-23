@@ -4,7 +4,7 @@ export interface Imagen {
 
   nombre: string;
 
-  ruta: string;
+  rutaArchivo: string;
 
   esAntes: boolean;
 

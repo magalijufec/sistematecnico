@@ -9,7 +9,8 @@ export class TareaService {
 
   private http = inject(HttpClient);
 
-  private api = 'https://localhost:44306/api/tarea';
+  //private api = 'https://localhost:44306/api/tarea';
+  private api = 'https://localhost:7122/api/tarea';
 
   obtenerTodas() {
 

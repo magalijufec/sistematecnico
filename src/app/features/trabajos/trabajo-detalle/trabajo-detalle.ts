@@ -127,8 +127,7 @@ export class TrabajoDetalleComponent implements OnInit {
   }
 
   subirFactura(event: Event) {
-    const input =
-      event.target as HTMLInputElement;
+    const input = event.target as HTMLInputElement;
     if (!input.files || input.files.length === 0) {
       return;
     }

@@ -11,7 +11,9 @@ export class ClienteService {
 
   private http = inject(HttpClient);
 
-  private api = 'https://localhost:44306/api/cliente';
+  //private api = 'https://localhost:44306/api/cliente';
+
+  private api = 'https://localhost:7721/api/cliente';
 
   obtenerTodos(): Observable<Cliente[]>{
       return this.http.get<Cliente[]>(this.api);

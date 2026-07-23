@@ -9,9 +9,8 @@ export class ImagenService {
 
     private http = inject(HttpClient);
 
-    private api =
-        'https://localhost:44306/api/trabajo';
-
+    //private api = 'https://localhost:44306/api/trabajo';
+    private api = 'https://localhost:7122/api/trabajo';
 
     obtenerPorTrabajo(idTrabajo: number) {
 

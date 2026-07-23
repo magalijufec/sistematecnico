@@ -95,7 +95,7 @@
 
         <div class="galeria">
             @for(img of imagenesAntes; track img.id){
-            <img [src]="'https://localhost:44306/'+img.ruta" width="150">
+            <img [src]="'https://localhost:7122/'+img.rutaArchivo" width="150">
             }
         </div>
 
@@ -105,7 +105,7 @@
 
         <div class="galeria">
             @for(img of imagenesDespues; track img.id){
-            <img [src]="'https://localhost:44306/'+img.ruta" width="150">
+            <img [src]="'https://localhost:7122/'+img.rutaArchivo" width="150">
             }
         </div>
 
@@ -143,7 +143,7 @@
 
         <p>Factura cargada</p>
 
-        <a mat-raised-button color="primary" [href]="'https://localhost:44306' + trabajo.factura" target="_blank">
+        <a mat-raised-button color="primary" [href]="'https://localhost:7122' + trabajo.factura" target="_blank">
 
             <mat-icon>picture_as_pdf</mat-icon>
 
@@ -155,14 +155,17 @@
 
         <p>No hay factura cargada.</p>
 
-        <button mat-raised-button color="primary">
+        <input #facturaInput type="file" accept="application/pdf" hidden (change)="subirFactura($event)">
+
+        <button mat-raised-button color="primary" type="button" (click)="facturaInput.click()">
 
             <mat-icon>upload_file</mat-icon>
 
             Cargar factura
 
         </button>
-        }
+
+        } 
 
         }
 
@@ -180,18 +183,15 @@
 
         @if (trabajo.estado === 'Pendiente pago') {
 
-  <button
-    mat-raised-button
-    color="primary"
-    (click)="registrarPago()">
+        <button mat-raised-button color="primary" (click)="registrarPago()">
 
-    <mat-icon>payments</mat-icon>
+            <mat-icon>payments</mat-icon>
 
-    Registrar pago
+            Registrar pago
 
-  </button>
+        </button>
 
-}
+        }
 
     </mat-card-content>
 
