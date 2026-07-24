@@ -15,6 +15,12 @@ export const MENU: MenuItem[] = [
   },
 
   {
+    text: 'Trabajos finalizados',
+    icon: 'task_alt',
+    route: '/trabajos-finalizados'
+  },
+
+  {
     icon: 'store',
     text: 'Clientes',
     route: '/clientes'

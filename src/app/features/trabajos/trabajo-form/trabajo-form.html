@@ -6,11 +6,11 @@
 
             @if (!esEdicion) {
 
-            Nueva Solicitud de Trabajo
+                Nueva Solicitud de Trabajo
 
             } @else {
 
-            Editar Trabajo #{{ idTrabajo }}
+                Editar Trabajo #{{ idTrabajo }}
 
             }
 
@@ -18,39 +18,62 @@
 
     </mat-card-header>
 
+
     <mat-card-content>
 
-        <form [formGroup]="form" class="formulario">
+        <form
+            [formGroup]="form"
+            class="formulario">
+
+
+            <!-- CLIENTE -->
 
             <mat-form-field appearance="outline">
 
-                <mat-label>Cliente</mat-label>
+                <mat-label>
+                    Cliente
+                </mat-label>
 
-                <mat-select formControlName="idCliente">
+                <mat-select
+                    formControlName="idCliente">
 
                     <mat-option>
 
-                        <ngx-mat-select-search [formControl]="clienteFiltro">
+                        <ngx-mat-select-search
+                            [formControl]="clienteFiltro">
+
                         </ngx-mat-select-search>
 
                     </mat-option>
 
-                    <mat-option *ngFor="let cliente of clientesFiltrados" [value]="cliente.id">
 
-                        {{cliente.nombre}}
+                    <mat-option
+                        *ngFor="let cliente of clientesFiltrados"
+                        [value]="cliente.id">
+
+                        {{ cliente.nombre }}
 
                     </mat-option>
 
                 </mat-select>
 
             </mat-form-field>
+
+
+            <!-- TÉCNICO -->
+
             <mat-form-field appearance="outline">
 
-                <mat-label>Técnico</mat-label>
+                <mat-label>
+                    Técnico
+                </mat-label>
 
-                <mat-select formControlName="idTecnico">
+                <mat-select
+                    formControlName="idTecnico">
 
-                    <mat-option *ngFor="let t of tecnicos" [value]="t.id">
+                    <mat-option
+                        *ngFor="let t of tecnicos"
+                        [value]="t.id">
 
                         {{ t.nombre }}
 
@@ -60,13 +83,21 @@
 
             </mat-form-field>
 
+
+            <!-- TAREA -->
+
             <mat-form-field appearance="outline">
 
-                <mat-label>Tarea</mat-label>
+                <mat-label>
+                    Tarea
+                </mat-label>
 
-                <mat-select formControlName="idTarea">
+                <mat-select
+                    formControlName="idTarea">
 
-                    <mat-option *ngFor="let t of tareas" [value]="t.id">
+                    <mat-option
+                        *ngFor="let t of tareas"
+                        [value]="t.id">
 
                         {{ t.nombre }}
 
@@ -76,47 +107,60 @@
 
             </mat-form-field>
 
-            <mat-form-field appearance="outline">
 
-                <mat-label>Fecha del trabajo</mat-label>
+            <!-- COMENTARIOS -->
 
-                <input matInput type="date" formControlName="fechaTrabajo">
+            <mat-form-field
+                appearance="outline"
+                class="comentarios">
 
-            </mat-form-field>
+                <mat-label>
+                    Comentarios
+                </mat-label>
 
-            <mat-form-field appearance="outline" class="comentarios">
-
-                <mat-label>Comentarios</mat-label>
-
-                <textarea matInput rows="5" formControlName="comentarios">
-
+                <textarea
+                    matInput
+                    rows="5"
+                    formControlName="comentarios">
                 </textarea>
 
             </mat-form-field>
 
+
+            <!-- BOTONES -->
+
             <div class="botones">
 
-                <button mat-stroked-button color="warn">
+                <button
+                    mat-stroked-button
+                    color="warn"
+                    type="button">
 
                     Cancelar
 
                 </button>
 
-                <button mat-raised-button color="primary" (click)="guardar()">
+
+                <button
+                    mat-raised-button
+                    color="primary"
+                    type="button"
+                    (click)="guardar()">
 
                     @if (!esEdicion) {
 
-                    Crear Trabajo
+                        Crear Trabajo
 
                     } @else {
 
-                    Guardar Cambios
+                        Guardar Cambios
 
                     }
 
                 </button>
 
             </div>
+
 
         </form>
 

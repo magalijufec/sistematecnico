@@ -15,7 +15,7 @@ export interface TrabajoDetalle {
   estadoColor: string;
 
   fechaSolicitud: string;
-  fechaTrabajo: string;
+  fechaFinalizado: string | null;
 
   comentarios: string;
   trabajoRealizado: string;

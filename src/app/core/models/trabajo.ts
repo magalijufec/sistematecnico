@@ -4,8 +4,8 @@ export interface Trabajo {
   idTecnico: number;
   idEstado: number;
   idTarea: number;
-  fechaSolicitud: Date;
-  fechaTrabajo: string;
+  fechaSolicitud: string;
+  fechaFinalizado: string;
   cliente: string;
   tecnico: string;
   tarea: string;

@@ -1,0 +1,356 @@
+<div class="toolbar">
+
+    <h2>
+        Trabajos finalizados
+    </h2>
+
+</div>
+
+
+<div class="filtros">
+
+    <mat-form-field appearance="outline">
+
+        <mat-label>
+            Buscar
+        </mat-label>
+
+        <input
+            matInput
+            [(ngModel)]="buscar"
+            (input)="filtrar()"
+            placeholder="Cliente, técnico, tarea, provincia o ciudad">
+
+    </mat-form-field>
+
+
+    <button
+        mat-stroked-button
+        (click)="limpiarFiltros()">
+
+        <mat-icon>
+            filter_alt_off
+        </mat-icon>
+
+        Limpiar
+
+    </button>
+
+</div>
+
+
+<mat-card>
+
+    <mat-card-header>
+
+        <mat-card-title>
+
+            Historial de trabajos finalizados
+
+        </mat-card-title>
+
+    </mat-card-header>
+
+
+    <mat-card-content>
+
+        <div class="tabla-container">
+
+            <table
+                mat-table
+                [dataSource]="trabajosFiltrados">
+
+
+                <!-- Fecha solicitud -->
+
+                <ng-container
+                    matColumnDef="fechaSolicitud">
+
+                    <th
+                        mat-header-cell
+                        *matHeaderCellDef>
+
+                        Fecha solicitud
+
+                    </th>
+
+                    <td
+                        mat-cell
+                        *matCellDef="let trabajo">
+
+                        {{ trabajo.fechaSolicitud
+                            | date:'dd/MM/yyyy' }}
+
+                    </td>
+
+                </ng-container>
+
+
+                <!-- Fecha trabajo -->
+
+                <ng-container
+                    matColumnDef="fechaFinalizado">
+
+                    <th
+                        mat-header-cell
+                        *matHeaderCellDef>
+
+                        Fecha finalización
+
+                    </th>
+
+                    <td
+                        mat-cell
+                        *matCellDef="let trabajo">
+
+                        @if (trabajo.fechaInicio) {
+
+                            {{ trabajo.fechaInicio
+                                | date:'dd/MM/yyyy' }}
+
+                        } @else {
+
+                            -
+
+                        }
+
+                    </td>
+
+                </ng-container>
+
+
+                <!-- Cliente -->
+
+                <ng-container
+                    matColumnDef="cliente">
+
+                    <th
+                        mat-header-cell
+                        *matHeaderCellDef>
+
+                        Cliente
+
+                    </th>
+
+                    <td
+                        mat-cell
+                        *matCellDef="let trabajo">
+
+                        {{ trabajo.cliente }}
+
+                    </td>
+
+                </ng-container>
+
+
+                <!-- Provincia -->
+
+                <ng-container
+                    matColumnDef="provincia">
+
+                    <th
+                        mat-header-cell
+                        *matHeaderCellDef>
+
+                        Provincia
+
+                    </th>
+
+                    <td
+                        mat-cell
+                        *matCellDef="let trabajo">
+
+                        {{ trabajo.provincia }}
+
+                    </td>
+
+                </ng-container>
+
+
+                <!-- Ciudad -->
+
+                <ng-container
+                    matColumnDef="ciudad">
+
+                    <th
+                        mat-header-cell
+                        *matHeaderCellDef>
+
+                        Ciudad
+
+                    </th>
+
+                    <td
+                        mat-cell
+                        *matCellDef="let trabajo">
+
+                        {{ trabajo.ciudad }}
+
+                    </td>
+
+                </ng-container>
+
+
+                <!-- Técnico -->
+
+                <ng-container
+                    matColumnDef="tecnico">
+
+                    <th
+                        mat-header-cell
+                        *matHeaderCellDef>
+
+                        Técnico
+
+                    </th>
+
+                    <td
+                        mat-cell
+                        *matCellDef="let trabajo">
+
+                        {{ trabajo.tecnico }}
+
+                    </td>
+
+                </ng-container>
+
+
+                <!-- Tarea -->
+
+                <ng-container
+                    matColumnDef="tarea">
+
+                    <th
+                        mat-header-cell
+                        *matHeaderCellDef>
+
+                        Tarea
+
+                    </th>
+
+                    <td
+                        mat-cell
+                        *matCellDef="let trabajo">
+
+                        {{ trabajo.tarea }}
+
+                    </td>
+
+                </ng-container>
+
+
+                <!-- Fecha pagado -->
+
+                <ng-container
+                    matColumnDef="fechaPagado">
+
+                    <th
+                        mat-header-cell
+                        *matHeaderCellDef>
+
+                        Fecha pagado
+
+                    </th>
+
+                    <td
+                        mat-cell
+                        *matCellDef="let trabajo">
+
+                        @if (trabajo.fechaPagado) {
+
+                            {{ trabajo.fechaPagado
+                                | date:'dd/MM/yyyy' }}
+
+                        } @else {
+
+                            -
+
+                        }
+
+                    </td>
+
+                </ng-container>
+
+
+                <!-- Trabajo realizado -->
+
+                <ng-container
+                    matColumnDef="trabajoRealizado">
+
+                    <th
+                        mat-header-cell
+                        *matHeaderCellDef>
+
+                        Trabajo realizado
+
+                    </th>
+
+                    <td
+                        mat-cell
+                        *matCellDef="let trabajo">
+
+                        {{ trabajo.trabajoRealizado || '-' }}
+
+                    </td>
+
+                </ng-container>
+
+
+                <!-- Acciones -->
+
+                <ng-container
+                    matColumnDef="acciones">
+
+                    <th
+                        mat-header-cell
+                        *matHeaderCellDef>
+
+                    </th>
+
+                    <td
+                        mat-cell
+                        *matCellDef="let trabajo">
+
+                        <button
+                            mat-icon-button
+                            color="primary"
+                            [routerLink]="[
+                                '/trabajos',
+                                trabajo.id
+                            ]">
+
+                            <mat-icon>
+                                visibility
+                            </mat-icon>
+
+                        </button>
+
+                    </td>
+
+                </ng-container>
+
+
+                <tr
+                    mat-header-row
+                    *matHeaderRowDef="displayedColumns">
+
+                </tr>
+
+
+                <tr
+                    mat-row
+                    *matRowDef="
+                        let row;
+                        columns: displayedColumns
+                    ">
+
+                </tr>
+
+
+            </table>
+
+        </div>
+
+    </mat-card-content>
+
+</mat-card>

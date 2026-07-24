@@ -11,6 +11,7 @@ import { LoginComponent } from './features/auth/login/login';
 import { authGuard } from './core/guards/auth.guard';
 import { guestGuard } from './core/guards/guest.guard';
 import { CambiarPasswordComponent } from './features/usuarios/cambiar-password/cambiar-password';
+import { TrabajosFinalizadosComponent } from './features/trabajos/trabajos-finalizados/trabajos-finalizados';
 
 export const routes: Routes = [
 
@@ -63,7 +64,10 @@ export const routes: Routes = [
                 path: 'trabajos/:id/editar',
                 component: TrabajoFormComponent
             },
-
+            {
+                path: 'trabajos-finalizados',
+                component: TrabajosFinalizadosComponent
+            },
             {
                 path: 'usuarios',
                 component: UsuariosListComponent

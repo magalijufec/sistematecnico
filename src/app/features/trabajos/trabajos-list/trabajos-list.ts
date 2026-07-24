@@ -80,7 +80,7 @@ export class TrabajosListComponent implements OnInit {
   }
 
   cargarTrabajos() {
-    this.trabajoService.obtenerTodos().subscribe({
+    this.trabajoService.obtenerNoFinalizados().subscribe({
       next: (data) => {
         console.log(data);
 
