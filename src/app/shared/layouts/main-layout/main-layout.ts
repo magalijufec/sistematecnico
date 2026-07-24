@@ -45,8 +45,11 @@ export class MainLayoutComponent implements OnInit {
   private breakpointObserver = inject(BreakpointObserver);
 
   esMovil = false;
+  nombreUsuario : string | undefined = '' ;
 
   ngOnInit(): void {
+
+    this.nombreUsuario = this.authService.obtenerUsuario()?.userName;
 
     this.breakpointObserver
       .observe([Breakpoints.Handset])

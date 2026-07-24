@@ -1,5 +1,6 @@
 <mat-sidenav-container class="container">
 
+  <!-- MENÚ LATERAL -->
   <mat-sidenav
     #drawer
     [mode]="esMovil ? 'over' : 'side'"
@@ -40,12 +41,13 @@
   </mat-sidenav>
 
 
+  <!-- CONTENIDO PRINCIPAL -->
   <mat-sidenav-content>
 
+    <!-- TOOLBAR -->
     <mat-toolbar color="primary">
 
       <!-- Botón menú -->
-
       <button
         mat-icon-button
         (click)="toggleMenu()">
@@ -57,16 +59,17 @@
       </button>
 
 
+      <!-- Título -->
       <span class="titulo">
         Sistema Técnico
       </span>
 
 
+      <!-- Espacio -->
       <span class="spacer"></span>
 
 
       <!-- Notificaciones -->
-
       <button
         mat-icon-button>
 
@@ -78,13 +81,21 @@
 
 
       <!-- Usuario -->
-
       <button
-        mat-icon-button
-        [matMenuTriggerFor]="menuUsuario">
+        mat-button
+        [matMenuTriggerFor]="menuUsuario"
+        class="usuario-menu">
 
         <mat-icon>
           account_circle
+        </mat-icon>
+
+        <span>
+          {{ nombreUsuario }}
+        </span>
+
+        <mat-icon>
+          arrow_drop_down
         </mat-icon>
 
       </button>
@@ -92,6 +103,7 @@
     </mat-toolbar>
 
 
+    <!-- CONTENIDO DE LAS RUTAS -->
     <main class="contenido">
 
       <router-outlet></router-outlet>
@@ -103,10 +115,10 @@
 </mat-sidenav-container>
 
 
-<!-- Menú de usuario -->
-
+<!-- MENÚ DESPLEGABLE DEL USUARIO -->
 <mat-menu #menuUsuario="matMenu">
 
+  <!-- CAMBIAR CONTRASEÑA -->
   <button
     mat-menu-item
     routerLink="/cambiar-password">
@@ -122,6 +134,7 @@
   </button>
 
 
+  <!-- CERRAR SESIÓN -->
   <button
     mat-menu-item
     (click)="cerrarSesion()">
