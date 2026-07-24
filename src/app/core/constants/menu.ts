@@ -21,6 +21,12 @@ export const MENU: MenuItem[] = [
   },
 
   {
+    text: 'Pendientes de pago',
+    icon: 'payment',
+    route: '/trabajos-pendiente-pago'  
+  },
+
+  {
     icon: 'store',
     text: 'Clientes',
     route: '/clientes'
@@ -30,12 +36,6 @@ export const MENU: MenuItem[] = [
     icon: 'people',
     text: 'Usuarios',
     route: '/usuarios'
-  },
-
-  {
-    icon: 'settings',
-    text: 'Configuración',
-    route: '/configuracion'
   }
 
 ];

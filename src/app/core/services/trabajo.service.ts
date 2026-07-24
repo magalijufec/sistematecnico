@@ -27,6 +27,10 @@ export class TrabajoService {
     return this.http.get<TrabajoFinalizado[]>( `${this.api}/finalizados`);
   }
 
+  obtenerPendientePago(): Observable<TrabajoFinalizado[]> {
+    return this.http.get<TrabajoFinalizado[]>( `${this.api}/pendiente-pago`);
+  }
+
   obtenerPorId(id: number): Observable<Trabajo> {
     return this.http.get<Trabajo>(`${this.api}/${id}`);
   }

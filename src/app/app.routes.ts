@@ -12,6 +12,7 @@ import { authGuard } from './core/guards/auth.guard';
 import { guestGuard } from './core/guards/guest.guard';
 import { CambiarPasswordComponent } from './features/usuarios/cambiar-password/cambiar-password';
 import { TrabajosFinalizadosComponent } from './features/trabajos/trabajos-finalizados/trabajos-finalizados';
+import { TrabajosPendientePagoComponent } from './features/trabajos/trabajos-pendiente-pago/trabajos-pendiente-pago';
 
 export const routes: Routes = [
 
@@ -67,6 +68,10 @@ export const routes: Routes = [
             {
                 path: 'trabajos-finalizados',
                 component: TrabajosFinalizadosComponent
+            },
+            {
+                path: 'trabajos-pendiente-pago',
+                component: TrabajosPendientePagoComponent
             },
             {
                 path: 'usuarios',
