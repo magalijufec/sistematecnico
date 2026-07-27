@@ -77,8 +77,12 @@ export const routes: Routes = [
                 path: 'usuarios',
                 component: UsuariosListComponent
             },
-           {
+            {
                 path: 'usuarios/nuevo',
+                component: UsuarioFormComponent
+            },
+            {
+                path: 'usuarios/:id/editar',
                 component: UsuarioFormComponent
             },
             {

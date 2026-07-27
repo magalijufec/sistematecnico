@@ -177,32 +177,13 @@ export class TrabajoFormComponent
 
   });
 
-
-  // ============================
-  // EDICIÓN
-  // ============================
-
   idTrabajo = 0;
-
-
   esEdicion = false;
 
-
-  // ============================
-  // INIT
-  // ============================
-
   ngOnInit(): void {
-
-
     this.cargarClientes();
-
-
     this.cargarTecnicos();
-
-
     this.cargarTareas();
-
 
     this.idTrabajo =
       Number(
@@ -211,261 +192,140 @@ export class TrabajoFormComponent
           .get('id')
       );
 
-
-    this.esEdicion =
-      this.idTrabajo > 0;
-
+    this.esEdicion = this.idTrabajo > 0;
 
     if (this.esEdicion) {
-
       this.cargarTrabajo();
-
     }
-
   }
 
-
-  // ============================
   // CARGAR TRABAJO
-  // ============================
 
   cargarTrabajo(): void {
-
-
     this.trabajoService
       .obtenerPorId(this.idTrabajo)
       .subscribe({
-
         next: trabajo => {
-
-
           this.form.patchValue({
-
-            idCliente:
-              trabajo.idCliente,
-
-            idTecnico:
-              trabajo.idTecnico,
-
-            idTarea:
-              trabajo.idTarea,
-
-            comentarios:
-              trabajo.comentarios
+            idCliente: trabajo.idCliente,
+            idTecnico: trabajo.idTecnico,
+            idTarea: trabajo.idTarea,
+            comentarios: trabajo.comentarios
 
           });
-
-
         },
-
         error: error => {
-
-          console.error(
-            'Error al cargar el trabajo',
+          console.error('Error al cargar el trabajo',
             error
           );
-
         }
-
       });
-
   }
 
-
-  // ============================
   // CARGAR CLIENTES
-  // ============================
 
   cargarClientes(): void {
-
-
     this.clienteService
       .obtenerCombo()
       .subscribe({
-
         next: data => {
-
-
-          this.clientes =
-            data;
-
-
-          this.clientesFiltrados =
-            data;
-
-
+          this.clientes = data;
+          this.clientesFiltrados = data;
         },
 
         error: error => {
-
           console.error(
             'Error al cargar clientes',
             error
           );
-
         }
-
       });
 
 
     this.clienteFiltro
       .valueChanges
       .subscribe(texto => {
-
-
-        const filtro =
-          (
-            texto ?? ''
-          )
+        const filtro = (texto ?? '')
           .toLowerCase();
-
 
         this.clientesFiltrados =
           this.clientes.filter(
             cliente =>
-
               cliente.nombre
                 .toLowerCase()
                 .includes(filtro)
-
           );
-
-
       });
-
   }
 
-
-  // ============================
   // CARGAR TÉCNICOS
-  // ============================
 
   cargarTecnicos(): void {
-
-
     this.usuarioService
       .obtenerTecnicos()
       .subscribe({
-
         next: data => {
-
-          this.tecnicos =
-            data;
-
+          this.tecnicos = data;
         },
-
         error: error => {
-
           console.error(
             'Error al cargar técnicos',
             error
           );
-
         }
-
       });
-
   }
 
-
-  // ============================
   // CARGAR TAREAS
-  // ============================
 
   cargarTareas(): void {
-
-
     this.tareaService
       .obtenerTodas()
       .subscribe({
-
         next: data => {
-
-          this.tareas =
-            data;
-
+          this.tareas = data;
         },
-
         error: error => {
-
           console.error(
             'Error al cargar tareas',
             error
           );
-
         }
-
       });
-
   }
 
-
-  // ============================
   // GUARDAR
-  // ============================
 
   guardar(): void {
-
-
     if (this.form.invalid) {
-
-
       this.form.markAllAsTouched();
-
-
       return;
-
     }
-
 
     const trabajo:
       TrabajoCreate =
         this.form.getRawValue();
 
-
-    // ============================
     // CREAR
-    // ============================
-
     if (!this.esEdicion) {
-
-
       this.trabajoService
         .crear(trabajo)
         .subscribe({
-
           next: () => {
-
-
             alert(
               'Trabajo creado correctamente'
             );
-
-
           },
-
           error: error => {
-
-
             console.error(
               'Error al crear trabajo',
               error
             );
-
-
           }
-
         });
-
-
       return;
-
     }
-
-
-    // ============================
     // EDITAR
-    // ============================
 
     this.trabajoService
       .actualizar(
@@ -473,28 +333,17 @@ export class TrabajoFormComponent
         trabajo
       )
       .subscribe({
-
         next: () => {
-
-
           alert(
             'Trabajo actualizado correctamente'
           );
-
-
         },
-
         error: error => {
-
-
           console.error(
             'Error al actualizar trabajo',
             error
           );
-
-
         }
-
       });
 
   }

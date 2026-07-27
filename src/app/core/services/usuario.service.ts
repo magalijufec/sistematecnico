@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Usuario } from '../models/usuario';
+import { Usuario, UsuarioDetalle } from '../models/usuario';
 import { Combo } from '../models/combo';
 
 @Injectable({
@@ -18,8 +18,8 @@ export class UsuarioService {
     return this.http.get<Usuario[]>(this.api);
   }
 
-  obtenerPorId(id: number): Observable<Usuario> {
-    return this.http.get<Usuario>(`${this.api}/${id}`);
+  obtenerPorId(id: number): Observable<UsuarioDetalle> {
+    return this.http.get<UsuarioDetalle>(`${this.api}/${id}`);
   }
 
   crear(usuario: any) {

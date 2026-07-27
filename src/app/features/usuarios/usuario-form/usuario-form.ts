@@ -53,6 +53,8 @@ export class UsuarioFormComponent implements OnInit {
   provincias: Combo[] = [];
   ciudades: Combo[] = [];
   mostrarCliente = false;
+  idUsuario = 0;
+  esEdicion = false;
 
   form = this.fb.group({
     userName: [
@@ -97,10 +99,66 @@ export class UsuarioFormComponent implements OnInit {
   });
 
   ngOnInit(): void {
+    this.idUsuario = Number(
+      this.route.snapshot.paramMap.get('id')
+    );
+
+    this.esEdicion = this.idUsuario > 0;
+
+    if (this.esEdicion) {
+      this.cargarUsuario();
+    }
     this.cargarPerfiles();
     this.cargarClientes();
     this.detectarCambioPerfil();
     this.cargarProvincias();
+  }
+
+  cargarUsuario(): void {
+
+    this.usuarioService
+      .obtenerPorId(this.idUsuario)
+      .subscribe({
+
+        next: usuario => {
+
+          console.log('Usuario a editar:', usuario);
+
+          this.form.patchValue({
+            userName: usuario.userName,
+            nombreApellido: usuario.nombreApellido,
+            email: usuario.email,
+            numeroCelular: usuario.numeroCelular,
+            idPerfil: usuario.perfilId,
+            provinciaId: usuario.provinciaId,
+            ciudadId: usuario.ciudadId,
+            clienteId: usuario.clienteId,
+            activo: usuario.activo
+          });
+
+          // Cargamos las ciudades de la provincia
+          if (usuario.provinciaId) {
+            this.ciudadService
+              .obtenerPorProvincia(usuario.provinciaId)
+              .subscribe({
+                next: ciudades => {
+                  this.ciudades = ciudades;
+                  // seleccionamos la ciudad del usuario
+                  this.form.patchValue({
+                    ciudadId: usuario.ciudadId
+                  });
+                },
+                error: error => {
+                  console.error('Error al cargar ciudades', error);
+                }
+              });
+          }
+        },
+
+        error: error => {
+          console.error('Error al cargar usuario', error);
+        }
+      });
   }
 
   cargarProvincias(): void {
@@ -109,25 +167,16 @@ export class UsuarioFormComponent implements OnInit {
         this.provincias = data;
       },
       error: error => {
-        console.error(
-          'Error al cargar provincias',
-          error
-        );
+        console.error('Error al cargar provincias', error);
       }
     });
   }
 
   cambioProvincia(): void {
-
-    const provinciaId =
-      this.form.get('provinciaId')?.value;
-
+    const provinciaId = this.form.get('provinciaId')?.value;
     this.ciudades = [];
-
     this.clientes = [];
-
     this.clientesFiltrados = [];
-
     this.form.patchValue({
       ciudadId: 0,
       clienteId: 0
@@ -153,17 +202,10 @@ export class UsuarioFormComponent implements OnInit {
   }
 
   cambioCiudad(): void {
-
-    const provinciaId =
-      this.form.get('provinciaId')?.value;
-
-    const ciudadId =
-      this.form.get('ciudadId')?.value;
-
+    const provinciaId = this.form.get('provinciaId')?.value;
+    const ciudadId = this.form.get('ciudadId')?.value;
     this.clientes = [];
-
     this.clientesFiltrados = [];
-
     this.form.patchValue({
       clienteId: 0
     });
@@ -184,19 +226,11 @@ export class UsuarioFormComponent implements OnInit {
       )
       .subscribe({
         next: data => {
-
           this.clientes = data;
-
           this.clientesFiltrados = data;
-
         },
         error: error => {
-
-          console.error(
-            'Error al cargar clientes',
-            error
-          );
-
+          console.error('Error al cargar clientes', error);
         }
       });
   }
@@ -311,36 +345,25 @@ export class UsuarioFormComponent implements OnInit {
           ]);
         },
         error: error => {
-          console.error(
-            'Error al crear usuario',
-            error
-          );
+          console.error('Error al crear usuario', error);
           if (
             error.status === 400
           ) {
-            alert(
-              'Los datos enviados no son válidos.'
-            );
+            alert('Los datos enviados no son válidos.');
           }
           else if (
             error.status === 401
           ) {
-            alert(
-              'No tiene autorización para crear usuarios.'
-            );
+            alert('No tiene autorización para crear usuarios.');
           }
 
           else if (
             error.status === 403
           ) {
-            alert(
-              'No tiene permisos para realizar esta acción.'
-            );
+            alert('No tiene permisos para realizar esta acción.');
           }
           else {
-            alert(
-              'Ocurrió un error al crear el usuario.'
-            );
+            alert('Ocurrió un error al crear el usuario.');
           }
         }
       });
