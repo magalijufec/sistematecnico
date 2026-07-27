@@ -1,16 +1,90 @@
-.galeria{
-
-display:flex;
-gap:15px;
-flex-wrap:wrap;
-
+.comparaciones {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
 
+.comparacion-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 20px;
+  align-items: center;
 
-.galeria img{
+  padding: 20px;
 
-border-radius:8px;
-object-fit:cover;
-height:150px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+
+  background-color: #fafafa;
+}
+
+.imagen-columna {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.imagen-columna h3 {
+  margin: 0;
+}
+
+.imagen-trabajo {
+  width: 100%;
+  max-width: 350px;
+  height: 250px;
+
+  object-fit: cover;
+
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.sin-imagen {
+  width: 100%;
+  max-width: 350px;
+  height: 250px;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+
+  color: #888;
+}
+
+.acciones-comparacion {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.agregar-comparacion {
+  display: flex;
+  justify-content: center;
+
+  margin-top: 24px;
+}
+
+@media (max-width: 768px) {
+
+  .comparacion-row {
+    grid-template-columns: 1fr;
+  }
+
+  .acciones-comparacion {
+    justify-content: flex-end;
+  }
+
+  .imagen-trabajo,
+  .sin-imagen {
+    max-width: 100%;
+  }
 
 }

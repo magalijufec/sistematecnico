@@ -87,27 +87,179 @@
         <!-- Trabajo en proceso -->
         @if (trabajo.estado === 'En proceso') {
 
+        <mat-card>
+
+            <mat-card-header>
+
+                <mat-card-title>
+                    Trabajo realizado
+                </mat-card-title>
+
+            </mat-card-header>
+
+            <mat-card-content>
+
+                <div class="comparaciones">
+
+                    @for (
+                    comparacion of comparaciones;
+                    track comparacion.id
+                    ) {
+
+                    <div class="comparacion-row">
+
+                        <!-- ANTES -->
+
+                        <div class="imagen-columna">
+
+                            <h3>
+                                Antes
+                            </h3>
+
+                            @if (comparacion.imagenAntes) {
+
+                            <img class="imagen-trabajo" [src]="obtenerUrlImagen(
+                  comparacion.imagenAntes.rutaArchivo
+                )" alt="Imagen antes">
+
+                            } @else {
+
+                            <div class="sin-imagen">
+
+                                <mat-icon>
+                                    image
+                                </mat-icon>
+
+                                <span>
+                                    No hay imagen
+                                </span>
+
+                            </div>
+
+                            }
+
+                            <input #inputAntes type="file" accept="image/*" hidden (change)="
+                subirAntes(
+                  $event,
+                  comparacion
+                )
+              ">
+
+                            <button mat-stroked-button color="primary" (click)="inputAntes.click()">
+
+                                <mat-icon>
+                                    upload
+                                </mat-icon>
+
+                                @if (comparacion.imagenAntes) {
+                                Cambiar imagen
+                                } @else {
+                                Cargar imagen
+                                }
+
+                            </button>
+
+                        </div>
 
 
-        <h3>Imágenes Antes</h3>
+                        <!-- DESPUÉS -->
 
-        <input type="file" multiple (change)="subirImagenes($event,true)">
+                        <div class="imagen-columna">
 
-        <div class="galeria">
-            @for(img of imagenesAntes; track img.id){
-            <img [src]="'https://localhost:7122/'+img.rutaArchivo" width="150">
-            }
-        </div>
+                            <h3>
+                                Después
+                            </h3>
 
-        <h3>Imágenes Después</h3>
+                            @if (comparacion.imagenDespues) {
 
-        <input type="file" multiple (change)="subirImagenes($event,false)">
+                            <img class="imagen-trabajo" [src]="obtenerUrlImagen(
+                  comparacion.imagenDespues.rutaArchivo
+                )" alt="Imagen después">
 
-        <div class="galeria">
-            @for(img of imagenesDespues; track img.id){
-            <img [src]="'https://localhost:7122/'+img.rutaArchivo" width="150">
-            }
-        </div>
+                            } @else {
+
+                            <div class="sin-imagen">
+
+                                <mat-icon>
+                                    image
+                                </mat-icon>
+
+                                <span>
+                                    No hay imagen
+                                </span>
+
+                            </div>
+
+                            }
+
+                            <input #inputDespues type="file" accept="image/*" hidden (change)="
+                subirDespues(
+                  $event,
+                  comparacion
+                )
+              ">
+
+                            <button mat-stroked-button color="primary" (click)="inputDespues.click()">
+
+                                <mat-icon>
+                                    upload
+                                </mat-icon>
+
+                                @if (comparacion.imagenDespues) {
+                                Cambiar imagen
+                                } @else {
+                                Cargar imagen
+                                }
+
+                            </button>
+
+                        </div>
+
+
+                        <!-- ELIMINAR -->
+
+                        <div class="acciones-comparacion">
+
+                            <button mat-icon-button color="warn" matTooltip="Eliminar comparación" (click)="
+                eliminarComparacion(
+                  comparacion
+                )
+              ">
+
+                                <mat-icon>
+                                    delete
+                                </mat-icon>
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                    }
+
+                </div>
+
+
+                <!-- AGREGAR -->
+
+                <div class="agregar-comparacion">
+
+                    <button mat-raised-button color="primary" (click)="agregarComparacion()">
+
+                        <mat-icon>
+                            add
+                        </mat-icon>
+
+                        Agregar comparación
+
+                    </button>
+
+                </div>
+
+            </mat-card-content>
+
+        </mat-card>
 
         <mat-divider></mat-divider>
 
@@ -165,7 +317,7 @@
 
         </button>
 
-        } 
+        }
 
         }
 

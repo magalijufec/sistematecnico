@@ -1,11 +1,16 @@
 export interface Imagen {
-
   id: number;
-
-  nombre: string;
-
+  tipo: string;
+  nombreArchivo: string;
   rutaArchivo: string;
+  extension: string;
+  tamanio: number;
+  fechaCarga: string;
+}
 
-  esAntes: boolean;
-
+export interface TrabajoImagenComparacion {
+  id: number;
+  trabajoId: number;
+  imagenAntes: Imagen | null;
+  imagenDespues: Imagen | null;
 }
