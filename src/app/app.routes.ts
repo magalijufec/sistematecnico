@@ -13,6 +13,7 @@ import { guestGuard } from './core/guards/guest.guard';
 import { CambiarPasswordComponent } from './features/usuarios/cambiar-password/cambiar-password';
 import { TrabajosFinalizadosComponent } from './features/trabajos/trabajos-finalizados/trabajos-finalizados';
 import { TrabajosPendientePagoComponent } from './features/trabajos/trabajos-pendiente-pago/trabajos-pendiente-pago';
+import { UsuarioFormComponent } from './features/usuarios/usuario-form/usuario-form';
 
 export const routes: Routes = [
 
@@ -48,7 +49,6 @@ export const routes: Routes = [
                 component: DashboardComponent
             },
 
-
             {
                 path: 'trabajos',
                 component: TrabajosListComponent
@@ -77,7 +77,10 @@ export const routes: Routes = [
                 path: 'usuarios',
                 component: UsuariosListComponent
             },
-
+           {
+                path: 'usuarios/nuevo',
+                component: UsuarioFormComponent
+            },
             {
                 path: 'clientes',
                 component: ClientesListComponent

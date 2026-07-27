@@ -1,0 +1,373 @@
+<mat-card class="usuario-card">
+
+  <mat-card-header>
+
+    <mat-card-title>
+
+      Nuevo usuario
+
+    </mat-card-title>
+
+    <mat-card-subtitle>
+
+      Complete los datos del usuario
+
+    </mat-card-subtitle>
+
+  </mat-card-header>
+
+
+  <mat-card-content>
+
+    <form
+      [formGroup]="form"
+      class="formulario">
+
+
+      <!-- ================================= -->
+      <!-- NOMBRE DE USUARIO -->
+      <!-- ================================= -->
+
+      <mat-form-field
+        appearance="outline"
+        class="campo">
+
+        <mat-label>
+          Nombre de usuario
+        </mat-label>
+
+        <input
+          matInput
+          formControlName="userName"
+          autocomplete="off">
+
+        @if (
+          campoInvalido('userName')
+        ) {
+
+          <mat-error>
+
+            @if (
+              form.controls.userName.errors?.['required']
+            ) {
+
+              El nombre de usuario es obligatorio.
+
+            }
+
+            @else if (
+              form.controls.userName.errors?.['minlength']
+            ) {
+
+              Debe tener al menos 3 caracteres.
+
+            }
+
+          </mat-error>
+
+        }
+
+      </mat-form-field>
+
+
+      <!-- ================================= -->
+      <!-- NOMBRE Y APELLIDO -->
+      <!-- ================================= -->
+
+      <mat-form-field
+        appearance="outline"
+        class="campo">
+
+        <mat-label>
+          Nombre y apellido
+        </mat-label>
+
+        <input
+          matInput
+          formControlName="nombreApellido">
+
+        @if (
+          campoInvalido('nombreApellido')
+        ) {
+
+          <mat-error>
+
+            El nombre y apellido es obligatorio.
+
+          </mat-error>
+
+        }
+
+      </mat-form-field>
+
+
+      <!-- ================================= -->
+      <!-- EMAIL -->
+      <!-- ================================= -->
+
+      <mat-form-field
+        appearance="outline"
+        class="campo">
+
+        <mat-label>
+          Email
+        </mat-label>
+
+        <input
+          matInput
+          type="email"
+          formControlName="email">
+
+        @if (
+          campoInvalido('email')
+        ) {
+
+          <mat-error>
+
+            @if (
+              form.controls.email.errors?.['required']
+            ) {
+
+              El email es obligatorio.
+
+            }
+
+            @else if (
+              form.controls.email.errors?.['email']
+            ) {
+
+              Ingrese un email válido.
+
+            }
+
+          </mat-error>
+
+        }
+
+      </mat-form-field>
+
+
+      <!-- ================================= -->
+      <!-- PASSWORD -->
+      <!-- ================================= -->
+
+      <mat-form-field
+        appearance="outline"
+        class="campo">
+
+        <mat-label>
+          Contraseña
+        </mat-label>
+
+        <input
+          matInput
+          type="password"
+          formControlName="password"
+          autocomplete="new-password">
+
+        @if (
+          campoInvalido('password')
+        ) {
+
+          <mat-error>
+
+            @if (
+              form.controls.password.errors?.['required']
+            ) {
+
+              La contraseña es obligatoria.
+
+            }
+
+            @else if (
+              form.controls.password.errors?.['minlength']
+            ) {
+
+              La contraseña debe tener al menos 6 caracteres.
+
+            }
+
+          </mat-error>
+
+        }
+
+      </mat-form-field>
+
+
+      <!-- ================================= -->
+      <!-- PERFIL -->
+      <!-- ================================= -->
+
+      <mat-form-field
+        appearance="outline"
+        class="campo">
+
+        <mat-label>
+          Perfil
+        </mat-label>
+
+        <mat-select
+          formControlName="idPerfil">
+
+          <mat-option
+            [value]="0">
+
+            Seleccione un perfil
+
+          </mat-option>
+
+
+          @for (
+            perfil of perfiles;
+            track perfil.id
+          ) {
+
+            <mat-option
+              [value]="perfil.id">
+
+              {{ perfil.nombre }}
+
+            </mat-option>
+
+          }
+
+        </mat-select>
+
+
+        @if (
+          campoInvalido('idPerfil')
+        ) {
+
+          <mat-error>
+
+            Debe seleccionar un perfil.
+
+          </mat-error>
+
+        }
+
+      </mat-form-field>
+
+
+      <!-- ================================= -->
+      <!-- CLIENTE / FARMACIA -->
+      <!-- SOLO PARA PERFIL FARMACIA -->
+      <!-- ================================= -->
+
+      @if (mostrarCliente) {
+
+        <mat-form-field
+          appearance="outline"
+          class="campo">
+
+          <mat-label>
+            Farmacia / Cliente
+          </mat-label>
+
+          <mat-select
+            formControlName="clienteId">
+
+
+            <mat-option
+              [value]="null">
+
+              Seleccione una farmacia
+
+            </mat-option>
+
+
+            @for (
+              cliente of clientes;
+              track cliente.id
+            ) {
+
+              <mat-option
+                [value]="cliente.id">
+
+                {{ cliente.nombre }}
+
+              </mat-option>
+
+            }
+
+
+          </mat-select>
+
+
+          @if (
+            campoInvalido('clienteId')
+          ) {
+
+            <mat-error>
+
+              Debe seleccionar una farmacia.
+
+            </mat-error>
+
+          }
+
+        </mat-form-field>
+
+      }
+
+
+      <!-- ================================= -->
+      <!-- ACTIVO -->
+      <!-- ================================= -->
+
+      <div class="activo">
+
+        <mat-checkbox
+          formControlName="activo">
+
+          Usuario activo
+
+        </mat-checkbox>
+
+      </div>
+
+
+      <!-- ================================= -->
+      <!-- BOTONES -->
+      <!-- ================================= -->
+
+      <div class="botones">
+
+        <button
+          mat-stroked-button
+          type="button"
+          color="warn"
+          (click)="cancelar()">
+
+          <mat-icon>
+            close
+          </mat-icon>
+
+          Cancelar
+
+        </button>
+
+
+        <button
+          mat-raised-button
+          color="primary"
+          type="button"
+          [disabled]="form.invalid"
+          (click)="guardar()">
+
+          <mat-icon>
+            save
+          </mat-icon>
+
+          Crear usuario
+
+        </button>
+
+      </div>
+
+
+    </form>
+
+  </mat-card-content>
+
+</mat-card>
