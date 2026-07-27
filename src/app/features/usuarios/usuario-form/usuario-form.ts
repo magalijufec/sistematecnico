@@ -91,6 +91,7 @@ export class UsuarioFormComponent implements OnInit {
     provinciaId: [0, Validators.required],
     ciudadId: [0, Validators.required],
     clienteId: [ null as number | null],
+    numeroCelular: [''],
     activo: [ true]
   });
 
@@ -208,24 +209,14 @@ export class UsuarioFormComponent implements OnInit {
   }
 
   guardar(): void {
-    // Validamos formulario
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
-    // Obtenemos valores
-    const valores =
-      this.form.getRawValue();
-    // VALIDACIÓN EXTRA PARA FARMACIA
-    if (
-      this.mostrarCliente &&
-      !valores.clienteId
-    ) {
-      this.form.controls.clienteId
-        .markAsTouched();
-      alert(
-        'Debe seleccionar una farmacia.'
-      );
+    const valores = this.form.getRawValue();
+    if (this.mostrarCliente && !valores.clienteId) {
+      this.form.controls.clienteId.markAsTouched();
+      alert('Debe seleccionar una farmacia.');
       return;
     }
     // OBJETO QUE SE ENVÍA AL BACKEND
@@ -235,10 +226,13 @@ export class UsuarioFormComponent implements OnInit {
       email: valores.email ?? '',
       password: valores.password ?? '',
       idPerfil: valores.idPerfil ?? 0,
+      idProvincia: valores.provinciaId ?? 0,
+      idCiudad: valores.ciudadId ?? 0,
       clienteId:
         this.mostrarCliente
           ? valores.clienteId
           : null,
+      numeroCelular: valores.numeroCelular ?? [''],
       activo: valores.activo ?? true
     };
 
