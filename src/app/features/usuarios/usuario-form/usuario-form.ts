@@ -18,6 +18,8 @@ import { ClienteService } from '../../../core/services/cliente.service';
 import { UsuarioService } from '../../../core/services/usuario.service';
 import { Combo } from '../../../core/models/combo';
 import { PerfilService } from '../../../core/services/perfil.service';
+import { CiudadService } from '../../../core/services/ciudad.service';
+import { ProvinciaService } from '../../../core/services/provincia.service';
 @Component({
   selector: 'app-usuario-form',
   standalone: true,
@@ -42,15 +44,16 @@ export class UsuarioFormComponent implements OnInit {
   private clienteService = inject(ClienteService);
   private perfilService = inject(PerfilService);
   private usuarioService = inject(UsuarioService);
-
+  private provinciaService = inject(ProvinciaService);
+  private ciudadService = inject(CiudadService);
 
   perfiles: Combo[] = [];
   clientes: Combo[] = [];
-
+  provincias: Combo[] = [];
+  ciudades: Combo[] = [];
   mostrarCliente = false;
 
   form = this.fb.group({
-
     userName: [
       '',
       [
@@ -58,14 +61,12 @@ export class UsuarioFormComponent implements OnInit {
         Validators.minLength(3)
       ]
     ],
-
     nombreApellido: [
       '',
       [
         Validators.required
       ]
     ],
-
     email: [
       '',
       [
@@ -73,7 +74,6 @@ export class UsuarioFormComponent implements OnInit {
         Validators.email
       ]
     ],
-
     password: [
       '',
       [
@@ -81,7 +81,6 @@ export class UsuarioFormComponent implements OnInit {
         Validators.minLength(6)
       ]
     ],
-
     idPerfil: [
       0,
       [
@@ -89,26 +88,53 @@ export class UsuarioFormComponent implements OnInit {
         Validators.min(1)
       ]
     ],
-
-    clienteId: [
-      null as number | null
-    ],
-
-    activo: [
-      true
-    ]
-
+    provinciaId: [0, Validators.required],
+    ciudadId: [0, Validators.required],
+    clienteId: [ null as number | null],
+    activo: [ true]
   });
-
-
-  // ==========================================
-  // INICIO
-  // ==========================================
 
   ngOnInit(): void {
     this.cargarPerfiles();
     this.cargarClientes();
     this.detectarCambioPerfil();
+    this.cargarProvincias();  
+  }
+
+  cargarProvincias(): void {
+    this.provinciaService.obtenerCombo().subscribe({
+      next: data => {
+        this.provincias = data;
+      },
+      error: error => {
+        console.error(
+          'Error al cargar provincias',
+          error
+        );
+      }
+    });
+  }
+
+  cambioProvincia(): void {
+    const provinciaId = this.form.get('provinciaId')?.value;
+    this.ciudades = [];
+    this.form.patchValue({ ciudadId: 0 });
+
+    if (!provinciaId) { return; }
+
+    this.ciudadService
+      .obtenerPorProvincia(provinciaId)
+      .subscribe({
+        next: data => {
+          this.ciudades = data;
+        },
+        error: error => {
+          console.error(
+            'Error al cargar ciudades',
+            error
+          );
+        }
+      });
   }
 
   cargarPerfiles(): void {
@@ -135,7 +161,6 @@ export class UsuarioFormComponent implements OnInit {
         next: data => {
           this.clientes = data;
         },
-
         error: error => {
           console.error(
             'Error al cargar clientes',
@@ -145,7 +170,6 @@ export class UsuarioFormComponent implements OnInit {
       });
   }
 
-
   detectarCambioPerfil(): void {
     this.form.controls.idPerfil
       .valueChanges
@@ -154,7 +178,6 @@ export class UsuarioFormComponent implements OnInit {
           this.perfiles.find(
             x => x.id === idPerfil
           );
-
         // Si todavía no cargaron los perfiles
         if (!perfil) {
           this.mostrarCliente = false;
@@ -168,45 +191,21 @@ export class UsuarioFormComponent implements OnInit {
             .trim()
             .toLowerCase() === 'farmacia'
         ) {
-
           this.mostrarCliente = true;
-
           this.form.controls.clienteId
             .setValidators([
               Validators.required
             ]);
-
         }
-
-
-        // ==========================================
         // CUALQUIER OTRO PERFIL
-        // ==========================================
-
         else {
-
           this.mostrarCliente = false;
-
-          this.form.controls.clienteId
-            .setValue(null);
-
-          this.form.controls.clienteId
-            .clearValidators();
-
+          this.form.controls.clienteId.setValue(null);
+          this.form.controls.clienteId.clearValidators();
         }
-
-
-        this.form.controls.clienteId
-          .updateValueAndValidity();
-
+        this.form.controls.clienteId.updateValueAndValidity();
       });
-
   }
-
-
-  // ==========================================
-  // GUARDAR USUARIO
-  // ==========================================
 
   guardar(): void {
     // Validamos formulario
@@ -217,9 +216,7 @@ export class UsuarioFormComponent implements OnInit {
     // Obtenemos valores
     const valores =
       this.form.getRawValue();
-    // ==========================================
     // VALIDACIÓN EXTRA PARA FARMACIA
-    // ==========================================
     if (
       this.mostrarCliente &&
       !valores.clienteId
@@ -231,147 +228,78 @@ export class UsuarioFormComponent implements OnInit {
       );
       return;
     }
-
-    // ==========================================
     // OBJETO QUE SE ENVÍA AL BACKEND
-    // ==========================================
-
     const usuario = {
-
-      userName:
-        valores.userName ?? '',
-
-      nombreApellido:
-        valores.nombreApellido ?? '',
-
-      email:
-        valores.email ?? '',
-
-      password:
-        valores.password ?? '',
-
-      idPerfil:
-        valores.idPerfil ?? 0,
-
+      userName: valores.userName ?? '',
+      nombreApellido: valores.nombreApellido ?? '',
+      email: valores.email ?? '',
+      password: valores.password ?? '',
+      idPerfil: valores.idPerfil ?? 0,
       clienteId:
         this.mostrarCliente
           ? valores.clienteId
           : null,
-
-      activo:
-        valores.activo ?? true
-
+      activo: valores.activo ?? true
     };
 
-
-    console.log(
-      'Usuario a guardar:',
-      usuario
-    );
-
-
-    // ==========================================
-    // LLAMAR API
-    // ==========================================
+    console.log('Usuario a guardar:',  usuario);
 
     this.usuarioService
       .crear(usuario)
       .subscribe({
-
         next: () => {
-
-          alert(
-            'Usuario creado correctamente'
-          );
-
+          alert('Usuario creado correctamente');
           this.router.navigate([
             '/usuarios'
           ]);
-
         },
-
         error: error => {
-
           console.error(
             'Error al crear usuario',
             error
           );
-
           if (
             error.status === 400
           ) {
-
             alert(
               'Los datos enviados no son válidos.'
             );
-
           }
-
           else if (
             error.status === 401
           ) {
-
             alert(
               'No tiene autorización para crear usuarios.'
             );
-
           }
 
           else if (
             error.status === 403
           ) {
-
             alert(
               'No tiene permisos para realizar esta acción.'
             );
-
           }
-
           else {
-
             alert(
               'Ocurrió un error al crear el usuario.'
             );
-
           }
-
         }
-
       });
-
   }
-
-
-  // ==========================================
-  // CANCELAR
-  // ==========================================
 
   cancelar(): void {
-
-    this.router.navigate([
-      '/usuarios'
-    ]);
-
+    this.router.navigate(['/usuarios']);
   }
 
-
-  // ==========================================
-  // MOSTRAR ERROR DE CAMPO
-  // ==========================================
-
-  campoInvalido(
-    nombreCampo: string
-  ): boolean {
-
-    const campo =
-      this.form.get(nombreCampo);
-
+  campoInvalido(nombreCampo: string): boolean {
+    const campo = this.form.get(nombreCampo);
     return !!(
       campo &&
       campo.invalid &&
       campo.touched
     );
-
   }
 
 }

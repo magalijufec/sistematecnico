@@ -19,51 +19,44 @@
 
   <mat-card-content>
 
-    <form
-      [formGroup]="form"
-      class="formulario">
+    <form [formGroup]="form" class="formulario">
 
 
       <!-- ================================= -->
       <!-- NOMBRE DE USUARIO -->
       <!-- ================================= -->
 
-      <mat-form-field
-        appearance="outline"
-        class="campo">
+      <mat-form-field appearance="outline" class="campo">
 
         <mat-label>
           Nombre de usuario
         </mat-label>
 
-        <input
-          matInput
-          formControlName="userName"
-          autocomplete="off">
+        <input matInput formControlName="userName" autocomplete="off">
 
         @if (
-          campoInvalido('userName')
+        campoInvalido('userName')
         ) {
 
-          <mat-error>
+        <mat-error>
 
-            @if (
-              form.controls.userName.errors?.['required']
-            ) {
+          @if (
+          form.controls.userName.errors?.['required']
+          ) {
 
-              El nombre de usuario es obligatorio.
+          El nombre de usuario es obligatorio.
 
-            }
+          }
 
-            @else if (
-              form.controls.userName.errors?.['minlength']
-            ) {
+          @else if (
+          form.controls.userName.errors?.['minlength']
+          ) {
 
-              Debe tener al menos 3 caracteres.
+          Debe tener al menos 3 caracteres.
 
-            }
+          }
 
-          </mat-error>
+        </mat-error>
 
         }
 
@@ -74,27 +67,23 @@
       <!-- NOMBRE Y APELLIDO -->
       <!-- ================================= -->
 
-      <mat-form-field
-        appearance="outline"
-        class="campo">
+      <mat-form-field appearance="outline" class="campo">
 
         <mat-label>
           Nombre y apellido
         </mat-label>
 
-        <input
-          matInput
-          formControlName="nombreApellido">
+        <input matInput formControlName="nombreApellido">
 
         @if (
-          campoInvalido('nombreApellido')
+        campoInvalido('nombreApellido')
         ) {
 
-          <mat-error>
+        <mat-error>
 
-            El nombre y apellido es obligatorio.
+          El nombre y apellido es obligatorio.
 
-          </mat-error>
+        </mat-error>
 
         }
 
@@ -105,42 +94,37 @@
       <!-- EMAIL -->
       <!-- ================================= -->
 
-      <mat-form-field
-        appearance="outline"
-        class="campo">
+      <mat-form-field appearance="outline" class="campo">
 
         <mat-label>
           Email
         </mat-label>
 
-        <input
-          matInput
-          type="email"
-          formControlName="email">
+        <input matInput type="email" formControlName="email">
 
         @if (
-          campoInvalido('email')
+        campoInvalido('email')
         ) {
 
-          <mat-error>
+        <mat-error>
 
-            @if (
-              form.controls.email.errors?.['required']
-            ) {
+          @if (
+          form.controls.email.errors?.['required']
+          ) {
 
-              El email es obligatorio.
+          El email es obligatorio.
 
-            }
+          }
 
-            @else if (
-              form.controls.email.errors?.['email']
-            ) {
+          @else if (
+          form.controls.email.errors?.['email']
+          ) {
 
-              Ingrese un email válido.
+          Ingrese un email válido.
 
-            }
+          }
 
-          </mat-error>
+        </mat-error>
 
         }
 
@@ -151,43 +135,37 @@
       <!-- PASSWORD -->
       <!-- ================================= -->
 
-      <mat-form-field
-        appearance="outline"
-        class="campo">
+      <mat-form-field appearance="outline" class="campo">
 
         <mat-label>
           Contraseña
         </mat-label>
 
-        <input
-          matInput
-          type="password"
-          formControlName="password"
-          autocomplete="new-password">
+        <input matInput type="password" formControlName="password" autocomplete="new-password">
 
         @if (
-          campoInvalido('password')
+        campoInvalido('password')
         ) {
 
-          <mat-error>
+        <mat-error>
 
-            @if (
-              form.controls.password.errors?.['required']
-            ) {
+          @if (
+          form.controls.password.errors?.['required']
+          ) {
 
-              La contraseña es obligatoria.
+          La contraseña es obligatoria.
 
-            }
+          }
 
-            @else if (
-              form.controls.password.errors?.['minlength']
-            ) {
+          @else if (
+          form.controls.password.errors?.['minlength']
+          ) {
 
-              La contraseña debe tener al menos 6 caracteres.
+          La contraseña debe tener al menos 6 caracteres.
 
-            }
+          }
 
-          </mat-error>
+        </mat-error>
 
         }
 
@@ -198,19 +176,15 @@
       <!-- PERFIL -->
       <!-- ================================= -->
 
-      <mat-form-field
-        appearance="outline"
-        class="campo">
+      <mat-form-field appearance="outline" class="campo">
 
         <mat-label>
           Perfil
         </mat-label>
 
-        <mat-select
-          formControlName="idPerfil">
+        <mat-select formControlName="idPerfil">
 
-          <mat-option
-            [value]="0">
+          <mat-option [value]="0">
 
             Seleccione un perfil
 
@@ -218,16 +192,15 @@
 
 
           @for (
-            perfil of perfiles;
-            track perfil.id
+          perfil of perfiles;
+          track perfil.id
           ) {
 
-            <mat-option
-              [value]="perfil.id">
+          <mat-option [value]="perfil.id">
 
-              {{ perfil.nombre }}
+            {{ perfil.nombre }}
 
-            </mat-option>
+          </mat-option>
 
           }
 
@@ -235,14 +208,14 @@
 
 
         @if (
-          campoInvalido('idPerfil')
+        campoInvalido('idPerfil')
         ) {
 
-          <mat-error>
+        <mat-error>
 
-            Debe seleccionar un perfil.
+          Debe seleccionar un perfil.
 
-          </mat-error>
+        </mat-error>
 
         }
 
@@ -256,59 +229,121 @@
 
       @if (mostrarCliente) {
 
-        <mat-form-field
-          appearance="outline"
-          class="campo">
+      <mat-form-field appearance="outline" class="campo">
 
-          <mat-label>
-            Farmacia / Cliente
-          </mat-label>
+        <mat-label>
+          Farmacia / Cliente
+        </mat-label>
 
-          <mat-select
-            formControlName="clienteId">
+        <mat-select formControlName="clienteId">
 
 
-            <mat-option
-              [value]="null">
+          <mat-option [value]="null">
 
-              Seleccione una farmacia
+            Seleccione una farmacia
 
-            </mat-option>
-
-
-            @for (
-              cliente of clientes;
-              track cliente.id
-            ) {
-
-              <mat-option
-                [value]="cliente.id">
-
-                {{ cliente.nombre }}
-
-              </mat-option>
-
-            }
+          </mat-option>
 
 
-          </mat-select>
-
-
-          @if (
-            campoInvalido('clienteId')
+          @for (
+          cliente of clientes;
+          track cliente.id
           ) {
 
-            <mat-error>
+          <mat-option [value]="cliente.id">
 
-              Debe seleccionar una farmacia.
+            {{ cliente.nombre }}
 
-            </mat-error>
+          </mat-option>
 
           }
 
-        </mat-form-field>
+
+        </mat-select>
+
+
+        @if (
+        campoInvalido('clienteId')
+        ) {
+
+        <mat-error>
+
+          Debe seleccionar una farmacia.
+
+        </mat-error>
+
+        }
+
+      </mat-form-field>
 
       }
+
+      <!-- ================================= -->
+      <!-- PROVINCIA -->
+      <!-- ================================= -->
+
+      <mat-form-field appearance="outline">
+        <mat-label>Provincia</mat-label>
+
+        <mat-select formControlName="provinciaId" (selectionChange)="cambioProvincia()">
+
+          <mat-option [value]="0">
+            Seleccione una provincia
+          </mat-option>
+
+          @for (provincia of provincias; track provincia.id) {
+          <mat-option [value]="provincia.id">
+            {{ provincia.nombre }}
+          </mat-option>
+          }
+
+        </mat-select>
+      </mat-form-field>
+
+      <!-- ================================= -->
+      <!-- CIUDAD -->
+      <!-- ================================= -->
+
+      <mat-form-field appearance="outline" class="campo">
+
+        <mat-label>
+          Ciudad
+        </mat-label>
+
+        <mat-select formControlName="ciudadId" [disabled]="ciudades.length === 0">
+
+          <mat-option [value]="null">
+
+            Seleccione una ciudad
+
+          </mat-option>
+
+          @for (
+          ciudad of ciudades;
+          track ciudad.id
+          ) {
+
+          <mat-option [value]="ciudad.id">
+
+            {{ ciudad.nombre }}
+
+          </mat-option>
+
+          }
+
+        </mat-select>
+
+        @if (campoInvalido('ciudadId')) {
+
+        <mat-error>
+
+          Debe seleccionar una ciudad.
+
+        </mat-error>
+
+        }
+
+      </mat-form-field>
 
 
       <!-- ================================= -->
@@ -317,8 +352,7 @@
 
       <div class="activo">
 
-        <mat-checkbox
-          formControlName="activo">
+        <mat-checkbox formControlName="activo">
 
           Usuario activo
 
@@ -333,11 +367,7 @@
 
       <div class="botones">
 
-        <button
-          mat-stroked-button
-          type="button"
-          color="warn"
-          (click)="cancelar()">
+        <button mat-stroked-button type="button" color="warn" (click)="cancelar()">
 
           <mat-icon>
             close
@@ -348,12 +378,7 @@
         </button>
 
 
-        <button
-          mat-raised-button
-          color="primary"
-          type="button"
-          [disabled]="form.invalid"
-          (click)="guardar()">
+        <button mat-raised-button color="primary" type="button" [disabled]="form.invalid" (click)="guardar()">
 
           <mat-icon>
             save
