@@ -15,12 +15,18 @@ export class ClienteService {
 
   private api = 'https://localhost:7122/api/cliente';
 
-  obtenerTodos(): Observable<Cliente[]>{
+  obtenerTodos(): Observable<Cliente[]> {
     return this.http.get<Cliente[]>(this.api);
   }
 
   obtenerCombo() {
     return this.http.get<Combo[]>(`${this.api}/combo`);
+  }
+
+  obtenerPorProvinciaCiudad(provinciaId: number, ciudadId: number): Observable<Combo[]> {
+    return this.http.get<Combo[]>(
+      `${this.api}/provincia/${provinciaId}/ciudad/${ciudadId}`
+    );
   }
 
 }

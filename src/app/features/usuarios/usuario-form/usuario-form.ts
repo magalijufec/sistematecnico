@@ -49,6 +49,7 @@ export class UsuarioFormComponent implements OnInit {
 
   perfiles: Combo[] = [];
   clientes: Combo[] = [];
+  clientesFiltrados: Combo[] = [];
   provincias: Combo[] = [];
   ciudades: Combo[] = [];
   mostrarCliente = false;
@@ -90,16 +91,16 @@ export class UsuarioFormComponent implements OnInit {
     ],
     provinciaId: [0, Validators.required],
     ciudadId: [0, Validators.required],
-    clienteId: [ null as number | null],
+    clienteId: [null as number | null],
     numeroCelular: [''],
-    activo: [ true]
+    activo: [true]
   });
 
   ngOnInit(): void {
     this.cargarPerfiles();
     this.cargarClientes();
     this.detectarCambioPerfil();
-    this.cargarProvincias();  
+    this.cargarProvincias();
   }
 
   cargarProvincias(): void {
@@ -117,11 +118,24 @@ export class UsuarioFormComponent implements OnInit {
   }
 
   cambioProvincia(): void {
-    const provinciaId = this.form.get('provinciaId')?.value;
-    this.ciudades = [];
-    this.form.patchValue({ ciudadId: 0 });
 
-    if (!provinciaId) { return; }
+    const provinciaId =
+      this.form.get('provinciaId')?.value;
+
+    this.ciudades = [];
+
+    this.clientes = [];
+
+    this.clientesFiltrados = [];
+
+    this.form.patchValue({
+      ciudadId: 0,
+      clienteId: 0
+    });
+
+    if (!provinciaId || provinciaId === 0) {
+      return;
+    }
 
     this.ciudadService
       .obtenerPorProvincia(provinciaId)
@@ -134,6 +148,55 @@ export class UsuarioFormComponent implements OnInit {
             'Error al cargar ciudades',
             error
           );
+        }
+      });
+  }
+
+  cambioCiudad(): void {
+
+    const provinciaId =
+      this.form.get('provinciaId')?.value;
+
+    const ciudadId =
+      this.form.get('ciudadId')?.value;
+
+    this.clientes = [];
+
+    this.clientesFiltrados = [];
+
+    this.form.patchValue({
+      clienteId: 0
+    });
+
+    if (
+      !provinciaId ||
+      provinciaId === 0 ||
+      !ciudadId ||
+      ciudadId === 0
+    ) {
+      return;
+    }
+
+    this.clienteService
+      .obtenerPorProvinciaCiudad(
+        provinciaId,
+        ciudadId
+      )
+      .subscribe({
+        next: data => {
+
+          this.clientes = data;
+
+          this.clientesFiltrados = data;
+
+        },
+        error: error => {
+
+          console.error(
+            'Error al cargar clientes',
+            error
+          );
+
         }
       });
   }
@@ -236,7 +299,7 @@ export class UsuarioFormComponent implements OnInit {
       activo: valores.activo ?? true
     };
 
-    console.log('Usuario a guardar:',  usuario);
+    console.log('Usuario a guardar:', usuario);
 
     this.usuarioService
       .crear(usuario)

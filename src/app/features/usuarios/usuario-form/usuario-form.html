@@ -204,44 +204,25 @@
       <!-- CIUDAD -->
       <!-- ================================= -->
 
-      <mat-form-field appearance="outline" class="campo">
+      <mat-form-field appearance="outline">
 
-        <mat-label>
-          Ciudad
-        </mat-label>
+        <mat-label>Ciudad</mat-label>
 
-        <mat-select formControlName="ciudadId" [disabled]="ciudades.length === 0">
+        <mat-select formControlName="ciudadId" (selectionChange)="cambioCiudad()">
 
-          <mat-option [value]="null">
-
+          <mat-option [value]="0">
             Seleccione una ciudad
-
           </mat-option>
 
-          @for (
-          ciudad of ciudades;
-          track ciudad.id
-          ) {
+          @for (ciudad of ciudades; track ciudad.id) {
 
           <mat-option [value]="ciudad.id">
-
             {{ ciudad.nombre }}
-
           </mat-option>
 
           }
 
         </mat-select>
-
-        @if (campoInvalido('ciudadId')) {
-
-        <mat-error>
-
-          Debe seleccionar una ciudad.
-
-        </mat-error>
-
-        }
 
       </mat-form-field>
 
@@ -310,16 +291,14 @@
 
         <mat-select formControlName="clienteId">
 
-
           <mat-option [value]="null">
 
             Seleccione una farmacia
 
           </mat-option>
 
-
           @for (
-          cliente of clientes;
+          cliente of clientesFiltrados;
           track cliente.id
           ) {
 
