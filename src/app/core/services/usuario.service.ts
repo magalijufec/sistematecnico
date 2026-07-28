@@ -22,6 +22,10 @@ export class UsuarioService {
     return this.http.get<UsuarioDetalle>(`${this.api}/${id}`);
   }
 
+  obtenerPorIdInactivoYActivo(id: number): Observable<UsuarioDetalle> {
+    return this.http.get<UsuarioDetalle>(`${this.api}/${id}/usuarioinactivoyactivo`);
+  }
+
   crear(usuario: any) {
     return this.http.post(this.api, usuario);
   }

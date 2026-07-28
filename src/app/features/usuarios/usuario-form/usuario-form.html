@@ -1,377 +1,234 @@
-<mat-card class="usuario-card">
+<mat-card>
 
   <mat-card-header>
 
     <mat-card-title>
 
-      Nuevo usuario
+      @if (esEdicion) {
+
+        Editar usuario #{{ idUsuario }}
+
+      } @else {
+
+        Nuevo usuario
+
+      }
 
     </mat-card-title>
-
-    <mat-card-subtitle>
-
-      Complete los datos del usuario
-
-    </mat-card-subtitle>
 
   </mat-card-header>
 
 
   <mat-card-content>
 
-    <form [formGroup]="form" class="formulario">
+    <form
+      [formGroup]="form"
+      (ngSubmit)="guardar()"
+      class="formulario">
 
 
-      <!-- ================================= -->
-      <!-- NOMBRE DE USUARIO -->
-      <!-- ================================= -->
+      <!-- Usuario -->
 
-      <mat-form-field appearance="outline" class="campo">
+      <mat-form-field appearance="outline">
 
-        <mat-label>
-          Nombre de usuario
-        </mat-label>
+        <mat-label>Usuario</mat-label>
 
-        <input matInput formControlName="userName" autocomplete="off">
-
-        @if (
-        campoInvalido('userName')
-        ) {
-
-        <mat-error>
-
-          @if (
-          form.controls.userName.errors?.['required']
-          ) {
-
-          El nombre de usuario es obligatorio.
-
-          }
-
-          @else if (
-          form.controls.userName.errors?.['minlength']
-          ) {
-
-          Debe tener al menos 3 caracteres.
-
-          }
-
-        </mat-error>
-
-        }
+        <input
+          matInput
+          formControlName="userName">
 
       </mat-form-field>
 
 
-      <!-- ================================= -->
-      <!-- NOMBRE Y APELLIDO -->
-      <!-- ================================= -->
+      <!-- Nombre -->
 
-      <mat-form-field appearance="outline" class="campo">
+      <mat-form-field appearance="outline">
 
-        <mat-label>
-          Nombre y apellido
-        </mat-label>
+        <mat-label>Nombre y apellido</mat-label>
 
-        <input matInput formControlName="nombreApellido">
-
-        @if (
-        campoInvalido('nombreApellido')
-        ) {
-
-        <mat-error>
-
-          El nombre y apellido es obligatorio.
-
-        </mat-error>
-
-        }
+        <input
+          matInput
+          formControlName="nombreApellido">
 
       </mat-form-field>
 
 
-      <!-- ================================= -->
-      <!-- EMAIL -->
-      <!-- ================================= -->
+      <!-- Email -->
 
-      <mat-form-field appearance="outline" class="campo">
+      <mat-form-field appearance="outline">
 
-        <mat-label>
-          Email
-        </mat-label>
+        <mat-label>Email</mat-label>
 
-        <input matInput type="email" formControlName="email">
-
-        @if (
-        campoInvalido('email')
-        ) {
-
-        <mat-error>
-
-          @if (
-          form.controls.email.errors?.['required']
-          ) {
-
-          El email es obligatorio.
-
-          }
-
-          @else if (
-          form.controls.email.errors?.['email']
-          ) {
-
-          Ingrese un email válido.
-
-          }
-
-        </mat-error>
-
-        }
+        <input
+          matInput
+          type="email"
+          formControlName="email">
 
       </mat-form-field>
 
 
-      <!-- ================================= -->
-      <!-- PASSWORD -->
-      <!-- ================================= -->
-
-      <mat-form-field appearance="outline" class="campo">
-
-        <mat-label>
-          Contraseña
-        </mat-label>
-
-        <input matInput type="password" formControlName="password" autocomplete="new-password">
-
-        @if (
-        campoInvalido('password')
-        ) {
-
-        <mat-error>
-
-          @if (
-          form.controls.password.errors?.['required']
-          ) {
-
-          La contraseña es obligatoria.
-
-          }
-
-          @else if (
-          form.controls.password.errors?.['minlength']
-          ) {
-
-          La contraseña debe tener al menos 6 caracteres.
-
-          }
-
-        </mat-error>
-
-        }
-
-      </mat-form-field>
+      <!-- Celular -->
 
       <mat-form-field appearance="outline">
 
         <mat-label>Número de celular</mat-label>
-        <input matInput type="tel" formControlName="numeroCelular" placeholder="Ej: 11 1234-5678">
+
+        <input
+          matInput
+          formControlName="numeroCelular">
 
       </mat-form-field>
 
-      <!-- ================================= -->
-      <!-- PROVINCIA -->
-      <!-- ================================= -->
 
-      <mat-form-field appearance="outline">
-        <mat-label>Provincia</mat-label>
+      <!-- Password -->
 
-        <mat-select formControlName="provinciaId" (selectionChange)="cambioProvincia()">
+      <mat-form-field
+        appearance="outline"
+        *ngIf="!esEdicion">
 
-          <mat-option [value]="0">
-            Seleccione una provincia
-          </mat-option>
+        <mat-label>Contraseña</mat-label>
 
-          @for (provincia of provincias; track provincia.id) {
-          <mat-option [value]="provincia.id">
-            {{ provincia.nombre }}
-          </mat-option>
-          }
+        <input
+          matInput
+          type="password"
+          formControlName="password">
 
-        </mat-select>
       </mat-form-field>
 
-      <!-- ================================= -->
-      <!-- CIUDAD -->
-      <!-- ================================= -->
+
+      <!-- Perfil -->
 
       <mat-form-field appearance="outline">
 
-        <mat-label>Ciudad</mat-label>
+        <mat-label>Perfil</mat-label>
 
-        <mat-select formControlName="ciudadId" (selectionChange)="cambioCiudad()">
+        <mat-select
+          formControlName="idPerfil">
 
-          <mat-option [value]="0">
-            Seleccione una ciudad
-          </mat-option>
-
-          @for (ciudad of ciudades; track ciudad.id) {
-
-          <mat-option [value]="ciudad.id">
-            {{ ciudad.nombre }}
-          </mat-option>
-
-          }
-
-        </mat-select>
-
-      </mat-form-field>
-
-      <!-- ================================= -->
-      <!-- PERFIL -->
-      <!-- ================================= -->
-
-      <mat-form-field appearance="outline" class="campo">
-
-        <mat-label>
-          Perfil
-        </mat-label>
-
-        <mat-select formControlName="idPerfil">
-
-          <mat-option [value]="0">
-
-            Seleccione un perfil
-
-          </mat-option>
-
-
-          @for (
-          perfil of perfiles;
-          track perfil.id
-          ) {
-
-          <mat-option [value]="perfil.id">
+          <mat-option
+            *ngFor="let perfil of perfiles"
+            [value]="perfil.id">
 
             {{ perfil.nombre }}
 
           </mat-option>
 
-          }
-
         </mat-select>
-
-
-        @if (
-        campoInvalido('idPerfil')
-        ) {
-
-        <mat-error>
-
-          Debe seleccionar un perfil.
-
-        </mat-error>
-
-        }
 
       </mat-form-field>
 
 
-      <!-- ================================= -->
-      <!-- CLIENTE / FARMACIA -->
-      <!-- SOLO PARA PERFIL FARMACIA -->
-      <!-- ================================= -->
+      <!-- Provincia -->
 
-      @if (mostrarCliente) {
+      <mat-form-field appearance="outline">
 
-      <mat-form-field appearance="outline" class="campo">
+        <mat-label>Provincia</mat-label>
 
-        <mat-label>
-          Farmacia / Cliente
-        </mat-label>
+        <mat-select
+          formControlName="idProvincia"
+          (selectionChange)="cambioProvincia()">
 
-        <mat-select formControlName="clienteId">
+          <mat-option
+            *ngFor="let provincia of provincias"
+            [value]="provincia.id">
 
-          <mat-option [value]="null">
-
-            Seleccione una farmacia
+            {{ provincia.nombre }}
 
           </mat-option>
 
-          @for (
-          cliente of clientesFiltrados;
-          track cliente.id
-          ) {
+        </mat-select>
 
-          <mat-option [value]="cliente.id">
+      </mat-form-field>
+
+
+      <!-- Ciudad -->
+
+      <mat-form-field appearance="outline">
+
+        <mat-label>Ciudad</mat-label>
+
+        <mat-select
+          formControlName="idCiudad">
+
+          <mat-option
+            *ngFor="let ciudad of ciudades"
+            [value]="ciudad.id">
+
+            {{ ciudad.nombre }}
+
+          </mat-option>
+
+        </mat-select>
+
+      </mat-form-field>
+
+
+      <!-- Cliente -->
+
+      <mat-form-field
+        appearance="outline"
+        *ngIf="mostrarCliente">
+
+        <mat-label>Cliente</mat-label>
+
+        <mat-select
+          formControlName="idCliente">
+
+          <mat-option
+            *ngFor="let cliente of clientes"
+            [value]="cliente.id">
 
             {{ cliente.nombre }}
 
           </mat-option>
 
-          }
-
-
         </mat-select>
-
-
-        @if (
-        campoInvalido('clienteId')
-        ) {
-
-        <mat-error>
-
-          Debe seleccionar una farmacia.
-
-        </mat-error>
-
-        }
 
       </mat-form-field>
 
-      }
 
-      <!-- ACTIVO -->
+      <!-- Activo -->
 
-      <div class="activo">
+      <mat-checkbox
+        formControlName="activo">
 
-        <mat-checkbox formControlName="activo">
+        Usuario activo
 
-          Usuario activo
-
-        </mat-checkbox>
-
-      </div>
+      </mat-checkbox>
 
 
-      <!-- ================================= -->
-      <!-- BOTONES -->
-      <!-- ================================= -->
+      <!-- Botones -->
 
       <div class="botones">
 
-        <button mat-stroked-button type="button" color="warn" (click)="cancelar()">
-
-          <mat-icon>
-            close
-          </mat-icon>
+        <button
+          mat-stroked-button
+          type="button"
+          routerLink="/usuarios">
 
           Cancelar
 
         </button>
 
 
-        <button mat-raised-button color="primary" type="button" [disabled]="form.invalid" (click)="guardar()">
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit">
 
-          <mat-icon>
-            save
-          </mat-icon>
+          @if (esEdicion) {
 
-          Crear usuario
+            Guardar cambios
+
+          } @else {
+
+            Crear usuario
+
+          }
 
         </button>
 
       </div>
-
 
     </form>
 

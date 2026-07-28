@@ -77,13 +77,7 @@ export class UsuarioFormComponent implements OnInit {
         Validators.email
       ]
     ],
-    password: [
-      '',
-      [
-        Validators.required,
-        Validators.minLength(6)
-      ]
-    ],
+    password: [''],
     idPerfil: [
       0,
       [
@@ -91,9 +85,9 @@ export class UsuarioFormComponent implements OnInit {
         Validators.min(1)
       ]
     ],
-    provinciaId: [0, Validators.required],
-    ciudadId: [0, Validators.required],
-    clienteId: [null as number | null],
+    idProvincia: [0, Validators.required],
+    idCiudad: [0, Validators.required],
+    idCliente: [null as number | null],
     numeroCelular: [''],
     activo: [true]
   });
@@ -106,6 +100,13 @@ export class UsuarioFormComponent implements OnInit {
     this.esEdicion = this.idUsuario > 0;
 
     if (this.esEdicion) {
+      this.form
+      .get('password')
+      ?.clearValidators();
+
+    this.form
+      .get('password')
+      ?.updateValueAndValidity();
       this.cargarUsuario();
     }
     this.cargarPerfiles();
@@ -117,7 +118,7 @@ export class UsuarioFormComponent implements OnInit {
   cargarUsuario(): void {
 
     this.usuarioService
-      .obtenerPorId(this.idUsuario)
+      .obtenerPorIdInactivoYActivo(this.idUsuario)
       .subscribe({
 
         next: usuario => {
@@ -130,9 +131,9 @@ export class UsuarioFormComponent implements OnInit {
             email: usuario.email,
             numeroCelular: usuario.numeroCelular,
             idPerfil: usuario.perfilId,
-            provinciaId: usuario.provinciaId,
-            ciudadId: usuario.ciudadId,
-            clienteId: usuario.clienteId,
+            idProvincia: usuario.provinciaId,
+            idCiudad: usuario.ciudadId,
+            idCliente: usuario.clienteId,
             activo: usuario.activo
           });
 
@@ -145,7 +146,7 @@ export class UsuarioFormComponent implements OnInit {
                   this.ciudades = ciudades;
                   // seleccionamos la ciudad del usuario
                   this.form.patchValue({
-                    ciudadId: usuario.ciudadId
+                    idCiudad: usuario.ciudadId
                   });
                 },
                 error: error => {
@@ -178,8 +179,8 @@ export class UsuarioFormComponent implements OnInit {
     this.clientes = [];
     this.clientesFiltrados = [];
     this.form.patchValue({
-      ciudadId: 0,
-      clienteId: 0
+      idCiudad: 0,
+      idCliente: 0
     });
 
     if (!provinciaId || provinciaId === 0) {
@@ -207,7 +208,7 @@ export class UsuarioFormComponent implements OnInit {
     this.clientes = [];
     this.clientesFiltrados = [];
     this.form.patchValue({
-      clienteId: 0
+      idCliente: 0
     });
 
     if (
@@ -279,7 +280,7 @@ export class UsuarioFormComponent implements OnInit {
         // Si todavía no cargaron los perfiles
         if (!perfil) {
           this.mostrarCliente = false;
-          this.form.controls.clienteId
+          this.form.controls.idCliente
             .setValue(null);
           return;
         }
@@ -290,7 +291,7 @@ export class UsuarioFormComponent implements OnInit {
             .toLowerCase() === 'farmacia'
         ) {
           this.mostrarCliente = true;
-          this.form.controls.clienteId
+          this.form.controls.idCliente
             .setValidators([
               Validators.required
             ]);
@@ -298,75 +299,99 @@ export class UsuarioFormComponent implements OnInit {
         // CUALQUIER OTRO PERFIL
         else {
           this.mostrarCliente = false;
-          this.form.controls.clienteId.setValue(null);
-          this.form.controls.clienteId.clearValidators();
+          this.form.controls.idCliente.setValue(null);
+          this.form.controls.idCliente.clearValidators();
         }
-        this.form.controls.clienteId.updateValueAndValidity();
+        this.form.controls.idCliente.updateValueAndValidity();
       });
   }
 
   guardar(): void {
     if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      return;
-    }
-    const valores = this.form.getRawValue();
-    if (this.mostrarCliente && !valores.clienteId) {
-      this.form.controls.clienteId.markAsTouched();
-      alert('Debe seleccionar una farmacia.');
-      return;
-    }
-    // OBJETO QUE SE ENVÍA AL BACKEND
-    const usuario = {
-      userName: valores.userName ?? '',
-      nombreApellido: valores.nombreApellido ?? '',
-      email: valores.email ?? '',
-      password: valores.password ?? '',
-      idPerfil: valores.idPerfil ?? 0,
-      idProvincia: valores.provinciaId ?? 0,
-      idCiudad: valores.ciudadId ?? 0,
-      clienteId:
-        this.mostrarCliente
-          ? valores.clienteId
-          : null,
-      numeroCelular: valores.numeroCelular ?? [''],
-      activo: valores.activo ?? true
-    };
 
-    console.log('Usuario a guardar:', usuario);
+      this.form.markAllAsTouched();
+
+      return;
+
+    }
+
+    const datos = this.form.getRawValue();
+
+    // CREAR USUARIO
+
+    if (!this.esEdicion) {
+
+      this.usuarioService
+        .crear(datos)
+        .subscribe({
+
+          next: () => {
+
+            alert(
+              'Usuario creado correctamente'
+            );
+
+            this.router.navigate(
+              ['/usuarios']
+            );
+
+          },
+
+          error: error => {
+
+            console.error(
+              'Error al crear usuario',
+              error
+            );
+
+            alert(
+              'No se pudo crear el usuario'
+            );
+
+          }
+
+        });
+
+      return;
+
+    }
+
+    // ACTUALIZAR USUARIO
 
     this.usuarioService
-      .crear(usuario)
+      .actualizar(
+        this.idUsuario,
+        datos
+      )
       .subscribe({
-        next: () => {
-          alert('Usuario creado correctamente');
-          this.router.navigate([
-            '/usuarios'
-          ]);
-        },
-        error: error => {
-          console.error('Error al crear usuario', error);
-          if (
-            error.status === 400
-          ) {
-            alert('Los datos enviados no son válidos.');
-          }
-          else if (
-            error.status === 401
-          ) {
-            alert('No tiene autorización para crear usuarios.');
-          }
 
-          else if (
-            error.status === 403
-          ) {
-            alert('No tiene permisos para realizar esta acción.');
-          }
-          else {
-            alert('Ocurrió un error al crear el usuario.');
-          }
+        next: () => {
+
+          alert(
+            'Usuario actualizado correctamente'
+          );
+
+          this.router.navigate(
+            ['/usuarios']
+          );
+
+        },
+
+        error: error => {
+
+          console.error(
+            'Error al actualizar usuario',
+            error
+          );
+
+          alert(
+            'No se pudo actualizar el usuario'
+          );
+
         }
+
       });
+
   }
 
   cancelar(): void {
