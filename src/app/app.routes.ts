@@ -14,6 +14,7 @@ import { CambiarPasswordComponent } from './features/usuarios/cambiar-password/c
 import { TrabajosFinalizadosComponent } from './features/trabajos/trabajos-finalizados/trabajos-finalizados';
 import { TrabajosPendientePagoComponent } from './features/trabajos/trabajos-pendiente-pago/trabajos-pendiente-pago';
 import { UsuarioFormComponent } from './features/usuarios/usuario-form/usuario-form';
+import { adminGuard } from './core/guards/role.guard';
 
 export const routes: Routes = [
 
@@ -75,20 +76,28 @@ export const routes: Routes = [
             },
             {
                 path: 'usuarios',
-                component: UsuariosListComponent
-            },
-            {
-                path: 'usuarios/nuevo',
-                component: UsuarioFormComponent
-            },
-            {
-                path: 'usuarios/:id/editar',
-                component: UsuarioFormComponent
-            },
-            {
-                path: 'clientes',
-                component: ClientesListComponent
-            },
+                canActivate: [
+                    authGuard,
+                    adminGuard
+                ],
+                data: {
+                    roles: ['Administrador']
+                },
+                children: [
+                    {
+                        path: '',
+                        component: UsuariosListComponent
+                    },
+                    {
+                        path: 'nuevo',
+                        component: UsuarioFormComponent
+                    },
+                    {
+                        path: ':id',
+                        component: UsuarioFormComponent
+                    }
+                ]
+            }
 
         ]
 

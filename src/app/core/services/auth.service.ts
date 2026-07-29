@@ -14,7 +14,6 @@ export class AuthService {
 
     private http = inject(HttpClient);
     private router = inject(Router);
-
     private api = 'https://localhost:7122/api/auth';
 
     login(dto: Login): Observable<LoginResponse> {
@@ -72,4 +71,37 @@ export class AuthService {
             datos
         );
     }
+
+    obtenerRol(): string | null {
+
+    const token = this.obtenerToken();
+
+    if (!token) {
+      return null;
+    }
+
+    try {
+
+      const payload = JSON.parse(
+        atob(token.split('.')[1])
+      );
+
+      // Claim de rol generado por ClaimTypes.Role
+      return payload[
+        'http://schemas.microsoft.com/ws/2008/06/identity/claims/role'
+      ] ?? null;
+
+    } catch {
+
+      return null;
+
+    }
+
+  }
+
+  esAdministrador(): boolean {
+
+    return this.obtenerRol() === 'Administrador';
+
+  }
 }

@@ -5,37 +5,42 @@ export const MENU: MenuItem[] = [
   {
     icon: 'dashboard',
     text: 'Dashboard',
-    route: '/dashboard'
+    route: '/dashboard',
+    soloAdministrador: false
   },
 
   {
     icon: 'build',
     text: 'Trabajos',
-    route: '/trabajos'
+    route: '/trabajos',
+    soloAdministrador: false
   },
 
   {
     text: 'Trabajos finalizados',
     icon: 'task_alt',
-    route: '/trabajos-finalizados'
+    route: '/trabajos-finalizados',
+    soloAdministrador: false
   },
 
   {
     text: 'Pendientes de pago',
     icon: 'payment',
-    route: '/trabajos-pendiente-pago'  
+    route: '/trabajos-pendiente-pago',
+    soloAdministrador: false  
   },
 
   {
-    icon: 'store',
     text: 'Clientes',
-    route: '/clientes'
+    icon: 'business',
+    route: '/clientes',
+    soloAdministrador: true
   },
-
   {
-    icon: 'people',
     text: 'Usuarios',
-    route: '/usuarios'
+    icon: 'people',
+    route: '/usuarios',
+    soloAdministrador: true
   }
 
 ];

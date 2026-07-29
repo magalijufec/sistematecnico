@@ -46,10 +46,12 @@ export class MainLayoutComponent implements OnInit {
 
   esMovil = false;
   nombreUsuario : string | undefined = '' ;
+  esAdministrador = false;
 
   ngOnInit(): void {
 
     this.nombreUsuario = this.authService.obtenerUsuario()?.userName;
+    this.esAdministrador = this.authService.esAdministrador();
 
     this.breakpointObserver
       .observe([Breakpoints.Handset])
@@ -60,6 +62,15 @@ export class MainLayoutComponent implements OnInit {
       });
 
   }
+
+  get menuVisible() {
+
+  return this.menu.filter(item =>
+    !item.soloAdministrador ||
+    this.esAdministrador
+  );
+
+}
 
   toggleMenu(): void {
 
