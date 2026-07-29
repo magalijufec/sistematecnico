@@ -6,6 +6,7 @@ export interface Usuario {
   numeroCelular: string;
   ciudad: string;
   provincia: string;
+  cliente: string;
   perfil: string;
   activo: boolean;
 }

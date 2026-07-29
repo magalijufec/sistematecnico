@@ -34,6 +34,7 @@ export class UsuariosListComponent implements OnInit {
   'perfil',
   'provincia',
   'ciudad',
+  'cliente',
   'activo',
   'acciones'
 ];

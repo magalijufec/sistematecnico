@@ -4,10 +4,8 @@ import {
   ReactiveFormsModule,
   Validators
 } from '@angular/forms';
-
 import { Router, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
-
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -15,13 +13,11 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-
 import { ClienteService } from '../../../core/services/cliente.service';
 import { UsuarioService } from '../../../core/services/usuario.service';
 import { PerfilService } from '../../../core/services/perfil.service';
 import { CiudadService } from '../../../core/services/ciudad.service';
 import { ProvinciaService } from '../../../core/services/provincia.service';
-
 import { Combo } from '../../../core/models/combo';
 
 @Component({
@@ -239,7 +235,6 @@ export class UsuarioFormComponent implements OnInit {
     if (!provinciaId || provinciaId === 0 || !ciudadId || ciudadId === 0) {
       return;
     }
-
     this.cargarClientesPorProvinciaCiudad(provinciaId, ciudadId);
   }
 
@@ -301,16 +296,14 @@ export class UsuarioFormComponent implements OnInit {
   }
 
   actualizarVisibilidadCliente(idPerfil: number): void {
-    const perfil =
-      this.perfiles.find(
-        x => x.id === idPerfil
-      );
+    const perfil = this.perfiles.find(x => x.id === idPerfil);
 
-    if (!perfil) { return; }
+    if (!perfil) { 
+      return; 
+    }
 
     if (perfil.nombre.trim().toLowerCase() === 'farmacia') {
       this.mostrarCliente = true;
-
       this.form
         .controls
         .idCliente
@@ -320,12 +313,10 @@ export class UsuarioFormComponent implements OnInit {
     }
     else {
       this.mostrarCliente = false;
-
       this.form
         .controls
         .idCliente
         .setValue(null);
-
       this.form
         .controls
         .idCliente
@@ -353,9 +344,7 @@ export class UsuarioFormComponent implements OnInit {
         .subscribe({
           next: () => {
             alert('Usuario creado correctamente');
-            this.router.navigate([
-              '/usuarios'
-            ]);
+            this.router.navigate(['/usuarios']);
           },
           error: error => {
             console.error('Error al crear usuario', error);
@@ -370,9 +359,7 @@ export class UsuarioFormComponent implements OnInit {
       .subscribe({
         next: () => {
           alert('Usuario actualizado correctamente');
-          this.router.navigate([
-            '/usuarios'
-          ]);
+          this.router.navigate(['/usuarios']);
         },
         error: error => {
           console.error('Error al actualizar usuario', error);
@@ -382,9 +369,7 @@ export class UsuarioFormComponent implements OnInit {
   }
 
   cancelar(): void {
-    this.router.navigate([
-      '/usuarios'
-    ]);
+    this.router.navigate(['/usuarios']);
   }
 
   campoInvalido(nombreCampo: string): boolean {
