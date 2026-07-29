@@ -7,6 +7,7 @@ import {
 
 import { Router, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
+
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -14,12 +15,15 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+
 import { ClienteService } from '../../../core/services/cliente.service';
 import { UsuarioService } from '../../../core/services/usuario.service';
-import { Combo } from '../../../core/models/combo';
 import { PerfilService } from '../../../core/services/perfil.service';
 import { CiudadService } from '../../../core/services/ciudad.service';
 import { ProvinciaService } from '../../../core/services/provincia.service';
+
+import { Combo } from '../../../core/models/combo';
+
 @Component({
   selector: 'app-usuario-form',
   standalone: true,
@@ -38,25 +42,50 @@ import { ProvinciaService } from '../../../core/services/provincia.service';
   styleUrl: './usuario-form.scss'
 })
 export class UsuarioFormComponent implements OnInit {
+
   private fb = inject(FormBuilder);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
+
   private clienteService = inject(ClienteService);
   private perfilService = inject(PerfilService);
   private usuarioService = inject(UsuarioService);
   private provinciaService = inject(ProvinciaService);
   private ciudadService = inject(CiudadService);
 
+
+  // ==========================================
+  // LISTAS
+  // ==========================================
+
   perfiles: Combo[] = [];
-  clientes: Combo[] = [];
-  clientesFiltrados: Combo[] = [];
+
   provincias: Combo[] = [];
+
   ciudades: Combo[] = [];
+
+  clientes: Combo[] = [];
+
+  clientesFiltrados: Combo[] = [];
+
+
+  // ==========================================
+  // CONTROL
+  // ==========================================
+
   mostrarCliente = false;
+
   idUsuario = 0;
+
   esEdicion = false;
 
+
+  // ==========================================
+  // FORMULARIO
+  // ==========================================
+
   form = this.fb.group({
+
     userName: [
       '',
       [
@@ -64,12 +93,14 @@ export class UsuarioFormComponent implements OnInit {
         Validators.minLength(3)
       ]
     ],
+
     nombreApellido: [
       '',
       [
         Validators.required
       ]
     ],
+
     email: [
       '',
       [
@@ -77,7 +108,11 @@ export class UsuarioFormComponent implements OnInit {
         Validators.email
       ]
     ],
-    password: [''],
+
+    password: [
+      ''
+    ],
+
     idPerfil: [
       0,
       [
@@ -85,35 +120,80 @@ export class UsuarioFormComponent implements OnInit {
         Validators.min(1)
       ]
     ],
-    idProvincia: [0, Validators.required],
-    idCiudad: [0, Validators.required],
-    idCliente: [null as number | null],
-    numeroCelular: [''],
-    activo: [true]
+
+    idProvincia: [
+      0,
+      Validators.required
+    ],
+
+    idCiudad: [
+      0,
+      Validators.required
+    ],
+
+    idCliente: [
+      null as number | null
+    ],
+
+    numeroCelular: [
+      ''
+    ],
+
+    activo: [
+      true
+    ]
+
   });
 
+
+  // ==========================================
+  // INIT
+  // ==========================================
+
   ngOnInit(): void {
+
     this.idUsuario = Number(
       this.route.snapshot.paramMap.get('id')
     );
 
-    this.esEdicion = this.idUsuario > 0;
+    this.esEdicion =
+      this.idUsuario > 0;
+
+
+    // Cargamos datos base
+
+    this.cargarPerfiles();
+
+    this.cargarProvincias();
+
+    this.detectarCambioPerfil();
+
+
+    // Si estamos editando
 
     if (this.esEdicion) {
-      this.form
-      .get('password')
-      ?.clearValidators();
 
-    this.form
-      .get('password')
-      ?.updateValueAndValidity();
+      // Password NO es obligatorio al editar
+
+      this.form
+        .get('password')
+        ?.clearValidators();
+
+      this.form
+        .get('password')
+        ?.updateValueAndValidity();
+
+
       this.cargarUsuario();
+
     }
-    this.cargarPerfiles();
-    this.cargarClientes();
-    this.detectarCambioPerfil();
-    this.cargarProvincias();
+
   }
+
+
+  // ==========================================
+  // CARGAR USUARIO
+  // ==========================================
 
   cargarUsuario(): void {
 
@@ -123,93 +203,305 @@ export class UsuarioFormComponent implements OnInit {
 
         next: usuario => {
 
-          console.log('Usuario a editar:', usuario);
+          console.log(
+            'Usuario a editar:',
+            usuario
+          );
+
+
+          // Primero cargamos los datos
+          // básicos del usuario
 
           this.form.patchValue({
-            userName: usuario.userName,
-            nombreApellido: usuario.nombreApellido,
-            email: usuario.email,
-            numeroCelular: usuario.numeroCelular,
-            idPerfil: usuario.perfilId,
-            idProvincia: usuario.provinciaId,
-            idCiudad: usuario.ciudadId,
-            idCliente: usuario.clienteId,
-            activo: usuario.activo
+
+            userName:
+              usuario.userName,
+
+            nombreApellido:
+              usuario.nombreApellido,
+
+            email:
+              usuario.email,
+
+            numeroCelular:
+              usuario.numeroCelular,
+
+            idPerfil:
+              usuario.perfilId,
+
+            idProvincia:
+              usuario.provinciaId,
+
+            idCiudad:
+              usuario.ciudadId,
+
+            idCliente:
+              usuario.clienteId,
+
+            activo:
+              usuario.activo
+
           });
 
-          // Cargamos las ciudades de la provincia
+
+          // Mostrar u ocultar cliente
+
+          this.actualizarVisibilidadCliente(
+            usuario.perfilId
+          );
+
+
+          // =====================================
+          // CARGAR CIUDADES
+          // =====================================
+
           if (usuario.provinciaId) {
+
             this.ciudadService
-              .obtenerPorProvincia(usuario.provinciaId)
+              .obtenerPorProvincia(
+                usuario.provinciaId
+              )
               .subscribe({
+
                 next: ciudades => {
-                  this.ciudades = ciudades;
-                  // seleccionamos la ciudad del usuario
+
+                  this.ciudades =
+                    ciudades;
+
+
+                  // Restauramos la ciudad
+
                   this.form.patchValue({
-                    idCiudad: usuario.ciudadId
+
+                    idCiudad:
+                      usuario.ciudadId
+
                   });
+
+
+                  // =================================
+                  // CARGAR CLIENTES
+                  // =================================
+
+                  if (
+                    usuario.provinciaId &&
+                    usuario.ciudadId
+                  ) {
+
+                    this.cargarClientesPorProvinciaCiudad(
+
+                      usuario.provinciaId,
+
+                      usuario.ciudadId,
+
+                      usuario.clienteId
+
+                    );
+
+                  }
+
                 },
+
                 error: error => {
-                  console.error('Error al cargar ciudades', error);
+
+                  console.error(
+                    'Error al cargar ciudades',
+                    error
+                  );
+
                 }
+
               });
+
           }
+
         },
 
         error: error => {
-          console.error('Error al cargar usuario', error);
+
+          console.error(
+            'Error al cargar usuario',
+            error
+          );
+
         }
+
       });
+
   }
+
+
+  // ==========================================
+  // PROVINCIAS
+  // ==========================================
 
   cargarProvincias(): void {
-    this.provinciaService.obtenerCombo().subscribe({
-      next: data => {
-        this.provincias = data;
-      },
-      error: error => {
-        console.error('Error al cargar provincias', error);
-      }
-    });
+
+    this.provinciaService
+      .obtenerCombo()
+      .subscribe({
+
+        next: data => {
+
+          this.provincias =
+            data;
+
+        },
+
+        error: error => {
+
+          console.error(
+            'Error al cargar provincias',
+            error
+          );
+
+        }
+
+      });
+
   }
 
+
+  // ==========================================
+  // CAMBIO DE PROVINCIA
+  // ==========================================
+
   cambioProvincia(): void {
-    const provinciaId = this.form.get('provinciaId')?.value;
+
+    // IMPORTANTE:
+    // El control se llama idProvincia
+    // NO provinciaId
+
+    const provinciaId =
+      this.form
+        .get('idProvincia')
+        ?.value;
+
+
+    console.log(
+      'Provincia seleccionada:',
+      provinciaId
+    );
+
+
+    // Limpiamos ciudades
+
     this.ciudades = [];
+
+
+    // Limpiamos clientes
+
     this.clientes = [];
+
     this.clientesFiltrados = [];
+
+
+    // Reseteamos ciudad y cliente
+
     this.form.patchValue({
+
       idCiudad: 0,
-      idCliente: 0
+
+      idCliente: null
+
     });
 
-    if (!provinciaId || provinciaId === 0) {
+
+    // Si no hay provincia,
+    // no hacemos nada
+
+    if (
+      !provinciaId ||
+      provinciaId === 0
+    ) {
+
       return;
+
     }
 
+
+    // ==========================================
+    // CARGAR CIUDADES
+    // ==========================================
+
     this.ciudadService
-      .obtenerPorProvincia(provinciaId)
+      .obtenerPorProvincia(
+        provinciaId
+      )
       .subscribe({
+
         next: data => {
-          this.ciudades = data;
+
+          console.log(
+            'Ciudades recibidas:',
+            data
+          );
+
+          this.ciudades =
+            data;
+
         },
+
         error: error => {
+
           console.error(
             'Error al cargar ciudades',
             error
           );
+
         }
+
       });
+
   }
 
+
+  // ==========================================
+  // CAMBIO DE CIUDAD
+  // ==========================================
+
   cambioCiudad(): void {
-    const provinciaId = this.form.get('provinciaId')?.value;
-    const ciudadId = this.form.get('ciudadId')?.value;
+
+    // IMPORTANTE:
+    // Los controles son idProvincia e idCiudad
+
+    const provinciaId =
+      this.form
+        .get('idProvincia')
+        ?.value;
+
+    const ciudadId =
+      this.form
+        .get('idCiudad')
+        ?.value;
+
+
+    console.log(
+      'Provincia:',
+      provinciaId
+    );
+
+    console.log(
+      'Ciudad:',
+      ciudadId
+    );
+
+
+    // Limpiamos clientes
+
     this.clientes = [];
+
     this.clientesFiltrados = [];
+
+
+    // Reseteamos cliente
+
     this.form.patchValue({
-      idCliente: 0
+
+      idCliente: null
+
     });
+
 
     if (
       !provinciaId ||
@@ -217,109 +509,279 @@ export class UsuarioFormComponent implements OnInit {
       !ciudadId ||
       ciudadId === 0
     ) {
+
       return;
+
     }
+
+
+    this.cargarClientesPorProvinciaCiudad(
+
+      provinciaId,
+
+      ciudadId
+
+    );
+
+  }
+
+
+  // ==========================================
+  // CARGAR CLIENTES POR PROVINCIA Y CIUDAD
+  // ==========================================
+
+  cargarClientesPorProvinciaCiudad(
+
+    provinciaId: number,
+
+    ciudadId: number,
+
+    clienteSeleccionadoId?: number | null
+
+  ): void {
 
     this.clienteService
       .obtenerPorProvinciaCiudad(
+
         provinciaId,
+
         ciudadId
+
       )
       .subscribe({
-        next: data => {
-          this.clientes = data;
-          this.clientesFiltrados = data;
-        },
-        error: error => {
-          console.error('Error al cargar clientes', error);
-        }
-      });
-  }
 
-  cargarPerfiles(): void {
-    this.perfilService
-      .obtenerPerfiles()
-      .subscribe({
         next: data => {
-          this.perfiles = data;
-        },
 
-        error: error => {
-          console.error(
-            'Error al cargar perfiles',
-            error
+          console.log(
+            'Clientes recibidos:',
+            data
           );
-        }
-      });
-  }
 
-  cargarClientes(): void {
-    this.clienteService
-      .obtenerCombo()
-      .subscribe({
-        next: data => {
-          this.clientes = data;
+
+          this.clientes =
+            data;
+
+          this.clientesFiltrados =
+            data;
+
+
+          // Si estamos editando
+          // restauramos el cliente
+
+          if (
+            clienteSeleccionadoId
+          ) {
+
+            this.form.patchValue({
+
+              idCliente:
+                clienteSeleccionadoId
+
+            });
+
+          }
+
         },
+
         error: error => {
+
           console.error(
             'Error al cargar clientes',
             error
           );
+
         }
+
       });
+
   }
+
+
+  // ==========================================
+  // PERFILES
+  // ==========================================
+
+  cargarPerfiles(): void {
+
+    this.perfilService
+      .obtenerPerfiles()
+      .subscribe({
+
+        next: data => {
+
+          this.perfiles =
+            data;
+
+
+          // Si estamos editando,
+          // volvemos a evaluar el perfil
+
+          if (this.esEdicion) {
+
+            const idPerfil =
+              this.form
+                .get('idPerfil')
+                ?.value;
+
+            if (idPerfil) {
+
+              this.actualizarVisibilidadCliente(
+                idPerfil
+              );
+
+            }
+
+          }
+
+        },
+
+        error: error => {
+
+          console.error(
+            'Error al cargar perfiles',
+            error
+          );
+
+        }
+
+      });
+
+  }
+
+
+  // ==========================================
+  // CAMBIO DE PERFIL
+  // ==========================================
 
   detectarCambioPerfil(): void {
-    this.form.controls.idPerfil
+
+    this.form
+      .controls
+      .idPerfil
       .valueChanges
       .subscribe(idPerfil => {
-        const perfil =
-          this.perfiles.find(
-            x => x.id === idPerfil
-          );
-        // Si todavía no cargaron los perfiles
-        if (!perfil) {
-          this.mostrarCliente = false;
-          this.form.controls.idCliente
-            .setValue(null);
+
+        if (!idPerfil) {
+
+          this.mostrarCliente =
+            false;
+
           return;
+
         }
 
-        if (
-          perfil.nombre
-            .trim()
-            .toLowerCase() === 'farmacia'
-        ) {
-          this.mostrarCliente = true;
-          this.form.controls.idCliente
-            .setValidators([
-              Validators.required
-            ]);
-        }
-        // CUALQUIER OTRO PERFIL
-        else {
-          this.mostrarCliente = false;
-          this.form.controls.idCliente.setValue(null);
-          this.form.controls.idCliente.clearValidators();
-        }
-        this.form.controls.idCliente.updateValueAndValidity();
+
+        this.actualizarVisibilidadCliente(
+          idPerfil
+        );
+
       });
+
   }
 
-  guardar(): void {
-    if (this.form.invalid) {
 
-      this.form.markAllAsTouched();
+  // ==========================================
+  // MOSTRAR / OCULTAR CLIENTE
+  // ==========================================
+
+  actualizarVisibilidadCliente(
+    idPerfil: number
+  ): void {
+
+    const perfil =
+      this.perfiles.find(
+        x => x.id === idPerfil
+      );
+
+
+    if (!perfil) {
 
       return;
 
     }
 
-    const datos = this.form.getRawValue();
 
-    // CREAR USUARIO
+    if (
+      perfil.nombre
+        .trim()
+        .toLowerCase() ===
+      'farmacia'
+    ) {
 
-    if (!this.esEdicion) {
+      this.mostrarCliente =
+        true;
+
+
+      this.form
+        .controls
+        .idCliente
+        .setValidators([
+          Validators.required
+        ]);
+
+    }
+
+    else {
+
+      this.mostrarCliente =
+        false;
+
+
+      this.form
+        .controls
+        .idCliente
+        .setValue(null);
+
+
+      this.form
+        .controls
+        .idCliente
+        .clearValidators();
+
+    }
+
+
+    this.form
+      .controls
+      .idCliente
+      .updateValueAndValidity();
+
+  }
+
+
+  // ==========================================
+  // GUARDAR
+  // ==========================================
+
+  guardar(): void {
+
+    if (
+      this.form.invalid
+    ) {
+
+      this.form.markAllAsTouched();
+
+      console.log(
+        'Formulario inválido',
+        this.form.value
+      );
+
+      return;
+
+    }
+
+
+    const datos =
+      this.form.getRawValue();
+
+
+    // ==========================================
+    // CREAR
+    // ==========================================
+
+    if (
+      !this.esEdicion
+    ) {
 
       this.usuarioService
         .crear(datos)
@@ -331,9 +793,9 @@ export class UsuarioFormComponent implements OnInit {
               'Usuario creado correctamente'
             );
 
-            this.router.navigate(
-              ['/usuarios']
-            );
+            this.router.navigate([
+              '/usuarios'
+            ]);
 
           },
 
@@ -356,12 +818,18 @@ export class UsuarioFormComponent implements OnInit {
 
     }
 
-    // ACTUALIZAR USUARIO
+
+    // ==========================================
+    // ACTUALIZAR
+    // ==========================================
 
     this.usuarioService
       .actualizar(
+
         this.idUsuario,
+
         datos
+
       )
       .subscribe({
 
@@ -371,9 +839,9 @@ export class UsuarioFormComponent implements OnInit {
             'Usuario actualizado correctamente'
           );
 
-          this.router.navigate(
-            ['/usuarios']
-          );
+          this.router.navigate([
+            '/usuarios'
+          ]);
 
         },
 
@@ -394,17 +862,43 @@ export class UsuarioFormComponent implements OnInit {
 
   }
 
+
+  // ==========================================
+  // CANCELAR
+  // ==========================================
+
   cancelar(): void {
-    this.router.navigate(['/usuarios']);
+
+    this.router.navigate([
+      '/usuarios'
+    ]);
+
   }
 
-  campoInvalido(nombreCampo: string): boolean {
-    const campo = this.form.get(nombreCampo);
+
+  // ==========================================
+  // VALIDACIÓN
+  // ==========================================
+
+  campoInvalido(
+    nombreCampo: string
+  ): boolean {
+
+    const campo =
+      this.form.get(
+        nombreCampo
+      );
+
     return !!(
+
       campo &&
+
       campo.invalid &&
+
       campo.touched
+
     );
+
   }
 
 }

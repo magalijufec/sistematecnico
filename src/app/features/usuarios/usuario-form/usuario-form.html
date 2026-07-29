@@ -122,70 +122,67 @@
 
       <mat-form-field appearance="outline">
 
-        <mat-label>Provincia</mat-label>
+  <mat-label>Provincia</mat-label>
 
-        <mat-select
-          formControlName="idProvincia"
-          (selectionChange)="cambioProvincia()">
+  <mat-select
+    formControlName="idProvincia"
+    (selectionChange)="cambioProvincia()">
 
-          <mat-option
-            *ngFor="let provincia of provincias"
-            [value]="provincia.id">
+    <mat-option
+      *ngFor="let provincia of provincias"
+      [value]="provincia.id">
 
-            {{ provincia.nombre }}
+      {{ provincia.nombre }}
 
-          </mat-option>
+    </mat-option>
 
-        </mat-select>
+  </mat-select>
 
-      </mat-form-field>
-
-
-      <!-- Ciudad -->
-
-      <mat-form-field appearance="outline">
-
-        <mat-label>Ciudad</mat-label>
-
-        <mat-select
-          formControlName="idCiudad">
-
-          <mat-option
-            *ngFor="let ciudad of ciudades"
-            [value]="ciudad.id">
-
-            {{ ciudad.nombre }}
-
-          </mat-option>
-
-        </mat-select>
-
-      </mat-form-field>
+</mat-form-field>
 
 
-      <!-- Cliente -->
+<mat-form-field appearance="outline">
 
-      <mat-form-field
-        appearance="outline"
-        *ngIf="mostrarCliente">
+  <mat-label>Ciudad</mat-label>
 
-        <mat-label>Cliente</mat-label>
+  <mat-select
+    formControlName="idCiudad"
+    (selectionChange)="cambioCiudad()">
 
-        <mat-select
-          formControlName="idCliente">
+    <mat-option
+      *ngFor="let ciudad of ciudades"
+      [value]="ciudad.id">
 
-          <mat-option
-            *ngFor="let cliente of clientes"
-            [value]="cliente.id">
+      {{ ciudad.nombre }}
 
-            {{ cliente.nombre }}
+    </mat-option>
 
-          </mat-option>
+  </mat-select>
 
-        </mat-select>
+</mat-form-field>
 
-      </mat-form-field>
 
+      @if (mostrarCliente) {
+
+  <mat-form-field appearance="outline">
+
+    <mat-label>Cliente</mat-label>
+
+    <mat-select formControlName="idCliente">
+
+      <mat-option
+        *ngFor="let cliente of clientesFiltrados"
+        [value]="cliente.id">
+
+        {{ cliente.nombre }}
+
+      </mat-option>
+
+    </mat-select>
+
+  </mat-form-field>
+
+}
 
       <!-- Activo -->
 
