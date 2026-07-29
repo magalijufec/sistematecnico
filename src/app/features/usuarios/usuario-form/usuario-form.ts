@@ -211,39 +211,39 @@ export class UsuarioFormComponent implements OnInit {
     this.ciudadService.obtenerPorProvincia(provinciaId)
       .subscribe({
         next: data => {
-          console.log('Ciudades recibidas:',data);
+          console.log('Ciudades recibidas:', data);
           this.ciudades = data;
         },
         error: error => {
-          console.error('Error al cargar ciudades', error );
+          console.error('Error al cargar ciudades', error);
         }
       });
   }
 
   cambioCiudad(): void {
     const provinciaId = this.form
-                          .get('idProvincia')
-                          ?.value;
+      .get('idProvincia')
+      ?.value;
 
     const ciudadId = this.form
-                          .get('idCiudad')
-                          ?.value;
+      .get('idCiudad')
+      ?.value;
 
-    console.log('Provincia:', provinciaId );
-    console.log( 'Ciudad:', ciudadId);
+    console.log('Provincia:', provinciaId);
+    console.log('Ciudad:', ciudadId);
     this.clientes = [];
     this.clientesFiltrados = [];
 
-    this.form.patchValue({idCliente: null});
+    this.form.patchValue({ idCliente: null });
 
-    if (!provinciaId || provinciaId === 0 || !ciudadId || ciudadId === 0 ) {
+    if (!provinciaId || provinciaId === 0 || !ciudadId || ciudadId === 0) {
       return;
     }
 
     this.cargarClientesPorProvinciaCiudad(provinciaId, ciudadId);
   }
 
-  cargarClientesPorProvinciaCiudad(provinciaId: number, ciudadId: number, 
+  cargarClientesPorProvinciaCiudad(provinciaId: number, ciudadId: number,
     clienteSeleccionadoId?: number | null): void {
     this.clienteService.obtenerPorProvinciaCiudad(provinciaId, ciudadId)
       .subscribe({
@@ -308,7 +308,7 @@ export class UsuarioFormComponent implements OnInit {
 
     if (!perfil) { return; }
 
-    if (perfil.nombre.trim().toLowerCase() ==='farmacia') {
+    if (perfil.nombre.trim().toLowerCase() === 'farmacia') {
       this.mostrarCliente = true;
 
       this.form
@@ -366,7 +366,7 @@ export class UsuarioFormComponent implements OnInit {
     }
 
     this.usuarioService
-      .actualizar(this.idUsuario,  datos)
+      .actualizar(this.idUsuario, datos)
       .subscribe({
         next: () => {
           alert('Usuario actualizado correctamente');
@@ -374,7 +374,8 @@ export class UsuarioFormComponent implements OnInit {
             '/usuarios'
           ]);
         },
-        error: error => { console.error( 'Error al actualizar usuario', error );
+        error: error => {
+          console.error('Error al actualizar usuario', error);
           alert('No se pudo actualizar el usuario');
         }
       });

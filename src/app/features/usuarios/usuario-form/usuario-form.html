@@ -3,28 +3,19 @@
   <mat-card-header>
 
     <mat-card-title>
-
       @if (esEdicion) {
-
-        Editar usuario #{{ idUsuario }}
-
+      Editar usuario #{{ idUsuario }}
       } @else {
-
-        Nuevo usuario
-
+      Nuevo usuario
       }
 
     </mat-card-title>
-
   </mat-card-header>
 
 
   <mat-card-content>
 
-    <form
-      [formGroup]="form"
-      (ngSubmit)="guardar()"
-      class="formulario">
+    <form [formGroup]="form" (ngSubmit)="guardar()" class="formulario">
 
 
       <!-- Usuario -->
@@ -33,9 +24,7 @@
 
         <mat-label>Usuario</mat-label>
 
-        <input
-          matInput
-          formControlName="userName">
+        <input matInput formControlName="userName">
 
       </mat-form-field>
 
@@ -46,9 +35,7 @@
 
         <mat-label>Nombre y apellido</mat-label>
 
-        <input
-          matInput
-          formControlName="nombreApellido">
+        <input matInput formControlName="nombreApellido">
 
       </mat-form-field>
 
@@ -59,10 +46,7 @@
 
         <mat-label>Email</mat-label>
 
-        <input
-          matInput
-          type="email"
-          formControlName="email">
+        <input matInput type="email" formControlName="email">
 
       </mat-form-field>
 
@@ -73,25 +57,18 @@
 
         <mat-label>Número de celular</mat-label>
 
-        <input
-          matInput
-          formControlName="numeroCelular">
+        <input matInput formControlName="numeroCelular">
 
       </mat-form-field>
 
 
       <!-- Password -->
 
-      <mat-form-field
-        appearance="outline"
-        *ngIf="!esEdicion">
+      <mat-form-field appearance="outline" *ngIf="!esEdicion">
 
         <mat-label>Contraseña</mat-label>
 
-        <input
-          matInput
-          type="password"
-          formControlName="password">
+        <input matInput type="password" formControlName="password">
 
       </mat-form-field>
 
@@ -102,12 +79,9 @@
 
         <mat-label>Perfil</mat-label>
 
-        <mat-select
-          formControlName="idPerfil">
+        <mat-select formControlName="idPerfil">
 
-          <mat-option
-            *ngFor="let perfil of perfiles"
-            [value]="perfil.id">
+          <mat-option *ngFor="let perfil of perfiles" [value]="perfil.id">
 
             {{ perfil.nombre }}
 
@@ -122,113 +96,76 @@
 
       <mat-form-field appearance="outline">
 
-  <mat-label>Provincia</mat-label>
+        <mat-label>Provincia</mat-label>
 
-  <mat-select
-    formControlName="idProvincia"
-    (selectionChange)="cambioProvincia()">
+        <mat-select formControlName="idProvincia" (selectionChange)="cambioProvincia()">
 
-    <mat-option
-      *ngFor="let provincia of provincias"
-      [value]="provincia.id">
+          <mat-option *ngFor="let provincia of provincias" [value]="provincia.id">
 
-      {{ provincia.nombre }}
+            {{ provincia.nombre }}
 
-    </mat-option>
+          </mat-option>
 
-  </mat-select>
+        </mat-select>
 
-</mat-form-field>
+      </mat-form-field>
 
 
-<mat-form-field appearance="outline">
+      <mat-form-field appearance="outline">
 
-  <mat-label>Ciudad</mat-label>
+        <mat-label>Ciudad</mat-label>
 
-  <mat-select
-    formControlName="idCiudad"
-    (selectionChange)="cambioCiudad()">
+        <mat-select formControlName="idCiudad" (selectionChange)="cambioCiudad()">
 
-    <mat-option
-      *ngFor="let ciudad of ciudades"
-      [value]="ciudad.id">
+          <mat-option *ngFor="let ciudad of ciudades" [value]="ciudad.id">
 
-      {{ ciudad.nombre }}
+            {{ ciudad.nombre }}
 
-    </mat-option>
+          </mat-option>
 
-  </mat-select>
+        </mat-select>
 
-</mat-form-field>
+      </mat-form-field>
 
 
       @if (mostrarCliente) {
 
-  <mat-form-field appearance="outline">
+      <mat-form-field appearance="outline">
 
-    <mat-label>Cliente</mat-label>
+        <mat-label>Cliente</mat-label>
 
-    <mat-select formControlName="idCliente">
+        <mat-select formControlName="idCliente">
 
-      <mat-option
-        *ngFor="let cliente of clientesFiltrados"
-        [value]="cliente.id">
+          <mat-option *ngFor="let cliente of clientesFiltrados" [value]="cliente.id">
 
-        {{ cliente.nombre }}
+            {{ cliente.nombre }}
 
-      </mat-option>
+          </mat-option>
 
-    </mat-select>
+        </mat-select>
 
-  </mat-form-field>
+      </mat-form-field>
 
-}
+      }
 
       <!-- Activo -->
-
-      <mat-checkbox
-        formControlName="activo">
-
+      <mat-checkbox formControlName="activo">
         Usuario activo
-
       </mat-checkbox>
 
-
-      <!-- Botones -->
-
       <div class="botones">
-
-        <button
-          mat-stroked-button
-          type="button"
-          routerLink="/usuarios">
-
+        <button mat-stroked-button color="warn" type="button" (click)="cancelar()">
           Cancelar
-
         </button>
 
-
-        <button
-          mat-raised-button
-          color="primary"
-          type="submit">
-
+        <button mat-raised-button color="primary" type="submit">
           @if (esEdicion) {
-
-            Guardar cambios
-
+          Guardar cambios
           } @else {
-
-            Crear usuario
-
+          Crear usuario
           }
-
         </button>
-
       </div>
-
     </form>
-
   </mat-card-content>
-
 </mat-card>
