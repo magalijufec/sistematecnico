@@ -8,6 +8,10 @@ export interface Usuario {
   provincia: string;
   cliente: string;
   perfil: string;
+  ciudadId: number;
+  provinciaId: number;
+  clienteId: number | null;
+  perfilId: number;
   activo: boolean;
 }
 

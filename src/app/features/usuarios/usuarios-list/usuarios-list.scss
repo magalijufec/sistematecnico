@@ -23,29 +23,21 @@ mat-card {
 }
 
 .estado {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 5px 10px;
+  display: inline-block;
+  padding: 5px 12px;
   border-radius: 16px;
   font-size: 13px;
-  font-weight: 500;
+  font-weight: 600;
 }
 
-.estado mat-icon {
-  font-size: 18px;
-  width: 18px;
-  height: 18px;
-}
-
-.estado.activo {
-  background-color: #e8f5e9;
+.estado-activo {
   color: #2e7d32;
+  background-color: #e8f5e9;
 }
 
-.estado.inactivo {
-  background-color: #ffebee;
+.estado-inactivo {
   color: #c62828;
+  background-color: #ffebee;
 }
 
 .sin-datos {

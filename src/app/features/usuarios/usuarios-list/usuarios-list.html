@@ -1,13 +1,3 @@
-<div class="toolbar">
-    <button mat-raised-button
-        color="primary"
-        routerLink="/usuarios/nuevo">
-        <mat-icon>person_add</mat-icon>
-        Nuevo Usuario
-    </button>
-</div>
-
-
 <mat-card>
 
     <mat-card-header>
@@ -16,36 +6,203 @@
             Usuarios
         </mat-card-title>
 
-        <mat-card-subtitle>
-            Lista de usuarios registrados
-        </mat-card-subtitle>
-
     </mat-card-header>
 
 
     <mat-card-content>
 
-        <table
-            mat-table
-            [dataSource]="usuarios"
-            class="usuarios-table">
+        <div class="filtros">
+
+
+            <!-- Buscar nombre o usuario -->
+
+            <mat-form-field appearance="outline" class="filtro-texto">
+
+                <mat-label>
+                    Buscar usuario o nombre
+                </mat-label>
+
+                <input matInput [(ngModel)]="filtroTexto" (ngModelChange)="aplicarFiltros()"
+                    placeholder="Ingrese usuario o nombre">
+
+                <mat-icon matSuffix>
+                    search
+                </mat-icon>
+
+            </mat-form-field>
+
+
+            <!-- Perfil -->
+
+            <mat-form-field appearance="outline">
+
+                <mat-label>
+                    Perfil
+                </mat-label>
+
+                <mat-select [(ngModel)]="filtroPerfil" (selectionChange)="aplicarFiltros()">
+
+                    <mat-option [value]="null">
+                        Todos
+                    </mat-option>
+
+                    @for (perfil of perfiles; track perfil.id) {
+
+                    <mat-option [value]="perfil.id">
+
+                        {{ perfil.nombre }}
+
+                    </mat-option>
+
+                    }
+
+                </mat-select>
+
+            </mat-form-field>
+
+
+            <!-- Provincia -->
+
+            <mat-form-field appearance="outline">
+
+                <mat-label>
+                    Provincia
+                </mat-label>
+
+                <mat-select [(ngModel)]="filtroProvincia" (selectionChange)="cambioProvincia()">
+
+                    <mat-option [value]="null">
+                        Todas
+                    </mat-option>
+
+                    @for (
+                    provincia of provincias;
+                    track provincia.id
+                    ) {
+
+                    <mat-option [value]="provincia.id">
+
+                        {{ provincia.nombre }}
+
+                    </mat-option>
+
+                    }
+
+                </mat-select>
+
+            </mat-form-field>
+
+
+            <!-- Ciudad -->
+
+            <mat-form-field appearance="outline">
+
+                <mat-label>
+                    Ciudad
+                </mat-label>
+
+                <mat-select [(ngModel)]="filtroCiudad" (selectionChange)="cambioCiudad()" [disabled]="!filtroProvincia">
+
+                    <mat-option [value]="null">
+                        Todas
+                    </mat-option>
+
+                    @for (
+                    ciudad of ciudades;
+                    track ciudad.id
+                    ) {
+
+                    <mat-option [value]="ciudad.id">
+
+                        {{ ciudad.nombre }}
+
+                    </mat-option>
+
+                    }
+
+                </mat-select>
+
+            </mat-form-field>
+
+
+            <!-- Cliente -->
+
+            <mat-form-field appearance="outline">
+
+                <mat-label>
+                    Cliente
+                </mat-label>
+
+                <mat-select [(ngModel)]="filtroCliente" (selectionChange)="aplicarFiltros()" [disabled]="!filtroCiudad">
+
+                    <mat-option [value]="null">
+                        Todos
+                    </mat-option>
+
+                    @for (
+                    cliente of clientes;
+                    track cliente.id
+                    ) {
+
+                    <mat-option [value]="cliente.id">
+
+                        {{ cliente.nombre }}
+
+                    </mat-option>
+
+                    }
+
+                </mat-select>
+
+            </mat-form-field>
+
+
+            <!-- Limpiar -->
+
+            <button mat-stroked-button type="button" (click)="limpiarFiltros()">
+
+                <mat-icon>
+                    clear
+                </mat-icon>
+
+                Limpiar filtros
+
+            </button>
+
+        </div>
+
+
+        <!-- Botón nuevo usuario -->
+
+        <div class="acciones-superiores">
+
+            <button mat-raised-button color="primary" routerLink="/usuarios/nuevo">
+
+                <mat-icon>
+                    person_add
+                </mat-icon>
+
+                Nuevo usuario
+
+            </button>
+
+        </div>
+
+
+        <!-- Tabla -->
+
+        <table mat-table [dataSource]="usuariosFiltrados" class="tabla">
 
 
             <!-- Usuario -->
 
             <ng-container matColumnDef="userName">
 
-                <th
-                    mat-header-cell
-                    *matHeaderCellDef>
-
+                <th mat-header-cell *matHeaderCellDef>
                     Usuario
-
                 </th>
 
-                <td
-                    mat-cell
-                    *matCellDef="let usuario">
+                <td mat-cell *matCellDef="let usuario">
 
                     {{ usuario.userName }}
 
@@ -58,19 +215,30 @@
 
             <ng-container matColumnDef="nombreApellido">
 
-                <th
-                    mat-header-cell
-                    *matHeaderCellDef>
-
+                <th mat-header-cell *matHeaderCellDef>
                     Nombre
-
                 </th>
 
-                <td
-                    mat-cell
-                    *matCellDef="let usuario">
+                <td mat-cell *matCellDef="let usuario">
 
                     {{ usuario.nombreApellido }}
+
+                </td>
+
+            </ng-container>
+
+
+            <!-- Email -->
+
+            <ng-container matColumnDef="email">
+
+                <th mat-header-cell *matHeaderCellDef>
+                    Email
+                </th>
+
+                <td mat-cell *matCellDef="let usuario">
+
+                    {{ usuario.email }}
 
                 </td>
 
@@ -81,17 +249,11 @@
 
             <ng-container matColumnDef="perfil">
 
-                <th
-                    mat-header-cell
-                    *matHeaderCellDef>
-
+                <th mat-header-cell *matHeaderCellDef>
                     Perfil
-
                 </th>
 
-                <td
-                    mat-cell
-                    *matCellDef="let usuario">
+                <td mat-cell *matCellDef="let usuario">
 
                     {{ usuario.perfil }}
 
@@ -104,19 +266,13 @@
 
             <ng-container matColumnDef="provincia">
 
-                <th
-                    mat-header-cell
-                    *matHeaderCellDef>
-
+                <th mat-header-cell *matHeaderCellDef>
                     Provincia
-
                 </th>
 
-                <td
-                    mat-cell
-                    *matCellDef="let usuario">
+                <td mat-cell *matCellDef="let usuario">
 
-                    {{ usuario.provincia }}
+                    {{ usuario.provincia || '-' }}
 
                 </td>
 
@@ -127,82 +283,52 @@
 
             <ng-container matColumnDef="ciudad">
 
-                <th
-                    mat-header-cell
-                    *matHeaderCellDef>
-
+                <th mat-header-cell *matHeaderCellDef>
                     Ciudad
-
                 </th>
 
-                <td
-                    mat-cell
-                    *matCellDef="let usuario">
+                <td mat-cell *matCellDef="let usuario">
 
-                    {{ usuario.ciudad }}
+                    {{ usuario.ciudad || '-' }}
 
                 </td>
 
             </ng-container>
+
+
+            <!-- Cliente -->
 
             <ng-container matColumnDef="cliente">
 
-                <th
-                    mat-header-cell
-                    *matHeaderCellDef>
-
+                <th mat-header-cell *matHeaderCellDef>
                     Cliente
-
                 </th>
 
-                <td
-                    mat-cell
-                    *matCellDef="let usuario">
+                <td mat-cell *matCellDef="let usuario">
 
-                    {{ usuario.cliente }}
+                    {{ usuario.cliente || '-' }}
 
                 </td>
 
             </ng-container>
 
 
-            <!-- Estado -->
+            <!-- Activo -->
 
             <ng-container matColumnDef="activo">
 
-                <th
-                    mat-header-cell
-                    *matHeaderCellDef>
-
+                <th mat-header-cell *matHeaderCellDef>
                     Estado
-
                 </th>
 
-                <td
-                    mat-cell
-                    *matCellDef="let usuario">
+                <td mat-cell *matCellDef="let usuario">
 
-                    @if (usuario.activo) {
+                    <span class="estado" [class.estado-activo]="usuario.activo"
+                        [class.estado-inactivo]="!usuario.activo">
 
-                        <span class="estado activo">
+                        {{ usuario.activo ? 'Activo' : 'Inactivo' }}
 
-                            <mat-icon>check_circle</mat-icon>
-
-                            Activo
-
-                        </span>
-
-                    } @else {
-
-                        <span class="estado inactivo">
-
-                            <mat-icon>cancel</mat-icon>
-
-                            Inactivo
-
-                        </span>
-
-                    }
+                    </span>
 
                 </td>
 
@@ -213,25 +339,20 @@
 
             <ng-container matColumnDef="acciones">
 
-                <th
-                    mat-header-cell
-                    *matHeaderCellDef>
-
+                <th mat-header-cell *matHeaderCellDef>
                     Acciones
-
                 </th>
 
-                <td
-                    mat-cell
-                    *matCellDef="let usuario">
+                <td mat-cell *matCellDef="let usuario">
 
-                    <button
-                        mat-icon-button
-                        color="primary"
-                        [routerLink]="['/usuarios', usuario.id , 'editar']"
-                        matTooltip="Editar usuario">
+                    <button mat-icon-button color="primary" [routerLink]="[
+              '/usuarios',
+              usuario.id
+            ]" matTooltip="Editar usuario">
 
-                        <mat-icon>edit</mat-icon>
+                        <mat-icon>
+                            edit
+                        </mat-icon>
 
                     </button>
 
@@ -240,33 +361,31 @@
             </ng-container>
 
 
-            <tr
-                mat-header-row
-                *matHeaderRowDef="displayedColumns">
+            <tr mat-header-row *matHeaderRowDef="displayedColumns">
+
             </tr>
 
+            <tr mat-row *matRowDef="
+          let row;
+          columns: displayedColumns;
+        ">
 
-            <tr
-                mat-row
-                *matRowDef="let row; columns: displayedColumns;">
             </tr>
 
 
         </table>
 
 
-        @if (usuarios.length === 0) {
+        @if (usuariosFiltrados.length === 0) {
 
-            <div class="sin-datos">
+        <div class="sin-resultados">
 
-                <mat-icon>people_outline</mat-icon>
+            No se encontraron usuarios
+            con los filtros seleccionados.
 
-                <p>No hay usuarios registrados</p>
-
-            </div>
+        </div>
 
         }
-
 
     </mat-card-content>
 
