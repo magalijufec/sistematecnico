@@ -26,21 +26,33 @@
             class="formulario">
 
 
+            <!-- ============================== -->
             <!-- CLIENTE -->
+            <!-- ============================== -->
 
-            <mat-form-field appearance="outline">
+            <mat-form-field
+                appearance="outline">
 
                 <mat-label>
                     Cliente
                 </mat-label>
 
+
                 <mat-select
-                    formControlName="idCliente">
+
+                    formControlName="idCliente"
+
+                    (selectionChange)="cambioCliente()">
 
                     <mat-option>
 
                         <ngx-mat-select-search
-                            [formControl]="clienteFiltro">
+
+                            [formControl]="clienteFiltro"
+
+                            placeholderLabel="Buscar cliente..."
+
+                            noEntriesFoundLabel="No se encontraron clientes">
 
                         </ngx-mat-select-search>
 
@@ -48,7 +60,9 @@
 
 
                     <mat-option
+
                         *ngFor="let cliente of clientesFiltrados"
+
                         [value]="cliente.id">
 
                         {{ cliente.nombre }}
@@ -60,81 +74,119 @@
             </mat-form-field>
 
 
+            <!-- ============================== -->
             <!-- TÉCNICO -->
+            <!-- ============================== -->
 
-            <mat-form-field appearance="outline">
+            <mat-form-field
+                appearance="outline">
 
                 <mat-label>
                     Técnico
                 </mat-label>
 
+
                 <mat-select
-                    formControlName="idTecnico">
+
+                    formControlName="idTecnico"
+
+                    [disabled]="tecnicosFiltrados.length === 0">
+
 
                     <mat-option
-                        *ngFor="let t of tecnicos"
+                        *ngFor="let t of tecnicosFiltrados"
+
                         [value]="t.id">
 
                         {{ t.nombre }}
 
                     </mat-option>
 
+
                 </mat-select>
 
             </mat-form-field>
 
 
+            <!-- ============================== -->
             <!-- TAREA -->
+            <!-- ============================== -->
 
-            <mat-form-field appearance="outline">
+            <mat-form-field
+                appearance="outline">
 
                 <mat-label>
                     Tarea
                 </mat-label>
 
+
                 <mat-select
+
                     formControlName="idTarea">
 
+
                     <mat-option
+
                         *ngFor="let t of tareas"
+
                         [value]="t.id">
 
                         {{ t.nombre }}
 
                     </mat-option>
 
+
                 </mat-select>
 
             </mat-form-field>
 
 
+            <!-- ============================== -->
             <!-- COMENTARIOS -->
+            <!-- ============================== -->
 
             <mat-form-field
+
                 appearance="outline"
+
                 class="comentarios">
+
 
                 <mat-label>
                     Comentarios
                 </mat-label>
 
+
                 <textarea
+
                     matInput
+
                     rows="5"
+
                     formControlName="comentarios">
+
                 </textarea>
+
 
             </mat-form-field>
 
 
+            <!-- ============================== -->
             <!-- BOTONES -->
+            <!-- ============================== -->
 
             <div class="botones">
 
+
                 <button
+
                     mat-stroked-button
+
                     color="warn"
-                    type="button">
+
+                    type="button"
+
+                    (click)="cancelar()">
 
                     Cancelar
 
@@ -142,10 +194,15 @@
 
 
                 <button
+
                     mat-raised-button
+
                     color="primary"
+
                     type="button"
+
                     (click)="guardar()">
+
 
                     @if (!esEdicion) {
 
@@ -157,7 +214,9 @@
 
                     }
 
+
                 </button>
+
 
             </div>
 

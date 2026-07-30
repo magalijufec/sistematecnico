@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Cliente } from '../models/cliente';
 import { Combo } from '../models/combo';
+import { ClienteCombo } from '../models/cliente-combo';
 
 @Injectable({
   providedIn: 'root'
@@ -20,11 +21,11 @@ export class ClienteService {
   }
 
   obtenerCombo() {
-    return this.http.get<Combo[]>(`${this.api}/combo`);
+    return this.http.get<ClienteCombo[]>(`${this.api}/combo`);
   }
 
-  obtenerPorProvinciaCiudad(provinciaId: number, ciudadId: number): Observable<Combo[]> {
-    return this.http.get<Combo[]>(
+  obtenerPorProvinciaCiudad(provinciaId: number, ciudadId: number): Observable<ClienteCombo[]> {
+    return this.http.get<ClienteCombo[]>(
       `${this.api}/provincia/${provinciaId}/ciudad/${ciudadId}`
     );
   }

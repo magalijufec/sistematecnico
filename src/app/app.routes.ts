@@ -49,6 +49,11 @@ export const routes: Routes = [
                 path: 'dashboard',
                 component: DashboardComponent
             },
+            {
+                path: 'clientes',
+                component: ClientesListComponent,
+                canActivate: [ adminGuard ],
+            },
 
             {
                 path: 'trabajos',

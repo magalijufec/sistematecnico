@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Usuario, UsuarioDetalle } from '../models/usuario';
 import { Combo } from '../models/combo';
+import { TecnicoCombo } from '../models/tecnico-combo';
 
 @Injectable({
   providedIn: 'root'
@@ -38,8 +39,8 @@ export class UsuarioService {
     return this.http.delete(`${this.api}/${id}`);
   }
 
-  obtenerTecnicos(): Observable<Combo[]> {
-    return this.http.get<Combo[]>(`${this.api}/tecnicos`);
+  obtenerTecnicos(): Observable<TecnicoCombo[]> {
+    return this.http.get<TecnicoCombo[]>(`${this.api}/tecnicos`);
   }
 
 }
