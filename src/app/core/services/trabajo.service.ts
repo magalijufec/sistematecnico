@@ -17,18 +17,18 @@ export class TrabajoService {
 
   //private api = 'https://localhost:44306/api/trabajo';
   private api = 'https://localhost:7122/api/trabajo';
-   //private api = 'http://localhost:5010/api/trabajo';   
+  //private api = 'http://localhost:5010/api/trabajo';   
 
   obtenerNoFinalizados(): Observable<Trabajo[]> {
-    return this.http.get<Trabajo[]>( `${this.api}/no-finalizados`);
+    return this.http.get<Trabajo[]>(`${this.api}/no-finalizados`);
   }
 
   obtenerFinalizados(): Observable<TrabajoFinalizado[]> {
-    return this.http.get<TrabajoFinalizado[]>( `${this.api}/finalizados`);
+    return this.http.get<TrabajoFinalizado[]>(`${this.api}/finalizados`);
   }
 
   obtenerPendientePago(): Observable<TrabajoFinalizado[]> {
-    return this.http.get<TrabajoFinalizado[]>( `${this.api}/pendiente-pago`);
+    return this.http.get<TrabajoFinalizado[]>(`${this.api}/pendiente-pago`);
   }
 
   obtenerPorId(id: number): Observable<Trabajo> {
@@ -47,12 +47,47 @@ export class TrabajoService {
     return this.http.get<TrabajoDetalle>(`${this.api}/${id}`);
   }
 
-  cambiarEstado(id: number, dto: CambiarEstado) {
+  // cambiarEstado(id: number, dto: CambiarEstado) {
+  //   return this.http.put(
+  //     `${this.api}/${id}/estado`,
+  //     dto
+  //   );
+  // }
+
+  iniciarTrabajo(id: number): Observable<any> {
     return this.http.put(
-      `${this.api}/${id}/estado`,
-      dto
+      `${this.api}/${id}/iniciar`,
+      {}
     );
   }
+
+  finalizarTrabajo(id: number): Observable<any> {
+    return this.http.put(
+      `${this.api}/${id}/finalizar`,
+      {}
+    );
+  }
+
+  aprobarTrabajo(id: number): Observable<any> {
+    return this.http.put(
+      `${this.api}/${id}/aprobar`,
+      {}
+    );
+  }
+
+  registrarPago(id: number): Observable<any> {
+    return this.http.put(
+      `${this.api}/${id}/registrar-pago`,
+      {}
+    );
+  }
+
+  // registrarPago(id: number): Observable<void> {
+  //   return this.http.put<void>(
+  //     `${this.api}/${id}/registrar-pago`,
+  //     {}
+  //   );
+  // }
 
   guardarTrabajoRealizado(id: number, texto: string) {
     return this.http.put(
@@ -105,11 +140,6 @@ export class TrabajoService {
     );
   }
 
-  registrarPago(id: number): Observable<void> {
-    return this.http.put<void>(
-      `${this.api}/${id}/registrar-pago`,
-      {}
-    );
-  }
+
 
 }

@@ -1,27 +1,31 @@
 export interface TrabajoDetalle {
   id: number;
 
-  idCliente: number;
-  cliente: string;
-
-  idTecnico: number;
-  tecnico: string;
-
-  idTarea: number;
-  tarea: string;
-
-  idEstado: number;
-  estado: string;
-  estadoColor: string;
-
   fechaSolicitud: string;
+
+  fechaInicio: string | null;
+
   fechaFinalizado: string | null;
 
-  comentarios: string;
+  fechaPagado: string | null;
+
+  cliente: string;
+
+  tecnico: string;
+
+  tarea: string;
+
+  estado: string;
+
+  estadoColor: string;
+
+  comentarios: string | null;
+
   trabajoRealizado: string;
 
+  factura: string | null;
+
   tieneFactura: boolean;
-  factura?: string | null;
 
   cantidadImagenes: number;
 }

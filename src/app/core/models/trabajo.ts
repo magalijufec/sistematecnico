@@ -1,16 +1,41 @@
 export interface Trabajo {
+
   id: number;
-  idCliente: number;
-  idTecnico: number;
-  idEstado: number;
-  idTarea: number;
+
   fechaSolicitud: string;
-  fechaFinalizado: string;
-  cliente: string;
-  tecnico: string;
-  tarea: string;
+
+  fechaInicio: string | null;
+
+  fechaFinalizado: string | null;
+
+  fechaPagado: string | null;
+
+  idEstado: number;
+
   estado: string;
-  comentarios: string;
-  provincia: string;
-  ciudad: string;
+
+  estadoColor: string;
+
+  idCliente: number;
+
+  cliente: string;
+
+  idTecnico: number;
+
+  tecnico: string;
+
+  idTarea: number;
+
+  tarea: string;
+
+  comentarios: string | null;
+
+  trabajoRealizado: string | null;
+
+  tieneFactura: boolean;
+
+  factura: string | null;
+
+  cantidadImagenes: number;
+
 }

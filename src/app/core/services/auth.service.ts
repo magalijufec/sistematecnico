@@ -74,34 +74,45 @@ export class AuthService {
 
     obtenerRol(): string | null {
 
-    const token = this.obtenerToken();
+        const token =
+            this.obtenerToken();
 
-    if (!token) {
-      return null;
+        if (!token) {
+            return null;
+        }
+
+        try {
+
+            const partes =
+                token.split('.');
+
+            const payload =
+                JSON.parse(
+                    atob(partes[1])
+                );
+
+            return (
+                payload[
+                'http://schemas.microsoft.com/ws/2008/06/identity/claims/role'
+                ] ?? null
+            );
+
+        } catch (error) {
+
+            console.error(
+                'Error al leer JWT',
+                error
+            );
+
+            return null;
+
+        }
+
     }
 
-    try {
+    esAdministrador(): boolean {
 
-      const payload = JSON.parse(
-        atob(token.split('.')[1])
-      );
-
-      // Claim de rol generado por ClaimTypes.Role
-      return payload[
-        'http://schemas.microsoft.com/ws/2008/06/identity/claims/role'
-      ] ?? null;
-
-    } catch {
-
-      return null;
+        return this.obtenerRol() === 'Administrador';
 
     }
-
-  }
-
-  esAdministrador(): boolean {
-
-    return this.obtenerRol() === 'Administrador';
-
-  }
 }

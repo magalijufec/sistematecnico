@@ -303,7 +303,7 @@ export class TrabajoFormComponent
               trabajo.idTarea,
 
             comentarios:
-              trabajo.comentarios
+              trabajo.comentarios + ''
 
           });
 
