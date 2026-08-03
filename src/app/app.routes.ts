@@ -15,6 +15,7 @@ import { TrabajosFinalizadosComponent } from './features/trabajos/trabajos-final
 import { TrabajosPendientePagoComponent } from './features/trabajos/trabajos-pendiente-pago/trabajos-pendiente-pago';
 import { UsuarioFormComponent } from './features/usuarios/usuario-form/usuario-form';
 import { adminGuard } from './core/guards/role.guard';
+import { ClienteFormComponent } from './features/clientes/cliente-form/cliente-form';
 
 export const routes: Routes = [
 
@@ -54,7 +55,16 @@ export const routes: Routes = [
                 component: ClientesListComponent,
                 canActivate: [ adminGuard ],
             },
-
+            { 
+                path: 'clientes/nuevo', 
+                component: ClienteFormComponent ,
+                canActivate: [ adminGuard ],
+            }, 
+            { 
+                path: 'clientes/:id', 
+                component: ClienteFormComponent,
+                canActivate: [ adminGuard ], 
+            },
             {
                 path: 'trabajos',
                 component: TrabajosListComponent

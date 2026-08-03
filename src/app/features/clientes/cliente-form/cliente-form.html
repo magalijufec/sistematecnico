@@ -1,0 +1,214 @@
+<mat-card>
+
+  <mat-card-header>
+
+    <mat-card-title>
+
+      @if (!esEdicion) {
+
+      Nuevo Cliente
+
+      } @else {
+
+      Editar Cliente #{{ idCliente }}
+
+      }
+
+    </mat-card-title>
+
+  </mat-card-header>
+
+
+  <mat-card-content>
+
+    <form [formGroup]="form" class="formulario">
+
+
+      <!-- NÚMERO DE FARMACIA -->
+
+      <mat-form-field appearance="outline">
+
+        <mat-label>
+          Número de farmacia
+        </mat-label>
+
+        <input matInput formControlName="nroCliente">
+
+        @if (
+        campoInvalido('nroCliente')
+        ) {
+
+        <mat-error>
+
+          El número de farmacia
+          es obligatorio
+
+        </mat-error>
+
+        }
+
+      </mat-form-field>
+
+
+      <!-- NOMBRE -->
+
+      <mat-form-field appearance="outline">
+
+        <mat-label>
+          Nombre
+        </mat-label>
+
+        <input matInput formControlName="nombre">
+
+        @if (
+        campoInvalido('nombre')
+        ) {
+
+        <mat-error>
+
+          El nombre es obligatorio
+
+        </mat-error>
+
+        }
+
+      </mat-form-field>
+
+
+      <!-- EMAIL -->
+
+      <mat-form-field appearance="outline">
+
+        <mat-label>
+          Email
+        </mat-label>
+
+        <input matInput type="email" formControlName="email">
+
+        @if (
+        campoInvalido('email')
+        ) {
+
+        <mat-error>
+
+          Ingresá un email válido
+
+        </mat-error>
+
+        }
+
+      </mat-form-field>
+
+
+      <!-- DIRECCIÓN -->
+
+      <mat-form-field appearance="outline">
+
+        <mat-label>
+          Dirección
+        </mat-label>
+
+        <input matInput formControlName="direccion">
+
+      </mat-form-field>
+
+
+      <!-- PROVINCIA -->
+
+      <mat-form-field appearance="outline">
+
+        <mat-label>
+          Provincia
+        </mat-label>
+
+        <mat-select formControlName="provinciaId" (selectionChange)="cambioProvincia()">
+
+          <mat-option [value]="0">
+            Seleccionar provincia
+          </mat-option>
+
+          @for (
+          provincia of provincias;
+          track provincia.id
+          ) {
+
+          <mat-option [value]="provincia.id">
+
+            {{ provincia.nombre }}
+
+          </mat-option>
+
+          }
+
+        </mat-select>
+
+      </mat-form-field>
+
+
+      <mat-form-field appearance="outline">
+
+        <mat-label>
+          Ciudad
+        </mat-label>
+
+        <mat-select formControlName="ciudadId" [disabled]="ciudades.length === 0">
+
+          <mat-option [value]="0">
+            Seleccionar ciudad
+          </mat-option>
+
+          @for (
+          ciudad of ciudades;
+          track ciudad.id
+          ) {
+
+          <mat-option [value]="ciudad.id">
+
+            {{ ciudad.nombre }}
+
+          </mat-option>
+
+          }
+
+        </mat-select>
+
+      </mat-form-field>
+
+
+      <!-- BOTONES -->
+
+      <div class="botones">
+
+
+        <button mat-stroked-button type="button" (click)="cancelar()">
+
+          Cancelar
+
+        </button>
+
+
+        <button mat-raised-button color="primary" type="button" (click)="guardar()">
+
+
+          @if (!esEdicion) {
+
+          Crear Cliente
+
+          } @else {
+
+          Guardar Cambios
+
+          }
+
+
+        </button>
+
+
+      </div>
+
+
+    </form>
+
+  </mat-card-content>
+
+</mat-card>
