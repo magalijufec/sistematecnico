@@ -82,19 +82,19 @@ export class TrabajoCambiarEstadoComponent implements OnInit {
 
     }
 
-    this.trabajoService.cambiarEstado(
+    // this.trabajoService.cambiarEstado(
 
-      this.data.idTrabajo,
+    //   this.data.idTrabajo,
 
-      this.form.getRawValue()
+    //   this.form.getRawValue()
 
-    ).subscribe({
+    // ).subscribe({
 
-      next: () => this.dialogRef.close(true),
+    //   next: () => this.dialogRef.close(true),
 
-      error: err => console.error(err)
+    //   error: err => console.error(err)
 
-    });
+    // });
 
   }
 

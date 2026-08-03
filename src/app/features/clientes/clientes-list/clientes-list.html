@@ -1,193 +1,357 @@
-<div class="clientes-container">
+<mat-card>
 
-  <!-- Encabezado -->
-  <div class="toolbar">
+  <mat-card-header>
 
-    <div>
-      <h2>Clientes</h2>
-      <p>Listado de farmacias y clientes registrados</p>
+    <mat-card-title>
+      Clientes / Farmacias
+    </mat-card-title>
+
+  </mat-card-header>
+
+
+  <mat-card-content>
+
+
+    <!-- ========================= -->
+    <!-- FILTROS -->
+    <!-- ========================= -->
+
+    <div class="filtros">
+
+
+      <!-- BUSCAR -->
+      <mat-form-field
+        appearance="outline">
+
+        <mat-label>
+          Buscar farmacia
+        </mat-label>
+
+        <input
+          matInput
+          [(ngModel)]="filtroTexto"
+          (ngModelChange)="cambioTexto()"
+          placeholder="Nombre o número de farmacia">
+
+        <mat-icon matSuffix>
+          search
+        </mat-icon>
+
+      </mat-form-field>
+
+
+      <!-- PROVINCIA -->
+
+      <mat-form-field
+        appearance="outline">
+
+        <mat-label>
+          Provincia
+        </mat-label>
+
+        <mat-select
+          [(ngModel)]="filtroProvincia"
+          (selectionChange)="cambioProvincia()">
+
+          <mat-option [value]="null">
+
+            Todas las provincias
+
+          </mat-option>
+
+          @for (
+            provincia of provincias;
+            track provincia.id
+          ) {
+
+            <mat-option
+              [value]="provincia.id">
+
+              {{ provincia.nombre }}
+
+            </mat-option>
+
+          }
+
+        </mat-select>
+
+      </mat-form-field>
+
+
+      <!-- CIUDAD -->
+
+      <mat-form-field
+        appearance="outline">
+
+        <mat-label>
+          Ciudad
+        </mat-label>
+
+        <mat-select
+          [(ngModel)]="filtroCiudad"
+          (selectionChange)="cambioCiudad()"
+          [disabled]="!filtroProvincia">
+
+          <mat-option [value]="null">
+
+            Todas las ciudades
+
+          </mat-option>
+
+          @for (
+            ciudad of ciudades;
+            track ciudad.id
+          ) {
+
+            <mat-option
+              [value]="ciudad.id">
+
+              {{ ciudad.nombre }}
+
+            </mat-option>
+
+          }
+
+        </mat-select>
+
+      </mat-form-field>
+
+
+      <!-- LIMPIAR -->
+
+      <button
+        mat-stroked-button
+        type="button"
+        (click)="limpiarFiltros()">
+
+        <mat-icon>
+          filter_alt_off
+        </mat-icon>
+
+        Limpiar filtros
+
+      </button>
+
+
     </div>
 
-    <button
-      mat-raised-button
-      color="primary">
 
-      <mat-icon>add</mat-icon>
+    <!-- ========================= -->
+    <!-- TABLA -->
+    <!-- ========================= -->
 
-      Nuevo cliente
+    <div class="tabla-container">
 
-    </button>
+      <table
+        mat-table
+        [dataSource]="clientesFiltrados"
+        class="tabla">
 
-  </div>
 
-  <!-- Card -->
-  <mat-card>
+        <!-- NRO CLIENTE -->
 
-    <mat-card-header>
+        <ng-container
+          matColumnDef="nroCliente">
 
-      <mat-card-title>
-        Clientes
-      </mat-card-title>
+          <th
+            mat-header-cell
+            *matHeaderCellDef>
 
-      <mat-card-subtitle>
-        {{ clientes.length }} clientes registrados
-      </mat-card-subtitle>
+            N.º Farmacia
 
-    </mat-card-header>
+          </th>
 
-    <mat-divider></mat-divider>
+          <td
+            mat-cell
+            *matCellDef="let cliente">
 
-    <mat-card-content>
+            {{ cliente.nroCliente }}
 
-      <!-- Vista escritorio -->
-      <div class="table-container">
+          </td>
 
-        <table
-          mat-table
-          [dataSource]="clientes"
-          class="clientes-table">
+        </ng-container>
 
-          <!-- N° Cliente -->
-          <ng-container matColumnDef="nroCliente">
 
-            <th mat-header-cell *matHeaderCellDef>
-              N°
-            </th>
+        <!-- NOMBRE -->
 
-            <td mat-cell *matCellDef="let cliente">
+        <ng-container
+          matColumnDef="nombre">
 
-              <strong>
-                {{ cliente.nroCliente }}
-              </strong>
+          <th
+            mat-header-cell
+            *matHeaderCellDef>
 
-            </td>
+            Nombre
 
-          </ng-container>
+          </th>
 
+          <td
+            mat-cell
+            *matCellDef="let cliente">
 
-          <!-- Nombre -->
-          <ng-container matColumnDef="nombre">
+            {{ cliente.nombre }}
 
-            <th mat-header-cell *matHeaderCellDef>
-              Nombre
-            </th>
+          </td>
 
-            <td mat-cell *matCellDef="let cliente">
+        </ng-container>
 
-              <div class="cliente-nombre">
 
-                <mat-icon>
-                  local_pharmacy
-                </mat-icon>
+        <!-- PROVINCIA -->
 
-                <span>
-                  {{ cliente.nombre }}
-                </span>
+        <ng-container
+          matColumnDef="provincia">
 
-              </div>
+          <th
+            mat-header-cell
+            *matHeaderCellDef>
 
-            </td>
+            Provincia
 
-          </ng-container>
+          </th>
 
+          <td
+            mat-cell
+            *matCellDef="let cliente">
 
-          <!-- Ciudad -->
-          <ng-container matColumnDef="ciudad">
+            {{ cliente.provincia }}
 
-            <th mat-header-cell *matHeaderCellDef>
-              Ciudad
-            </th>
+          </td>
 
-            <td mat-cell *matCellDef="let cliente">
+        </ng-container>
 
-              <div class="ubicacion">
 
-                <mat-icon>
-                  location_city
-                </mat-icon>
+        <!-- CIUDAD -->
 
-                {{ cliente.ciudad }}
+        <ng-container
+          matColumnDef="ciudad">
 
-              </div>
+          <th
+            mat-header-cell
+            *matHeaderCellDef>
 
-            </td>
+            Ciudad
 
-          </ng-container>
+          </th>
 
+          <td
+            mat-cell
+            *matCellDef="let cliente">
 
-          <!-- Provincia -->
-          <ng-container matColumnDef="provincia">
+            {{ cliente.ciudad }}
 
-            <th mat-header-cell *matHeaderCellDef>
-              Provincia
-            </th>
+          </td>
 
-            <td mat-cell *matCellDef="let cliente">
+        </ng-container>
 
-              {{ cliente.provincia }}
 
-            </td>
+        <!-- DIRECCIÓN -->
 
-          </ng-container>
+        <ng-container
+          matColumnDef="direccion">
 
+          <th
+            mat-header-cell
+            *matHeaderCellDef>
 
-          <!-- Acciones -->
-          <ng-container matColumnDef="acciones">
+            Dirección
 
-            <th mat-header-cell *matHeaderCellDef>
-            </th>
+          </th>
 
-            <td mat-cell *matCellDef="let cliente">
+          <td
+            mat-cell
+            *matCellDef="let cliente">
 
-              <button
-                mat-icon-button
-                color="primary"
-                matTooltip="Ver cliente">
+            {{ cliente.direccion }}
 
-                <mat-icon>
-                  visibility
-                </mat-icon>
+          </td>
 
-              </button>
+        </ng-container>
 
-              <button
-                mat-icon-button
-                color="accent"
-                matTooltip="Editar cliente">
 
-                <mat-icon>
-                  edit
-                </mat-icon>
+        <!-- ACCIONES -->
 
-              </button>
+        <ng-container
+          matColumnDef="acciones">
 
-            </td>
+          <th
+            mat-header-cell
+            *matHeaderCellDef>
 
-          </ng-container>
+            Acciones
 
+          </th>
 
-          <!-- Header -->
-          <tr
-            mat-header-row
-            *matHeaderRowDef="displayedColumns">
-          </tr>
+          <td
+            mat-cell
+            *matCellDef="let cliente">
 
+            <button
+              mat-icon-button
+              color="primary"
+              [routerLink]="[
+                '/clientes',
+                cliente.id
+              ]"
+              matTooltip="Editar cliente">
 
-          <!-- Filas -->
-          <tr
-            mat-row
-            *matRowDef="
-              let row;
-              columns: displayedColumns;
-            ">
-          </tr>
+              <mat-icon>
+                edit
+              </mat-icon>
 
-        </table>
+            </button>
 
-      </div>
+          </td>
 
-    </mat-card-content>
+        </ng-container>
 
-  </mat-card>
 
-</div>
+        <!-- HEADER -->
+
+        <tr
+          mat-header-row
+          *matHeaderRowDef="displayedColumns">
+
+        </tr>
+
+
+        <!-- FILAS -->
+
+        <tr
+          mat-row
+          *matRowDef="
+            let row;
+            columns: displayedColumns
+          ">
+
+        </tr>
+
+
+      </table>
+
+
+      <!-- SIN RESULTADOS -->
+
+      @if (
+        clientesFiltrados.length === 0
+      ) {
+
+        <div class="sin-resultados">
+
+          <mat-icon>
+            search_off
+          </mat-icon>
+
+          <p>
+            No se encontraron clientes
+            con los filtros seleccionados.
+          </p>
+
+        </div>
+
+      }
+
+    </div>
+
+  </mat-card-content>
+
+</mat-card>

@@ -1,17 +1,11 @@
-export interface Cliente{
-
-    id:number;
-
-    nroCliente:number;
-
-    nombre:string;
-
-    razonSocial:string;
-
-    provincia:string;
-
-    ciudad:string;
-
-    direccion:string;
-
+export interface Cliente {
+    id: number;
+    nroCliente: number;
+    nombre: string;
+    razonSocial: string;
+    provinciaId: number;
+    provincia: string;
+    ciudadId: number;
+    ciudad: string;
+    direccion: string;
 }
