@@ -16,6 +16,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MENU } from '../../../core/constants/menu';
 import { AuthService } from '../../../core/services/auth.service';
 import { MatMenuModule } from '@angular/material/menu';
+import { MenuItem } from '../../../core/models/menu-item';
 
 @Component({
   selector: 'app-main-layout',
@@ -47,6 +48,7 @@ export class MainLayoutComponent implements OnInit {
   esMovil = false;
   nombreUsuario : string | undefined = '' ;
   esAdministrador = false;
+  menuVisible: MenuItem[] = [];
 
   ngOnInit(): void {
 
@@ -61,16 +63,11 @@ export class MainLayoutComponent implements OnInit {
 
       });
 
+      const rol = this.authService.obtenerRol(); 
+      this.menuVisible = this.menu.filter(
+        item => item.roles.includes(rol ?? '') );
+
   }
-
-  get menuVisible() {
-
-  return this.menu.filter(item =>
-    !item.soloAdministrador ||
-    this.esAdministrador
-  );
-
-}
 
   toggleMenu(): void {
 

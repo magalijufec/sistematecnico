@@ -48,9 +48,7 @@
 
                 <div class="estado-container">
 
-                    <span
-                        class="estado"
-                        [style.background]="trabajo.estadoColor">
+                    <span class="estado" [style.background]="trabajo.estadoColor">
 
                         {{ trabajo.estado }}
 
@@ -156,11 +154,11 @@
                     El trabajo está pendiente de inicio.
                 </p>
 
-
-                <button
-                    mat-raised-button
-                    color="primary"
-                    (click)="iniciarTrabajo()">
+                @if (
+                trabajo.estado === 'Pendiente'
+                && esRol('Tecnico')
+                ) {
+                <button mat-raised-button color="primary" (click)="iniciarTrabajo()">
 
                     <mat-icon>
                         play_arrow
@@ -169,6 +167,9 @@
                     Iniciar trabajo
 
                 </button>
+                }
+
+
 
             </mat-card-content>
 
@@ -213,8 +214,8 @@
 
 
                     @for (
-                        comparacion of comparaciones;
-                        track comparacion.id
+                    comparacion of comparaciones;
+                    track comparacion.id
                     ) {
 
 
@@ -234,12 +235,9 @@
 
                             @if (comparacion.imagenAntes) {
 
-                            <img
-                                class="imagen-trabajo"
-                                [src]="obtenerUrlImagen(
+                            <img class="imagen-trabajo" [src]="obtenerUrlImagen(
                                     comparacion.imagenAntes.rutaArchivo
-                                )"
-                                alt="Imagen antes">
+                                )" alt="Imagen antes">
 
                             }
 
@@ -260,12 +258,7 @@
                             }
 
 
-                            <input
-                                #inputAntes
-                                type="file"
-                                accept="image/*"
-                                hidden
-                                (change)="
+                            <input #inputAntes type="file" accept="image/*" hidden (change)="
                                     subirAntes(
                                         $event,
                                         comparacion
@@ -273,11 +266,7 @@
                                 ">
 
 
-                            <button
-                                mat-stroked-button
-                                color="primary"
-                                type="button"
-                                (click)="inputAntes.click()">
+                            <button mat-stroked-button color="primary" type="button" (click)="inputAntes.click()">
 
 
                                 <mat-icon>
@@ -287,13 +276,13 @@
 
                                 @if (comparacion.imagenAntes) {
 
-                                    Cambiar imagen
+                                Cambiar imagen
 
                                 }
 
                                 @else {
 
-                                    Cargar imagen
+                                Cargar imagen
 
                                 }
 
@@ -315,12 +304,9 @@
 
                             @if (comparacion.imagenDespues) {
 
-                            <img
-                                class="imagen-trabajo"
-                                [src]="obtenerUrlImagen(
+                            <img class="imagen-trabajo" [src]="obtenerUrlImagen(
                                     comparacion.imagenDespues.rutaArchivo
-                                )"
-                                alt="Imagen después">
+                                )" alt="Imagen después">
 
                             }
 
@@ -341,12 +327,7 @@
                             }
 
 
-                            <input
-                                #inputDespues
-                                type="file"
-                                accept="image/*"
-                                hidden
-                                (change)="
+                            <input #inputDespues type="file" accept="image/*" hidden (change)="
                                     subirDespues(
                                         $event,
                                         comparacion
@@ -354,11 +335,7 @@
                                 ">
 
 
-                            <button
-                                mat-stroked-button
-                                color="primary"
-                                type="button"
-                                (click)="inputDespues.click()">
+                            <button mat-stroked-button color="primary" type="button" (click)="inputDespues.click()">
 
 
                                 <mat-icon>
@@ -368,13 +345,13 @@
 
                                 @if (comparacion.imagenDespues) {
 
-                                    Cambiar imagen
+                                Cambiar imagen
 
                                 }
 
                                 @else {
 
-                                    Cargar imagen
+                                Cargar imagen
 
                                 }
 
@@ -389,11 +366,7 @@
 
                         <div class="acciones-comparacion">
 
-                            <button
-                                mat-icon-button
-                                color="warn"
-                                matTooltip="Eliminar comparación"
-                                type="button"
+                            <button mat-icon-button color="warn" matTooltip="Eliminar comparación" type="button"
                                 (click)="
                                     eliminarComparacion(
                                         comparacion
@@ -421,11 +394,7 @@
 
                 <div class="agregar-comparacion">
 
-                    <button
-                        mat-raised-button
-                        color="primary"
-                        type="button"
-                        (click)="agregarComparacion()">
+                    <button mat-raised-button color="primary" type="button" (click)="agregarComparacion()">
 
                         <mat-icon>
                             add
@@ -450,9 +419,7 @@
                 </h3>
 
 
-                <mat-form-field
-                    appearance="outline"
-                    class="w-100">
+                <mat-form-field appearance="outline" class="w-100">
 
 
                     <mat-label>
@@ -460,10 +427,7 @@
                     </mat-label>
 
 
-                    <textarea
-                        matInput
-                        rows="6"
-                        [(ngModel)]="trabajo.trabajoRealizado">
+                    <textarea matInput rows="6" [(ngModel)]="trabajo.trabajoRealizado">
                     </textarea>
 
 
@@ -472,11 +436,7 @@
 
                 <div class="acciones">
 
-                    <button
-                        mat-raised-button
-                        color="primary"
-                        type="button"
-                        (click)="guardarTrabajoRealizado()">
+                    <button mat-raised-button color="primary" type="button" (click)="guardarTrabajoRealizado()">
 
                         <mat-icon>
                             save
@@ -491,11 +451,7 @@
                     <!-- FINALIZAR TRABAJO -->
                     <!-- ========================= -->
 
-                    <button
-                        mat-raised-button
-                        color="accent"
-                        type="button"
-                        (click)="finalizarTrabajo()">
+                    <button mat-raised-button color="accent" type="button" (click)="finalizarTrabajo()">
 
                         <mat-icon>
                             check
@@ -518,7 +474,8 @@
         <!-- ESTADO: TRABAJADO FINALIZADO -->
         <!-- ================================================= -->
 
-        @if (trabajo.estado === 'Trabajado finalizado') {
+        @if (trabajo.estado === 'Trabajado finalizado'
+        && esRol('Sistemas')) {
 
         <mat-divider></mat-divider>
 
@@ -546,11 +503,7 @@
                 </p>
 
 
-                <button
-                    mat-raised-button
-                    color="primary"
-                    type="button"
-                    (click)="aprobarTrabajo()">
+                <button mat-raised-button color="primary" type="button" (click)="aprobarTrabajo()">
 
                     <mat-icon>
                         verified
@@ -571,7 +524,8 @@
         <!-- ESTADO: APROBADO -->
         <!-- ================================================= -->
 
-        @if (trabajo.estado === 'Aprobado') {
+        @if (trabajo.estado === 'Aprobado'
+        && esRol('Tecnico')) {
 
         <mat-divider></mat-divider>
 
@@ -606,14 +560,10 @@
                 </p>
 
 
-                <a
-                    mat-raised-button
-                    color="primary"
-                    [href]="
+                <a mat-raised-button color="primary" [href]="
                         'https://localhost:7122'
                         + trabajo.factura
-                    "
-                    target="_blank">
+                    " target="_blank">
 
                     <mat-icon>
                         picture_as_pdf
@@ -632,19 +582,10 @@
                 </p>
 
 
-                <input
-                    #facturaInput
-                    type="file"
-                    accept="application/pdf"
-                    hidden
-                    (change)="subirFactura($event)">
+                <input #facturaInput type="file" accept="application/pdf" hidden (change)="subirFactura($event)">
 
 
-                <button
-                    mat-raised-button
-                    color="primary"
-                    type="button"
-                    (click)="facturaInput.click()">
+                <button mat-raised-button color="primary" type="button" (click)="facturaInput.click()">
 
                     <mat-icon>
                         upload_file
@@ -667,7 +608,8 @@
         <!-- ESTADO: PENDIENTE DE PAGO -->
         <!-- ================================================= -->
 
-        @if (trabajo.estado === 'Pendiente pago') {
+        @if (trabajo.estado === 'Pendiente pago'
+        && esRol('Pagos')) {
 
         <mat-divider></mat-divider>
 
@@ -692,14 +634,10 @@
 
                 @if (trabajo.factura) {
 
-                <a
-                    mat-raised-button
-                    color="primary"
-                    [href]="
+                <a mat-raised-button color="primary" [href]="
                         'https://localhost:7122'
                         + trabajo.factura
-                    "
-                    target="_blank">
+                    " target="_blank">
 
                     <mat-icon>
                         picture_as_pdf
@@ -712,11 +650,7 @@
                 }
 
 
-                <button
-                    mat-raised-button
-                    color="primary"
-                    type="button"
-                    (click)="registrarPago()">
+                <button mat-raised-button color="primary" type="button" (click)="registrarPago()">
 
                     <mat-icon>
                         payments

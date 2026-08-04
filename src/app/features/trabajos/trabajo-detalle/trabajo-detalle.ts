@@ -59,22 +59,11 @@ export class TrabajoDetalleComponent implements OnInit {
     this.cargarTrabajo();
   }
 
-  // cambiarEstado() {
-  //   const dialogRef = this.dialog.open(
-  //     TrabajoCambiarEstadoComponent,
-  //     {
-  //       width: '500px',
-  //       data: {
-  //         idTrabajo: this.trabajo?.id
-  //       }
-  //     });
-
-  //   dialogRef.afterClosed().subscribe(resultado => {
-  //     if (resultado) {
-  //       this.cargarTrabajo();
-  //     }
-  //   });
-  // }
+  esRol(...roles: string[]): boolean {
+    return this.authService.tieneRol(
+      ...roles
+    );
+  }
 
   cargarComparaciones(): void {
     if (!this.trabajo) {

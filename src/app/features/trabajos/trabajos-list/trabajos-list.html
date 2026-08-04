@@ -1,12 +1,10 @@
 <div class="toolbar">
-
+    @if (esRol('Sistemas') || esRol('Administrador')) {                                                                        
     <button mat-raised-button color="primary" routerLink="/trabajos/nuevo">
-
         <mat-icon>add</mat-icon>
-
         Nuevo Trabajo
-
     </button>
+    }
 
 </div>
 
@@ -17,23 +15,21 @@
 </mat-form-field>
 
 <mat-form-field appearance="outline">
-  <mat-label>Estado</mat-label>
+    <mat-label>Estado</mat-label>
 
-  <mat-select
-    [(ngModel)]="estadoSeleccionado"
-    (selectionChange)="filtrar()">
+    <mat-select [(ngModel)]="estadoSeleccionado" (selectionChange)="filtrar()">
 
-    <mat-option value="">
-      Todos
-    </mat-option>
+        <mat-option value="">
+            Todos
+        </mat-option>
 
-    @for (estado of estados; track estado.id) {
-      <mat-option [value]="estado.id">
-        {{ estado.nombre }}
-      </mat-option>
-    }
+        @for (estado of estados; track estado.id) {
+        <mat-option [value]="estado.id">
+            {{ estado.nombre }}
+        </mat-option>
+        }
 
-  </mat-select>
+    </mat-select>
 </mat-form-field>
 
 <button mat-stroked-button (click)="limpiarFiltros()">
@@ -175,12 +171,11 @@
                         <mat-icon>visibility</mat-icon>
 
                     </button>
-
+                    @if (esRol('Sistemas') || esRol('Administrador')) {
                     <button mat-icon-button color="accent" [routerLink]="['/trabajos', t.id, 'editar']">
-
                         <mat-icon>edit</mat-icon>
-
                     </button>
+                    }
 
                 </td>
 

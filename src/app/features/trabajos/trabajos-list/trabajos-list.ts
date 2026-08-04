@@ -12,6 +12,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { EstadoService } from '../../../core/services/estado.service';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-trabajos-list',
@@ -35,6 +36,9 @@ export class TrabajosListComponent implements OnInit {
 
   private trabajoService = inject(TrabajoService);
   private estadoService = inject(EstadoService);
+  private router = inject(Router);
+  private authService = inject(AuthService);
+
   trabajos: Trabajo[] = [];
   trabajosFiltrados: Trabajo[] = [];
 
@@ -62,7 +66,11 @@ export class TrabajosListComponent implements OnInit {
     this.cargarEstados();
   }
 
-  private router = inject(Router);
+  esRol(...roles: string[]): boolean {
+    return this.authService.tieneRol(
+      ...roles
+    );
+  }
 
   nuevo() {
     this.router.navigate(['/trabajos/nuevo']);

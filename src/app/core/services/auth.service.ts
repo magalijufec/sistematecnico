@@ -73,16 +73,12 @@ export class AuthService {
     }
 
     obtenerRol(): string | null {
-
         const token =
             this.obtenerToken();
-
         if (!token) {
             return null;
         }
-
         try {
-
             const partes =
                 token.split('.');
 
@@ -103,16 +99,16 @@ export class AuthService {
                 'Error al leer JWT',
                 error
             );
-
             return null;
-
         }
-
     }
 
     esAdministrador(): boolean {
-
         return this.obtenerRol() === 'Administrador';
+    }
 
+    tieneRol(...roles: string[]): boolean {
+        const rol = this.obtenerRol();
+        return !!rol && roles.includes(rol);
     }
 }

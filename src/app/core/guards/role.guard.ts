@@ -1,20 +1,46 @@
 import { inject } from '@angular/core';
+
 import {
   CanActivateFn,
   Router
 } from '@angular/router';
 
-import { AuthService } from '../services/auth.service';
+import {
+  AuthService
+} from '../services/auth.service';
 
-export const adminGuard: CanActivateFn = () => {
 
-  const authService = inject(AuthService);
-  const router = inject(Router);
+export const roleGuard = (
+  rolesPermitidos: string[]
+): CanActivateFn => {
 
-  if (authService.esAdministrador()) {
-    return true;
-  }
+  return () => {
 
-  return router.createUrlTree(['/dashboard']);
+    const authService =
+      inject(AuthService);
+
+    const router =
+      inject(Router);
+
+
+    const rol =
+      authService.obtenerRol();
+
+
+    if (
+      rol &&
+      rolesPermitidos.includes(rol)
+    ) {
+
+      return true;
+
+    }
+
+
+    return router.createUrlTree([
+      '/dashboard'
+    ]);
+
+  };
 
 };
