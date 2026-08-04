@@ -14,6 +14,7 @@ import { MatInputModule } from '@angular/material/input';
 import { TrabajoImagenComparacion } from '../../../core/models/imagen';
 import { TrabajoImagenComparacionService } from '../../../core/services/trabajo.imagen.comparacion.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { ToastService } from '../../../core/services/toast.service';
 
 @Component({
   selector: 'app-trabajo-detalle',
@@ -39,6 +40,7 @@ export class TrabajoDetalleComponent implements OnInit {
   private trabajoService = inject(TrabajoService);
   private comparacionService = inject(TrabajoImagenComparacionService);
   private authService = inject(AuthService);
+  private toastService = inject(ToastService);
 
   comparaciones: TrabajoImagenComparacion[] = [];
   trabajo?: TrabajoDetalle;
@@ -149,7 +151,7 @@ export class TrabajoDetalleComponent implements OnInit {
             error
           );
 
-          alert(
+          this.toastService.error(
             'No se pudo agregar la comparación'
           );
 
@@ -185,7 +187,7 @@ export class TrabajoDetalleComponent implements OnInit {
 
         next: () => {
 
-          alert(
+          this.toastService.success(
             'Imagen Antes cargada correctamente'
           );
 
@@ -199,7 +201,9 @@ export class TrabajoDetalleComponent implements OnInit {
             'Error al subir imagen Antes',
             error
           );
-          alert('No se pudo cargar la imagen');
+          this.toastService.error(
+            'No se pudo cargar la imagen'
+          );
         }
 
       });
@@ -225,7 +229,9 @@ export class TrabajoDetalleComponent implements OnInit {
       )
       .subscribe({
         next: () => {
-          alert('Imagen Después cargada correctamente');
+          this.toastService.success(
+            'Imagen Después cargada correctamente'
+          );
           this.cargarComparaciones();
         },
 
@@ -234,8 +240,9 @@ export class TrabajoDetalleComponent implements OnInit {
             'Error al subir imagen Después',
             error
           );
-          alert(
-            'No se pudo cargar la imagen');
+          this.toastService.error(
+            'No se pudo cargar la imagen'
+          );
         }
       });
   }
@@ -261,8 +268,10 @@ export class TrabajoDetalleComponent implements OnInit {
 
         error: error => {
           console.error('Error al eliminar comparación', error);
-          alert('No se pudo eliminar la comparación');
-        }
+          this.toastService.error(
+            'No se pudo eliminar la comparación'
+          );
+        } 
       });
   }
 
@@ -277,7 +286,9 @@ export class TrabajoDetalleComponent implements OnInit {
         this.trabajo!.trabajoRealizado
       )
       .subscribe(() => {
-        alert('Trabajo actualizado');
+        this.toastService.success(
+          'Trabajo actualizado correctamente'
+        );
       });
   }
 
@@ -298,7 +309,7 @@ export class TrabajoDetalleComponent implements OnInit {
       )
       .subscribe({
         next: () => {
-          alert(
+          this.toastService.success(
             'Factura cargada correctamente'
           );
           this.cargarTrabajo();
@@ -308,7 +319,7 @@ export class TrabajoDetalleComponent implements OnInit {
             'Error al cargar factura',
             err
           );
-          alert(
+          this.toastService.error(
             'No se pudo cargar la factura'
           );
         }
@@ -328,9 +339,8 @@ export class TrabajoDetalleComponent implements OnInit {
       .subscribe({
 
         next: () => {
-
-          alert(
-            'Trabajo iniciado correctamente.'
+          this.toastService.success(
+            'Trabajo iniciado correctamente'
           );
 
           this.cargarTrabajo();
@@ -344,9 +354,8 @@ export class TrabajoDetalleComponent implements OnInit {
             error
           );
 
-          alert(
-            error.error?.mensaje ??
-            'No se pudo iniciar el trabajo.'
+          this.toastService.error(
+            'No se pudo iniciar el trabajo'
           );
 
         }
@@ -368,8 +377,7 @@ export class TrabajoDetalleComponent implements OnInit {
       .subscribe({
 
         next: () => {
-
-          alert(
+          this.toastService.success(
             'Trabajo enviado a aprobación correctamente.'
           );
 
@@ -384,10 +392,7 @@ export class TrabajoDetalleComponent implements OnInit {
             error
           );
 
-          alert(
-            error.error?.mensaje ??
-            'No se pudo finalizar el trabajo.'
-          );
+          this.toastService.error('No se pudo finalizar el trabajo.');
 
         }
 
@@ -408,8 +413,7 @@ export class TrabajoDetalleComponent implements OnInit {
       .subscribe({
 
         next: () => {
-
-          alert(
+          this.toastService.success(
             'Trabajo aprobado correctamente.'
           );
 
@@ -423,8 +427,7 @@ export class TrabajoDetalleComponent implements OnInit {
             'Error al aprobar trabajo',
             error
           );
-
-          alert(
+          this.toastService.error(
             error.error?.mensaje ??
             'No se pudo aprobar el trabajo.'
           );
@@ -449,7 +452,7 @@ export class TrabajoDetalleComponent implements OnInit {
 
         next: () => {
 
-          alert(
+          this.toastService.success(
             'Pago registrado correctamente.'
           );
 
@@ -463,8 +466,7 @@ export class TrabajoDetalleComponent implements OnInit {
             'Error al registrar pago',
             error
           );
-
-          alert(
+          this.toastService.error(
             error.error?.mensaje ??
             'No se pudo registrar el pago.'
           );

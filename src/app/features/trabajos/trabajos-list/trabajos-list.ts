@@ -90,10 +90,7 @@ export class TrabajosListComponent implements OnInit {
   cargarTrabajos() {
     this.trabajoService.obtenerNoFinalizados().subscribe({
       next: (data) => {
-        console.log(data);
-
         this.trabajos = data;
-
         this.filtrar();
       },
       error: (err) => console.error(err)

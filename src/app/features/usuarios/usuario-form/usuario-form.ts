@@ -19,6 +19,7 @@ import { PerfilService } from '../../../core/services/perfil.service';
 import { CiudadService } from '../../../core/services/ciudad.service';
 import { ProvinciaService } from '../../../core/services/provincia.service';
 import { Combo } from '../../../core/models/combo';
+import { ToastService } from '../../../core/services/toast.service';
 
 @Component({
   selector: 'app-usuario-form',
@@ -47,6 +48,7 @@ export class UsuarioFormComponent implements OnInit {
   private usuarioService = inject(UsuarioService);
   private provinciaService = inject(ProvinciaService);
   private ciudadService = inject(CiudadService);
+  private toastService = inject(ToastService);
 
   perfiles: Combo[] = [];
   provincias: Combo[] = [];
@@ -344,12 +346,16 @@ export class UsuarioFormComponent implements OnInit {
         .crear(datos)
         .subscribe({
           next: () => {
-            alert('Usuario creado correctamente');
+            this.toastService.success(
+              'Usuario creado correctamente'
+            );
             this.router.navigate(['/usuarios']);
           },
           error: error => {
             console.error('Error al crear usuario', error);
-            alert('No se pudo crear el usuario');
+            this.toastService.error(
+              'No se pudo crear el usuario'
+            );
           }
         });
       return;
@@ -359,12 +365,16 @@ export class UsuarioFormComponent implements OnInit {
       .actualizar(this.idUsuario, datos)
       .subscribe({
         next: () => {
-          alert('Usuario actualizado correctamente');
+          this.toastService.success(
+            'Usuario actualizado correctamente'
+          );
           this.router.navigate(['/usuarios']);
         },
         error: error => {
           console.error('Error al actualizar usuario', error);
-          alert('No se pudo actualizar el usuario');
+          this.toastService.error(
+            'No se pudo actualizar el usuario'
+          );
         }
       });
   }

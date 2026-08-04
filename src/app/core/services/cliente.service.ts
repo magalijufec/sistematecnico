@@ -17,7 +17,6 @@ import { ClienteCombo } from '../models/cliente-combo';
 export class ClienteService {
 
   private http = inject(HttpClient);
-
   private api = 'https://localhost:7122/api/cliente';
 
   obtenerTodos(): Observable<Cliente[]> {

@@ -72,6 +72,7 @@ import {
   TecnicoCombo
 } from '../../../core/models/tecnico-combo';
 import { ClienteCombo } from '../../../core/models/cliente-combo';
+import { ToastService } from '../../../core/services/toast.service';
 
 
 @Component({
@@ -107,33 +108,26 @@ import { ClienteCombo } from '../../../core/models/cliente-combo';
 export class TrabajoFormComponent
   implements OnInit {
 
-
   private fb =
     inject(FormBuilder);
-
 
   private route =
     inject(ActivatedRoute);
 
-
   private router =
     inject(Router);
-
 
   private clienteService =
     inject(ClienteService);
 
-
   private usuarioService =
     inject(UsuarioService);
-
 
   private tareaService =
     inject(TareaService);
 
-
-  private trabajoService =
-    inject(TrabajoService);
+  private trabajoService = inject(TrabajoService);
+  private toastService = inject(ToastService);
 
 
   clienteFiltro =
@@ -707,11 +701,8 @@ export class TrabajoFormComponent
         .subscribe({
 
           next: () => {
-
-            alert(
-
+            this.toastService.success(
               'Trabajo creado correctamente'
-
             );
 
 
@@ -761,11 +752,8 @@ export class TrabajoFormComponent
       .subscribe({
 
         next: () => {
-
-          alert(
-
+          this.toastService.success(
             'Trabajo actualizado correctamente'
-
           );
 
 

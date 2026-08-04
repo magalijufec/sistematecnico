@@ -59,6 +59,7 @@ import {
 import {
   ClienteDetalle
 } from '../../../core/models/cliente';
+import { ToastService } from '../../../core/services/toast.service';
 
 
 @Component({
@@ -113,6 +114,7 @@ export class ClienteFormComponent
 
   private ciudadService =
     inject(CiudadService);
+  private toastService = inject(ToastService);
 
 
   // ============================
@@ -454,12 +456,17 @@ export class ClienteFormComponent
         activo: datos.activo
       }).subscribe({
         next: () => {
-          alert('Cliente creado correctamente');
+          this.toastService.success(
+            'Cliente creado correctamente'
+          );
           this.router.navigate(['/clientes']);
         },
         error: error => {
           console.error('Error al crear cliente', error);
-          alert('No se pudo crear el cliente');
+          this.toastService.error(
+            'No se pudo crear el cliente'
+          );
+
         }
       });
       return;
@@ -477,12 +484,16 @@ export class ClienteFormComponent
       activo: datos.activo
     }).subscribe({
       next: () => {
-        alert('Cliente actualizado correctamente');
+        this.toastService.success(
+          'Cliente actualizado correctamente'
+        );
         this.router.navigate(['/clientes']);
       },
       error: error => {
         console.error('Error al actualizar cliente', error);
-        alert('No se pudo actualizar el cliente');
+        this.toastService.error(
+          'No se pudo actualizar el cliente'
+        );
       }
     });
   }
