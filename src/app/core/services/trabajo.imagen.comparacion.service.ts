@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { TrabajoImagenComparacion } from '../models/imagen';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -10,17 +11,17 @@ export class TrabajoImagenComparacionService {
 
   private http = inject(HttpClient);
 
-  private apiUrl = 'https://localhost:7122/api/trabajo-imagen-comparacion';
+  private api = `${environment.apiUrl}/trabajo-imagen-comparacion`;
 
   obtenerPorTrabajo(idTrabajo: number): Observable<TrabajoImagenComparacion[]> {
     return this.http.get<TrabajoImagenComparacion[]>(
-      `${this.apiUrl}/trabajo/${idTrabajo}`
+      `${this.api}/trabajo/${idTrabajo}`
     );
   }
 
   crear(idTrabajo: number): Observable<TrabajoImagenComparacion> {
     return this.http.post<TrabajoImagenComparacion>(
-      `${this.apiUrl}/trabajo/${idTrabajo}`,
+      `${this.api}/trabajo/${idTrabajo}`,
       {}
     );
   }
@@ -34,7 +35,7 @@ export class TrabajoImagenComparacionService {
     );
 
     return this.http.post<void>(
-      `${this.apiUrl}/${idComparacion}/antes`,
+      `${this.api}/${idComparacion}/antes`,
       formData
     );
   }
@@ -47,14 +48,14 @@ export class TrabajoImagenComparacionService {
     );
 
     return this.http.post<void>(
-      `${this.apiUrl}/${idComparacion}/despues`,
+      `${this.api}/${idComparacion}/despues`,
       formData
     );
   }
 
   eliminar(idComparacion: number): Observable<void> {
     return this.http.delete<void>(
-      `${this.apiUrl}/${idComparacion}`
+      `${this.api}/${idComparacion}`
     );
   }
 }

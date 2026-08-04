@@ -6,6 +6,7 @@ import { Login } from '../models/login';
 import { LoginResponse } from '../models/login-response';
 import { Router } from '@angular/router';
 import { CambiarPassword } from '../models/cambiar-password';
+import { environment } from '../../environments/environment';
 
 @Injectable({
     providedIn: 'root'
@@ -14,7 +15,7 @@ export class AuthService {
 
     private http = inject(HttpClient);
     private router = inject(Router);
-    private api = 'https://localhost:7122/api/auth';
+    private api = `${environment.apiUrl}/auth`;
 
     login(dto: Login): Observable<LoginResponse> {
 

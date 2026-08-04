@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Imagen } from '../models/imagen';
+import { environment } from '../../environments/environment';
 
 @Injectable({
     providedIn: 'root'
@@ -8,9 +9,7 @@ import { Imagen } from '../models/imagen';
 export class ImagenService {
 
     private http = inject(HttpClient);
-
-    //private api = 'https://localhost:44306/api/trabajo';
-    private api = 'https://localhost:7122/api/trabajo';
+    private api = `${environment.apiUrl}/trabajo`;
 
     obtenerPorTrabajo(idTrabajo: number) {
 

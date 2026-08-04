@@ -7,17 +7,15 @@ import { TrabajoCreate } from '../models/trabajo-create';
 import { TrabajoDetalle } from '../models/trabajo-detalle';
 import { CambiarEstado } from '../models/cambiar-estado';
 import { TrabajoFinalizado } from '../models/trabajo-finalizado';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TrabajoService {
 
-  private http = inject(HttpClient);
-
-  //private api = 'https://localhost:44306/api/trabajo';
-  private api = 'https://localhost:7122/api/trabajo';
-  //private api = 'http://localhost:5010/api/trabajo';   
+  private http = inject(HttpClient);  
+  private api = `${environment.apiUrl}/trabajo`;
 
   obtenerNoFinalizados(): Observable<Trabajo[]> {
     return this.http.get<Trabajo[]>(`${this.api}/no-finalizados`);
@@ -46,13 +44,6 @@ export class TrabajoService {
   obtenerDetalle(id: number) {
     return this.http.get<TrabajoDetalle>(`${this.api}/${id}`);
   }
-
-  // cambiarEstado(id: number, dto: CambiarEstado) {
-  //   return this.http.put(
-  //     `${this.api}/${id}/estado`,
-  //     dto
-  //   );
-  // }
 
   iniciarTrabajo(id: number): Observable<any> {
     return this.http.put(

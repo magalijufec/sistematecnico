@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Combo } from '../models/combo';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -8,9 +9,7 @@ import { Combo } from '../models/combo';
 export class TareaService {
 
   private http = inject(HttpClient);
-
-  //private api = 'https://localhost:44306/api/tarea';
-  private api = 'https://localhost:7122/api/tarea';
+  private api = `${environment.apiUrl}/tarea`;
 
   obtenerTodas() {
 

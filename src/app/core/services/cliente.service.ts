@@ -10,6 +10,7 @@ import {
 } from '../models/cliente';
 
 import { ClienteCombo } from '../models/cliente-combo';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,7 @@ import { ClienteCombo } from '../models/cliente-combo';
 export class ClienteService {
 
   private http = inject(HttpClient);
-  private api = 'https://localhost:7122/api/cliente';
+  private api = `${environment.apiUrl}/cliente`;
 
   obtenerTodos(): Observable<Cliente[]> {
     return this.http.get<Cliente[]>(this.api);

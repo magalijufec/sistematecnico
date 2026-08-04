@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Usuario, UsuarioDetalle } from '../models/usuario';
 import { Combo } from '../models/combo';
 import { TecnicoCombo } from '../models/tecnico-combo';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -11,9 +12,7 @@ import { TecnicoCombo } from '../models/tecnico-combo';
 export class UsuarioService {
 
   private http = inject(HttpClient);
-
-  //private api = 'https://localhost:44306/api/usuario';
-  private api = 'https://localhost:7122/api/usuario';
+  private api = `${environment.apiUrl}/usuario`;
 
   obtenerTodos(): Observable<Usuario[]> {
     return this.http.get<Usuario[]>(this.api);
