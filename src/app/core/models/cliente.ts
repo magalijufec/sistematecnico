@@ -8,6 +8,7 @@ export interface Cliente {
   provincia: string;
   ciudadId: number;
   ciudad: string;
+  activo: boolean;
 }
 
 export interface ClienteDetalle {
@@ -18,6 +19,7 @@ export interface ClienteDetalle {
   direccion: string | null;
   provinciaId: number;
   ciudadId: number;
+  activo: boolean;
 }
 
 export interface ClienteCreate {
@@ -27,6 +29,7 @@ export interface ClienteCreate {
   direccion: string | null;
   provinciaId: number;
   ciudadId: number;
+  activo: boolean;
 }
 
 export interface ClienteUpdate {
@@ -36,4 +39,5 @@ export interface ClienteUpdate {
   direccion: string | null;
   provinciaId: number;
   ciudadId: number;
+  activo: boolean;
 }

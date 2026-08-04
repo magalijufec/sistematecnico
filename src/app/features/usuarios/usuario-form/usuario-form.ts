@@ -78,7 +78,6 @@ export class UsuarioFormComponent implements OnInit {
         Validators.email
       ]
     ],
-    password: [''],
     idPerfil: [
       0,
       [
@@ -98,7 +97,10 @@ export class UsuarioFormComponent implements OnInit {
       null as number | null
     ],
     numeroCelular: [''],
-    activo: [true]
+    activo: [true],
+    cambiarPassword: [false],
+    password: [''],
+    confirmarPassword: ['']
   });
 
   ngOnInit(): void {
@@ -243,7 +245,6 @@ export class UsuarioFormComponent implements OnInit {
     this.clienteService.obtenerPorProvinciaCiudad(provinciaId, ciudadId)
       .subscribe({
         next: data => {
-          console.log('Clientes recibidos:', data);
           this.clientes = data;
           this.clientesFiltrados = data;
           if (clienteSeleccionadoId) {
@@ -298,8 +299,8 @@ export class UsuarioFormComponent implements OnInit {
   actualizarVisibilidadCliente(idPerfil: number): void {
     const perfil = this.perfiles.find(x => x.id === idPerfil);
 
-    if (!perfil) { 
-      return; 
+    if (!perfil) {
+      return;
     }
 
     if (perfil.nombre.trim().toLowerCase() === 'farmacia') {

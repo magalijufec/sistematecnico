@@ -64,14 +64,108 @@
 
       <!-- Password -->
 
-      <mat-form-field appearance="outline" *ngIf="!esEdicion">
+      @if (!esEdicion) {
 
-        <mat-label>Contraseña</mat-label>
+      <!-- CREAR USUARIO -->
+
+      <mat-form-field appearance="outline">
+
+        <mat-label>
+          Contraseña
+        </mat-label>
 
         <input matInput type="password" formControlName="password">
 
+        @if (campoInvalido('password')) {
+
+        <mat-error>
+          La contraseña es obligatoria
+        </mat-error>
+
+        }
+
       </mat-form-field>
 
+
+      <!-- CONFIRMAR CONTRASEÑA -->
+
+      <mat-form-field appearance="outline">
+
+        <mat-label>
+          Confirmar contraseña
+        </mat-label>
+
+        <input matInput type="password" formControlName="confirmarPassword">
+
+        @if (campoInvalido('confirmarPassword')) {
+
+        <mat-error>
+          Las contraseñas no coinciden
+        </mat-error>
+
+        }
+
+      </mat-form-field>
+
+      }
+
+      <!-- CAMBIAR CONTRASEÑA EN EDICIÓN -->
+
+      @if (esEdicion) {
+
+      <div class="cambiar-password">
+
+        <mat-checkbox formControlName="cambiarPassword">
+
+          Cambiar contraseña
+
+        </mat-checkbox>
+
+      </div>
+
+
+      @if (form.controls.cambiarPassword.value) {
+
+      <mat-form-field appearance="outline">
+
+        <mat-label>
+          Nueva contraseña
+        </mat-label>
+
+        <input matInput type="password" formControlName="password">
+
+        @if (campoInvalido('password')) {
+
+        <mat-error>
+          Ingresá una nueva contraseña
+        </mat-error>
+
+        }
+
+      </mat-form-field>
+
+
+      <mat-form-field appearance="outline">
+
+        <mat-label>
+          Confirmar nueva contraseña
+        </mat-label>
+
+        <input matInput type="password" formControlName="confirmarPassword">
+
+        @if (campoInvalido('confirmarPassword')) {
+
+        <mat-error>
+          Las contraseñas no coinciden
+        </mat-error>
+
+        }
+
+      </mat-form-field>
+
+      }
+
+      }
 
       <!-- Perfil -->
 

@@ -46,6 +46,7 @@ import {
 import {
   ProvinciaService
 } from '../../../core/services/provincia.service';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 import {
   CiudadService
@@ -70,6 +71,7 @@ import {
     CommonModule,
 
     ReactiveFormsModule,
+    MatCheckboxModule,
 
     MatCardModule,
 
@@ -169,7 +171,8 @@ export class ClienteFormComponent
         Validators.required,
         Validators.min(1)
       ]
-    ]
+    ],
+    activo: [true]
   });
 
   ngOnInit(): void {
@@ -280,7 +283,8 @@ export class ClienteFormComponent
               cliente.direccion ?? '',
 
             provinciaId:
-              cliente.provinciaId
+              cliente.provinciaId,
+            activo: cliente.activo
 
           });
 
@@ -446,7 +450,8 @@ export class ClienteFormComponent
         email: datos.email || null,
         direccion: datos.direccion || null,
         provinciaId: datos.provinciaId,
-        ciudadId: datos.ciudadId
+        ciudadId: datos.ciudadId,
+        activo: datos.activo
       }).subscribe({
         next: () => {
           alert('Cliente creado correctamente');
@@ -468,7 +473,8 @@ export class ClienteFormComponent
       email: datos.email || null,
       direccion: datos.direccion || null,
       provinciaId: datos.provinciaId,
-      ciudadId: datos.ciudadId
+      ciudadId: datos.ciudadId,
+      activo: datos.activo
     }).subscribe({
       next: () => {
         alert('Cliente actualizado correctamente');
