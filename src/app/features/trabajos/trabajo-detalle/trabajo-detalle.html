@@ -58,6 +58,16 @@
 
             </div>
 
+            <div>
+
+                <strong>Solicitante</strong>
+
+                <p>
+                    {{ trabajo.solicitante }}
+                </p>
+
+            </div>
+
 
             <div>
 
@@ -182,7 +192,7 @@
         <!-- ESTADO: EN PROCESO -->
         <!-- ================================================= -->
 
-        @if (trabajo.estado === 'En proceso') {
+        @if (trabajo.estado === 'En proceso' ) {
 
         <mat-divider></mat-divider>
 
@@ -199,29 +209,16 @@
 
 
             <mat-card-content>
-
-
-                <!-- ========================= -->
-                <!-- IMÁGENES -->
-                <!-- ========================= -->
-
                 <h3>
                     Imágenes del trabajo
                 </h3>
 
-
                 <div class="comparaciones">
-
-
                     @for (
                     comparacion of comparaciones;
                     track comparacion.id
                     ) {
-
-
                     <div class="comparacion-row">
-
-
                         <!-- ========================= -->
                         <!-- IMAGEN ANTES -->
                         <!-- ========================= -->
@@ -232,13 +229,11 @@
                                 Antes
                             </h3>
 
-
                             @if (comparacion.imagenAntes) {
 
                             <img class="imagen-trabajo" [src]="obtenerUrlImagen(
                                     comparacion.imagenAntes.rutaArchivo
                                 )" alt="Imagen antes">
-
                             }
 
                             @else {
@@ -413,11 +408,7 @@
                 <!-- ========================= -->
                 <!-- TRABAJO REALIZADO -->
                 <!-- ========================= -->
-
-                <h3>
-                    Trabajo realizado
-                </h3>
-
+                <h3>Trabajo realizado</h3>
 
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>
@@ -442,10 +433,10 @@
         }
 
         <!-- ================================================= -->
-        <!-- ESTADO: TRABAJADO FINALIZADO -->
+        <!-- ESTADO: TRABAJO FINALIZADO -->
         <!-- ================================================= -->
 
-        @if (trabajo.estado === 'Trabajado finalizado' && esRol('Tecnico')) {
+        @if (trabajo.estado === 'Trabajo finalizado' && esRol('Tecnico')) {
         <mat-divider></mat-divider>
         <p>
             El trabajo está pendiente de aprobación por Sistemas.
@@ -453,12 +444,11 @@
         }
 
         <!-- ================================================= -->
-        <!-- ESTADO: TRABAJADO FINALIZADO - SISTEMAS -->
+        <!-- ESTADO: TRABAJO FINALIZADO - SISTEMAS -->
         <!-- ================================================= -->
 
         @if (
-        trabajo.estado === 'Trabajado finalizado'
-        && esRol('Sistemas')
+        trabajo.estado === 'Trabajo finalizado' && esRol('Sistemas')
         ) {
 
         <mat-divider></mat-divider>

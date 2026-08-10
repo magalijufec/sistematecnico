@@ -37,5 +37,4 @@ export interface Trabajo {
   factura: string | null;
 
   cantidadImagenes: number;
-
 }

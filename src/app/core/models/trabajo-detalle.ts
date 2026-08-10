@@ -28,4 +28,7 @@ export interface TrabajoDetalle {
   tieneFactura: boolean;
 
   cantidadImagenes: number;
+  
+  solicitante: string | null;
+
 }

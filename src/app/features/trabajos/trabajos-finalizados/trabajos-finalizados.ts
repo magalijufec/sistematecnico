@@ -26,6 +26,7 @@ import {
 } from '@angular/material/icon';
 
 import {
+  Router,
   RouterModule
 } from '@angular/router';
 
@@ -74,6 +75,7 @@ export class TrabajosFinalizadosComponent
   implements OnInit {
 
   private trabajoService = inject(TrabajoService);
+  private router = inject(Router);
   trabajos: TrabajoFinalizado[] = [];
   trabajosFiltrados: TrabajoFinalizado[] = [];
   buscar = '';
@@ -89,7 +91,6 @@ export class TrabajosFinalizadosComponent
     'tecnico',
     'tarea',
     'fechaPagado',
-    'trabajoRealizado',
     'acciones'
   ];
 
@@ -123,6 +124,13 @@ export class TrabajosFinalizadosComponent
 
   }
 
+  verTrabajo(id: number): void {
+    this.router.navigate([
+        '/trabajos',
+        id
+    ]);
+
+}
 
   filtrar(): void {
 
