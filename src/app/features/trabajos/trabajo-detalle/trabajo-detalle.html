@@ -452,6 +452,10 @@
         </p>
         }
 
+        <!-- ================================================= -->
+        <!-- ESTADO: TRABAJADO FINALIZADO - SISTEMAS -->
+        <!-- ================================================= -->
+
         @if (
         trabajo.estado === 'Trabajado finalizado'
         && esRol('Sistemas')
@@ -474,16 +478,176 @@
 
                 <p>
                     El técnico ha informado que el trabajo fue realizado.
+                    Revisá el detalle, las imágenes y luego aprobá o solicitá una mejora.
                 </p>
 
 
-                <!-- =============================== -->
+                <!-- ========================================= -->
+                <!-- TRABAJO REALIZADO -->
+                <!-- ========================================= -->
+
+                <mat-divider></mat-divider>
+
+                <h3>
+                    Trabajo realizado
+                </h3>
+
+                <div class="trabajo-realizado">
+
+                    @if (trabajo.trabajoRealizado) {
+
+                    <p>
+                        {{ trabajo.trabajoRealizado }}
+                    </p>
+
+                    }
+
+                    @else {
+
+                    <p>
+                        No se informó el detalle del trabajo realizado.
+                    </p>
+
+                    }
+
+                </div>
+
+
+                <!-- ========================================= -->
+                <!-- IMÁGENES ANTES / DESPUÉS -->
+                <!-- ========================================= -->
+
+                <mat-divider></mat-divider>
+
+                <h3>
+                    Imágenes del trabajo
+                </h3>
+
+
+                @if (comparaciones.length > 0) {
+
+                <div class="comparaciones">
+
+
+                    @for (
+                    comparacion of comparaciones;
+                    track comparacion.id
+                    ) {
+
+                    <div class="comparacion-row">
+
+
+                        <!-- ============================= -->
+                        <!-- ANTES -->
+                        <!-- ============================= -->
+
+                        <div class="imagen-columna">
+
+                            <h3>
+                                Antes
+                            </h3>
+
+
+                            @if (comparacion.imagenAntes) {
+
+                            <img class="imagen-trabajo" [src]="obtenerUrlImagen(
+                                            comparacion.imagenAntes.rutaArchivo
+                                        )" alt="Imagen antes del trabajo">
+
+                            }
+
+                            @else {
+
+                            <div class="sin-imagen">
+
+                                <mat-icon>
+                                    image
+                                </mat-icon>
+
+                                <span>
+                                    No hay imagen Antes
+                                </span>
+
+                            </div>
+
+                            }
+
+                        </div>
+
+
+                        <!-- ============================= -->
+                        <!-- DESPUÉS -->
+                        <!-- ============================= -->
+
+                        <div class="imagen-columna">
+
+                            <h3>
+                                Después
+                            </h3>
+
+
+                            @if (comparacion.imagenDespues) {
+
+                            <img class="imagen-trabajo" [src]="obtenerUrlImagen(
+                                            comparacion.imagenDespues.rutaArchivo
+                                        )" alt="Imagen después del trabajo">
+
+                            }
+
+                            @else {
+
+                            <div class="sin-imagen">
+
+                                <mat-icon>
+                                    image
+                                </mat-icon>
+
+                                <span>
+                                    No hay imagen Después
+                                </span>
+
+                            </div>
+
+                            }
+
+                        </div>
+
+                    </div>
+
+                    }
+
+                </div>
+
+                }
+
+                @else {
+
+                <div class="sin-imagenes">
+
+                    <mat-icon>
+                        image_not_supported
+                    </mat-icon>
+
+                    <p>
+                        No hay imágenes cargadas para este trabajo.
+                    </p>
+
+                </div>
+
+                }
+
+
+                <!-- ========================================= -->
                 <!-- ACCIONES -->
-                <!-- =============================== -->
+                <!-- ========================================= -->
+
+                <mat-divider></mat-divider>
+
 
                 @if (!mostrarSolicitudMejora) {
 
                 <div class="acciones-trabajo">
+
 
                     <!-- APROBAR -->
 
@@ -515,9 +679,9 @@
                 }
 
 
-                <!-- =============================== -->
+                <!-- ========================================= -->
                 <!-- SOLICITUD DE MEJORA -->
-                <!-- =============================== -->
+                <!-- ========================================= -->
 
                 @if (mostrarSolicitudMejora) {
 
@@ -541,12 +705,15 @@
 
                         <textarea matInput rows="5" [(ngModel)]="comentarios"
                             placeholder="Describí qué debe corregirse o realizarse nuevamente...">
-            </textarea>
+                        </textarea>
 
                     </mat-form-field>
 
 
                     <div class="acciones-mejora">
+
+
+                        <!-- CANCELAR -->
 
                         <button mat-stroked-button type="button" (click)="cancelarSolicitudMejora()">
 
@@ -558,6 +725,8 @@
 
                         </button>
 
+
+                        <!-- SOLICITAR -->
 
                         <button mat-raised-button color="warn" type="button" (click)="solicitarMejora()">
 

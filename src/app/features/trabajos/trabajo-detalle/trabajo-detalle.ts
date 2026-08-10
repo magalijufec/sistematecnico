@@ -281,11 +281,9 @@ export class TrabajoDetalleComponent implements OnInit {
   }
 
   cancelarSolicitudMejora(): void {
-
-  this.mostrarSolicitudMejora = false;
-
-  this.comentarios   = '';
-}
+    this.mostrarSolicitudMejora = false;
+    this.comentarios = '';
+  }
 
   solicitarMejora(): void {
 
