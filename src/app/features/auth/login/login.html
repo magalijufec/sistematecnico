@@ -1,71 +1,123 @@
-<mat-card>
+<div class="login-page">
 
-    <mat-card-header>
+    <div class="login-overlay"></div>
 
-        <mat-card-title>
-            Iniciar sesión
-        </mat-card-title>
+    <mat-card class="login-card">
 
-    </mat-card-header>
+        <mat-card-header class="login-header">
 
-    <mat-card-content>
+            <mat-card-title>
+                Sistema Técnico
+            </mat-card-title>
 
-        <form
-            [formGroup]="form"
-            (ngSubmit)="login()">
+            <mat-card-subtitle>
+                Iniciar sesión
+            </mat-card-subtitle>
 
-            <mat-form-field
-                appearance="outline"
-                class="w-100">
-
-                <mat-label>
-                    Usuario
-                </mat-label>
-
-                <input
-                    matInput
-                    formControlName="userName">
-
-            </mat-form-field>
+        </mat-card-header>
 
 
-            <mat-form-field
-                appearance="outline"
-                class="w-100">
+        <mat-card-content>
 
-                <mat-label>
-                    Contraseña
-                </mat-label>
-
-                <input
-                    matInput
-                    type="password"
-                    formControlName="password">
-
-            </mat-form-field>
+            <form
+                [formGroup]="form"
+                (ngSubmit)="login()"
+                class="login-form">
 
 
-            @if(error) {
+                <!-- USUARIO -->
 
-                <p class="error">
-                    {{ error }}
-                </p>
+                <mat-form-field
+                    appearance="outline"
+                    class="w-100">
 
-            }
+                    <mat-label>
+                        Usuario
+                    </mat-label>
+
+                    <mat-icon matPrefix>
+                        person
+                    </mat-icon>
+
+                    <input
+                        matInput
+                        formControlName="userName"
+                        autocomplete="username">
+
+                </mat-form-field>
 
 
-            <button
-                mat-raised-button
-                color="primary"
-                type="submit"
-                [disabled]="form.invalid">
+                <!-- CONTRASEÑA -->
 
-                Ingresar
+                <mat-form-field
+                    appearance="outline"
+                    class="w-100">
 
-            </button>
+                    <mat-label>
+                        Contraseña
+                    </mat-label>
 
-        </form>
+                    <mat-icon matPrefix>
+                        lock
+                    </mat-icon>
 
-    </mat-card-content>
+                    <input
+                        matInput
+                        type="password"
+                        formControlName="password"
+                        autocomplete="current-password">
 
-</mat-card>
+                </mat-form-field>
+
+
+                <!-- ERROR -->
+
+                @if (error) {
+
+                    <div class="login-error">
+
+                        <mat-icon>
+                            error
+                        </mat-icon>
+
+                        <span>
+                            {{ error }}
+                        </span>
+
+                    </div>
+
+                }
+
+
+                <!-- BOTÓN -->
+
+                <button
+                    mat-raised-button
+                    color="primary"
+                    type="submit"
+                    class="login-button"
+                    [disabled]="form.invalid">
+
+                    <mat-icon>
+                        login
+                    </mat-icon>
+
+                    Ingresar
+
+                </button>
+
+
+            </form>
+
+        </mat-card-content>
+
+
+        <mat-card-footer class="login-footer">
+
+            Sistema Técnico
+
+        </mat-card-footer>
+
+    </mat-card>
+
+</div>

@@ -25,17 +25,17 @@ export const MENU: MenuItem[] = [
     icon: 'store', 
     route: '/clientes', 
     roles: [ 'Administrador' ] 
-  }, 
-  { 
-    text: 'Trabajos finalizados', 
-    icon: 'task_alt', route: '/trabajos-finalizados', 
-    roles: [ 'Administrador', 'Sistemas' ] 
-  }, 
+  },   
   { 
     text: 'Pendientes de pago', 
     icon: 'payments', 
     route: '/trabajos-pendiente-pago', 
     roles: [ 'Administrador', 'Pagos' ] 
+  },
+  { 
+    text: 'Trabajos finalizados', 
+    icon: 'task_alt', route: '/trabajos-finalizados', 
+    roles: [ 'Administrador', 'Sistemas', 'Pagos' ] 
   }
 
 ];

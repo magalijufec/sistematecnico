@@ -32,6 +32,7 @@ import {
 import {
   AuthService
 } from '../../../core/services/auth.service';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-login',
@@ -42,7 +43,8 @@ import {
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
-    MatButtonModule
+    MatButtonModule,
+    MatIconModule
   ],
 
   templateUrl: './login.html',
