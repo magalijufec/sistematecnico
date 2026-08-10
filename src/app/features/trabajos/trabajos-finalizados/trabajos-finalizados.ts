@@ -79,7 +79,9 @@ export class TrabajosFinalizadosComponent
   buscar = '';
 
   displayedColumns = [
+    'id',
     'fechaSolicitud',
+    'fechaInicio',
     'fechaFinalizado',
     'cliente',
     'provincia',
@@ -102,12 +104,6 @@ export class TrabajosFinalizadosComponent
       .subscribe({
 
         next: data => {
-
-          console.log(
-            'Trabajos finalizados:',
-            data
-          );
-
           this.trabajos = data;
 
           this.trabajosFiltrados = data;

@@ -45,6 +45,8 @@ import {
   TrabajoService
 } from '../../../core/services/trabajo.service';
 import { TrabajoFinalizado } from '../../../core/models/trabajo-finalizado';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { ToastService } from '../../../core/services/toast.service';
 
 @Component({
   selector: 'app-trabajos-pendiente-pago',
@@ -60,7 +62,8 @@ import { TrabajoFinalizado } from '../../../core/models/trabajo-finalizado';
     MatButtonModule,
     MatIconModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    MatTooltipModule
   ],
 
   templateUrl: './trabajos-pendiente-pago.html',
@@ -70,11 +73,13 @@ import { TrabajoFinalizado } from '../../../core/models/trabajo-finalizado';
 export class TrabajosPendientePagoComponent implements OnInit {
 
   private trabajoService = inject(TrabajoService);
+  private toastService = inject(ToastService);
   trabajos: TrabajoFinalizado[] = [];
   trabajosFiltrados: TrabajoFinalizado[] = [];
   buscar = '';
 
   displayedColumns = [
+    'id',
     'fechaSolicitud',
     'fechaFinalizado',
     'cliente',
@@ -90,6 +95,82 @@ export class TrabajosPendientePagoComponent implements OnInit {
     this.cargarTrabajos();
   }
 
+  verFactura(rutaFactura: string): void {
+
+    const url =
+      'https://localhost:7122' + rutaFactura;
+
+    window.open(
+      url,
+      '_blank'
+    );
+
+  }
+
+  descargarFactura(rutaFactura: string): void {
+
+    const url =
+      'https://localhost:7122' + rutaFactura;
+
+    const enlace =
+      document.createElement('a');
+
+    enlace.href = url;
+    enlace.target = '_blank';
+    enlace.download = '';
+
+    document.body.appendChild(enlace);
+
+    enlace.click();
+
+    document.body.removeChild(enlace);
+
+  }
+
+  pagarTrabajo(
+    trabajo: TrabajoFinalizado
+  ): void {
+
+    if (
+      !confirm(
+        `¿Confirma registrar el pago del trabajo #${trabajo.id}?`
+      )
+    ) {
+      return;
+    }
+
+    this.trabajoService
+      .registrarPago(trabajo.id)
+      .subscribe({
+
+        next: response => {
+
+          this.toastService.success(
+            response?.mensaje ??
+            'Pago registrado correctamente.'
+          );
+
+          this.cargarTrabajos();
+
+        },
+
+        error: error => {
+
+          console.error(
+            'Error al registrar pago',
+            error
+          );
+
+          this.toastService.error(
+            error.error?.mensaje ??
+            'No se pudo registrar el pago.'
+          );
+
+        }
+
+      });
+
+  }
 
   cargarTrabajos(): void {
     this.trabajoService
@@ -97,11 +178,6 @@ export class TrabajosPendientePagoComponent implements OnInit {
       .subscribe({
 
         next: data => {
-
-          console.log(
-            'Trabajos pendientes de pago:',
-            data
-          );
 
           this.trabajos = data;
 

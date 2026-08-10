@@ -15,18 +15,13 @@
             Buscar
         </mat-label>
 
-        <input
-            matInput
-            [(ngModel)]="buscar"
-            (input)="filtrar()"
+        <input matInput [(ngModel)]="buscar" (input)="filtrar()"
             placeholder="Cliente, técnico, tarea, provincia o ciudad">
 
     </mat-form-field>
 
 
-    <button
-        mat-stroked-button
-        (click)="limpiarFiltros()">
+    <button mat-stroked-button (click)="limpiarFiltros()">
 
         <mat-icon>
             filter_alt_off
@@ -56,30 +51,38 @@
 
         <div class="tabla-container">
 
-            <table
-                mat-table
-                [dataSource]="trabajosFiltrados">
+            <table mat-table [dataSource]="trabajosFiltrados">
 
+                <ng-container matColumnDef="id">
+
+                    <th mat-header-cell *matHeaderCellDef>
+
+                        Id
+
+                    </th>
+
+                    <td mat-cell *matCellDef="let trabajo">
+
+                        {{ trabajo.id }}
+
+                    </td>
+
+                </ng-container>
 
                 <!-- Fecha solicitud -->
 
-                <ng-container
-                    matColumnDef="fechaSolicitud">
+                <ng-container matColumnDef="fechaSolicitud">
 
-                    <th
-                        mat-header-cell
-                        *matHeaderCellDef>
+                    <th mat-header-cell *matHeaderCellDef>
 
                         Fecha solicitud
 
                     </th>
 
-                    <td
-                        mat-cell
-                        *matCellDef="let trabajo">
+                    <td mat-cell *matCellDef="let trabajo">
 
                         {{ trabajo.fechaSolicitud
-                            | date:'dd/MM/yyyy' }}
+                        | date:'dd/MM/yyyy' }}
 
                     </td>
 
@@ -88,29 +91,24 @@
 
                 <!-- Fecha trabajo -->
 
-                <ng-container
-                    matColumnDef="fechaFinalizado">
+                <ng-container matColumnDef="fechaFinalizado">
 
-                    <th
-                        mat-header-cell
-                        *matHeaderCellDef>
+                    <th mat-header-cell *matHeaderCellDef>
 
                         Fecha finalización
 
                     </th>
 
-                    <td
-                        mat-cell
-                        *matCellDef="let trabajo">
+                    <td mat-cell *matCellDef="let trabajo">
 
-                        @if (trabajo.fechaInicio) {
+                        @if (trabajo.fechaFinalizado) {
 
-                            {{ trabajo.fechaInicio
-                                | date:'dd/MM/yyyy' }}
+                        {{ trabajo.fechaFinalizado
+                        | date:'dd/MM/yyyy' }}
 
                         } @else {
 
-                            -
+                        -
 
                         }
 
@@ -121,20 +119,15 @@
 
                 <!-- Cliente -->
 
-                <ng-container
-                    matColumnDef="cliente">
+                <ng-container matColumnDef="cliente">
 
-                    <th
-                        mat-header-cell
-                        *matHeaderCellDef>
+                    <th mat-header-cell *matHeaderCellDef>
 
                         Cliente
 
                     </th>
 
-                    <td
-                        mat-cell
-                        *matCellDef="let trabajo">
+                    <td mat-cell *matCellDef="let trabajo">
 
                         {{ trabajo.cliente }}
 
@@ -145,20 +138,15 @@
 
                 <!-- Provincia -->
 
-                <ng-container
-                    matColumnDef="provincia">
+                <ng-container matColumnDef="provincia">
 
-                    <th
-                        mat-header-cell
-                        *matHeaderCellDef>
+                    <th mat-header-cell *matHeaderCellDef>
 
                         Provincia
 
                     </th>
 
-                    <td
-                        mat-cell
-                        *matCellDef="let trabajo">
+                    <td mat-cell *matCellDef="let trabajo">
 
                         {{ trabajo.provincia }}
 
@@ -169,20 +157,15 @@
 
                 <!-- Ciudad -->
 
-                <ng-container
-                    matColumnDef="ciudad">
+                <ng-container matColumnDef="ciudad">
 
-                    <th
-                        mat-header-cell
-                        *matHeaderCellDef>
+                    <th mat-header-cell *matHeaderCellDef>
 
                         Ciudad
 
                     </th>
 
-                    <td
-                        mat-cell
-                        *matCellDef="let trabajo">
+                    <td mat-cell *matCellDef="let trabajo">
 
                         {{ trabajo.ciudad }}
 
@@ -193,20 +176,15 @@
 
                 <!-- Técnico -->
 
-                <ng-container
-                    matColumnDef="tecnico">
+                <ng-container matColumnDef="tecnico">
 
-                    <th
-                        mat-header-cell
-                        *matHeaderCellDef>
+                    <th mat-header-cell *matHeaderCellDef>
 
                         Técnico
 
                     </th>
 
-                    <td
-                        mat-cell
-                        *matCellDef="let trabajo">
+                    <td mat-cell *matCellDef="let trabajo">
 
                         {{ trabajo.tecnico }}
 
@@ -217,43 +195,33 @@
 
                 <!-- Tarea -->
 
-                <ng-container
-                    matColumnDef="tarea">
+                <ng-container matColumnDef="tarea">
 
-                    <th
-                        mat-header-cell
-                        *matHeaderCellDef>
+                    <th mat-header-cell *matHeaderCellDef>
 
                         Tarea
 
                     </th>
 
-                    <td
-                        mat-cell
-                        *matCellDef="let trabajo">
+                    <td mat-cell *matCellDef="let trabajo">
 
                         {{ trabajo.tarea }}
 
                     </td>
 
-                </ng-container>     
+                </ng-container>
 
                 <!-- Trabajo realizado -->
 
-                <ng-container
-                    matColumnDef="trabajoRealizado">
+                <ng-container matColumnDef="trabajoRealizado">
 
-                    <th
-                        mat-header-cell
-                        *matHeaderCellDef>
+                    <th mat-header-cell *matHeaderCellDef>
 
                         Trabajo realizado
 
                     </th>
 
-                    <td
-                        mat-cell
-                        *matCellDef="let trabajo">
+                    <td mat-cell *matCellDef="let trabajo">
 
                         {{ trabajo.trabajoRealizado || '-' }}
 
@@ -264,29 +232,52 @@
 
                 <!-- Acciones -->
 
-                <ng-container
-                    matColumnDef="acciones">
+                <ng-container matColumnDef="acciones">
 
-                    <th
-                        mat-header-cell
-                        *matHeaderCellDef>
-
+                    <th mat-header-cell *matHeaderCellDef>
+                        Acciones
                     </th>
 
-                    <td
-                        mat-cell
-                        *matCellDef="let trabajo">
-
-                        <button
-                            mat-icon-button
-                            color="primary"
-                            [routerLink]="[
-                                '/trabajos',
-                                trabajo.id
-                            ]">
+                    <td mat-cell *matCellDef="let trabajo">
+                        <!-- ========================= -->
+                        <!-- VER FACTURA -->
+                        <!-- ========================= -->
+                        @if (trabajo.factura) {
+                        <button mat-icon-button color="primary" matTooltip="Ver factura" type="button"
+                            (click)="verFactura(trabajo.factura)">
 
                             <mat-icon>
                                 visibility
+                            </mat-icon>
+
+                        </button>
+
+
+                        <!-- ========================= -->
+                        <!-- DESCARGAR -->
+                        <!-- ========================= -->
+
+                        <button mat-icon-button color="primary" matTooltip="Descargar factura" type="button"
+                            (click)="descargarFactura(trabajo.factura)">
+
+                            <mat-icon>
+                                download
+                            </mat-icon>
+
+                        </button>
+
+                        }
+
+
+                        <!-- ========================= -->
+                        <!-- PAGAR -->
+                        <!-- ========================= -->
+
+                        <button mat-icon-button color="accent" matTooltip="Registrar pago" type="button"
+                            (click)="pagarTrabajo(trabajo)">
+
+                            <mat-icon>
+                                payments
                             </mat-icon>
 
                         </button>
@@ -295,17 +286,12 @@
 
                 </ng-container>
 
-
-                <tr
-                    mat-header-row
-                    *matHeaderRowDef="displayedColumns">
+                <tr mat-header-row *matHeaderRowDef="displayedColumns">
 
                 </tr>
 
 
-                <tr
-                    mat-row
-                    *matRowDef="
+                <tr mat-row *matRowDef="
                         let row;
                         columns: displayedColumns
                     ">
