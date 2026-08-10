@@ -87,4 +87,34 @@
     max-width: 100%;
   }
 
+  .acciones-trabajo {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.solicitud-mejora {
+  margin-top: 20px;
+  padding: 20px;
+  border-radius: 8px;
+  background: #fff8f8;
+  border: 1px solid #ffcdd2;
+}
+
+.solicitud-mejora h3 {
+  margin-top: 0;
+}
+
+.acciones-mejora {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.w-100 {
+  width: 100%;
+}
+
 }

@@ -667,18 +667,12 @@ export class TrabajoFormComponent
   // =====================================================
 
   guardar(): void {
-
-
     if (
       this.form.invalid
     ) {
-
       this.form.markAllAsTouched();
-
       return;
-
     }
-
 
     const trabajo:
       TrabajoCreate =

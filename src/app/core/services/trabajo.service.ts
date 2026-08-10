@@ -1,11 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
 import { Trabajo } from '../models/trabajo';
 import { TrabajoCreate } from '../models/trabajo-create';
 import { TrabajoDetalle } from '../models/trabajo-detalle';
-import { CambiarEstado } from '../models/cambiar-estado';
 import { TrabajoFinalizado } from '../models/trabajo-finalizado';
 import { environment } from '../../environments/environment';
 
@@ -14,7 +12,7 @@ import { environment } from '../../environments/environment';
 })
 export class TrabajoService {
 
-  private http = inject(HttpClient);  
+  private http = inject(HttpClient);
   private api = `${environment.apiUrl}/trabajo`;
 
   obtenerNoFinalizados(): Observable<Trabajo[]> {
@@ -52,10 +50,29 @@ export class TrabajoService {
     );
   }
 
-  finalizarTrabajo(id: number): Observable<any> {
+  finalizarTrabajo(
+    id: number,
+    trabajoRealizado: string
+  ): Observable<any> {
+
     return this.http.put(
       `${this.api}/${id}/finalizar`,
-      {}
+      {
+        trabajoRealizado: trabajoRealizado
+      }
+    );
+  }
+
+  solicitarMejora(
+    id: number,
+    comentario: string
+  ): Observable<any> {
+
+    return this.http.put(
+      `${this.api}/${id}/solicitar-mejora`,
+      {
+        comentario: comentario
+      }
     );
   }
 
@@ -80,14 +97,14 @@ export class TrabajoService {
   //   );
   // }
 
-  guardarTrabajoRealizado(id: number, texto: string) {
-    return this.http.put(
-      `${this.api}/${id}/trabajo-realizado`,
-      {
-        trabajoRealizado: texto
-      }
-    );
-  }
+  // guardarTrabajoRealizado(id: number, texto: string) {
+  //   return this.http.put(
+  //     `${this.api}/${id}/trabajo-realizado`,
+  //     {
+  //       trabajoRealizado: texto
+  //     }
+  //   );
+  // }
 
   subirImagenes(idTrabajo: number, archivos: File[], tipo: number) {
     const formData = new FormData();

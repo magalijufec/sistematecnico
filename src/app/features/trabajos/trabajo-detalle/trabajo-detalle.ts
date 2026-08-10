@@ -5,7 +5,6 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatDialog } from '@angular/material/dialog';
 import { TrabajoService } from '../../../core/services/trabajo.service';
 import { TrabajoDetalle } from '../../../core/models/trabajo-detalle';
 import { FormsModule } from '@angular/forms';
@@ -47,6 +46,8 @@ export class TrabajoDetalleComponent implements OnInit {
   factura?: string | null;
   rolUsuario: string | null = null;
   idTrabajo = 0;
+  mostrarSolicitudMejora = false;
+  comentarios = '';
 
   ngOnInit(): void {
     this.rolUsuario =
@@ -271,7 +272,7 @@ export class TrabajoDetalleComponent implements OnInit {
           this.toastService.error(
             'No se pudo eliminar la comparación'
           );
-        } 
+        }
       });
   }
 
@@ -279,16 +280,65 @@ export class TrabajoDetalleComponent implements OnInit {
     return 'https://localhost:7122' + ruta;
   }
 
-  guardarTrabajoRealizado() {
+  cancelarSolicitudMejora(): void {
+
+  this.mostrarSolicitudMejora = false;
+
+  this.comentarios   = '';
+}
+
+  solicitarMejora(): void {
+
+    if (!this.trabajo) {
+      return;
+    }
+
+    const comentario =
+      this.comentarios.trim();
+
+    if (!comentario) {
+
+      this.toastService.warning(
+        'Debe indicar qué mejora debe realizar el técnico.'
+      );
+
+      return;
+    }
+
     this.trabajoService
-      .guardarTrabajoRealizado(
-        this.trabajo!.id,
-        this.trabajo!.trabajoRealizado
+      .solicitarMejora(
+        this.trabajo.id,
+        comentario
       )
-      .subscribe(() => {
-        this.toastService.success(
-          'Trabajo actualizado correctamente'
-        );
+      .subscribe({
+
+        next: response => {
+
+          this.toastService.success(
+            response?.mensaje ??
+            'Se solicitó la mejora correctamente.'
+          );
+
+          this.mostrarSolicitudMejora = false;
+
+          this.comentarios = '';
+
+          this.cargarTrabajo();
+        },
+
+        error: error => {
+
+          console.error(
+            'Error al solicitar mejora:',
+            error
+          );
+
+          this.toastService.error(
+            error.error?.mensaje ??
+            'No se pudo solicitar la mejora.'
+          );
+        }
+
       });
   }
 
@@ -366,19 +416,33 @@ export class TrabajoDetalleComponent implements OnInit {
 
   finalizarTrabajo(): void {
 
-    if (!confirm(
-      '¿Desea finalizar el trabajo y enviarlo a aprobación?'
-    )) {
+    if (!this.trabajo) {
+      return;
+    }
+
+    const texto = this.trabajo.trabajoRealizado?.trim() ?? '';
+
+    console.log('Trabajo realizado que se enviará:', texto);
+
+    if (!texto) {
+
+      this.toastService.warning(
+        'Debe indicar el trabajo realizado.'
+      );
+
       return;
     }
 
     this.trabajoService
-      .finalizarTrabajo(this.idTrabajo)
+      .finalizarTrabajo(
+        this.trabajo.id,
+        texto
+      )
       .subscribe({
 
-        next: () => {
+        next: response => {
           this.toastService.success(
-            'Trabajo enviado a aprobación correctamente.'
+            'Trabajo enviado a aprobación correctamente'
           );
 
           this.cargarTrabajo();
@@ -392,12 +456,19 @@ export class TrabajoDetalleComponent implements OnInit {
             error
           );
 
-          this.toastService.error('No se pudo finalizar el trabajo.');
+          console.error(
+            'Respuesta backend:',
+            error.error
+          );
+
+          this.toastService.error(
+            error.error?.mensaje ??
+            'No se pudo finalizar el trabajo'
+          );
 
         }
 
       });
-
   }
 
   aprobarTrabajo(): void {

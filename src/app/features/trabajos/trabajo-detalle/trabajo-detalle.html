@@ -420,65 +420,44 @@
 
 
                 <mat-form-field appearance="outline" class="w-100">
-
-
                     <mat-label>
                         Detalle del trabajo realizado
                     </mat-label>
-
-
                     <textarea matInput rows="6" [(ngModel)]="trabajo.trabajoRealizado">
                     </textarea>
-
-
                 </mat-form-field>
 
-
                 <div class="acciones">
-
-                    <button mat-raised-button color="primary" type="button" (click)="guardarTrabajoRealizado()">
-
-                        <mat-icon>
-                            save
-                        </mat-icon>
-
-                        Guardar trabajo realizado
-
-                    </button>
-
-
-                    <!-- ========================= -->
-                    <!-- FINALIZAR TRABAJO -->
-                    <!-- ========================= -->
-
                     <button mat-raised-button color="accent" type="button" (click)="finalizarTrabajo()">
-
                         <mat-icon>
                             check
                         </mat-icon>
-
                         Finalizar trabajo
-
                     </button>
-
                 </div>
-
             </mat-card-content>
 
         </mat-card>
 
         }
 
-
         <!-- ================================================= -->
         <!-- ESTADO: TRABAJADO FINALIZADO -->
         <!-- ================================================= -->
 
-        @if (trabajo.estado === 'Trabajado finalizado'
-        && esRol('Sistemas')) {
+        @if (trabajo.estado === 'Trabajado finalizado' && esRol('Tecnico')) {
+        <mat-divider></mat-divider>
+        <p>
+            El trabajo está pendiente de aprobación por Sistemas.
+        </p>
+        }
+
+        @if (
+        trabajo.estado === 'Trabajado finalizado'
+        && esRol('Sistemas')
+        ) {
 
         <mat-divider></mat-divider>
-
 
         <mat-card class="seccion-accion">
 
@@ -498,20 +477,103 @@
                 </p>
 
 
-                <p>
-                    El trabajo está pendiente de aprobación por Sistemas.
-                </p>
+                <!-- =============================== -->
+                <!-- ACCIONES -->
+                <!-- =============================== -->
+
+                @if (!mostrarSolicitudMejora) {
+
+                <div class="acciones-trabajo">
+
+                    <!-- APROBAR -->
+
+                    <button mat-raised-button color="primary" type="button" (click)="aprobarTrabajo()">
+
+                        <mat-icon>
+                            verified
+                        </mat-icon>
+
+                        Aprobar trabajo
+
+                    </button>
 
 
-                <button mat-raised-button color="primary" type="button" (click)="aprobarTrabajo()">
+                    <!-- SOLICITAR MEJORA -->
 
-                    <mat-icon>
-                        verified
-                    </mat-icon>
+                    <button mat-stroked-button color="warn" type="button" (click)="mostrarSolicitudMejora = true">
 
-                    Aprobar trabajo
+                        <mat-icon>
+                            replay
+                        </mat-icon>
 
-                </button>
+                        Solicitar mejora
+
+                    </button>
+
+                </div>
+
+                }
+
+
+                <!-- =============================== -->
+                <!-- SOLICITUD DE MEJORA -->
+                <!-- =============================== -->
+
+                @if (mostrarSolicitudMejora) {
+
+                <div class="solicitud-mejora">
+
+                    <h3>
+                        Solicitar mejora
+                    </h3>
+
+
+                    <p>
+                        Indicá al técnico qué debe revisar o corregir.
+                    </p>
+
+
+                    <mat-form-field appearance="outline" class="w-100">
+
+                        <mat-label>
+                            Motivo de la mejora
+                        </mat-label>
+
+                        <textarea matInput rows="5" [(ngModel)]="comentarios"
+                            placeholder="Describí qué debe corregirse o realizarse nuevamente...">
+            </textarea>
+
+                    </mat-form-field>
+
+
+                    <div class="acciones-mejora">
+
+                        <button mat-stroked-button type="button" (click)="cancelarSolicitudMejora()">
+
+                            <mat-icon>
+                                close
+                            </mat-icon>
+
+                            Cancelar
+
+                        </button>
+
+
+                        <button mat-raised-button color="warn" type="button" (click)="solicitarMejora()">
+
+                            <mat-icon>
+                                replay
+                            </mat-icon>
+
+                            Solicitar mejora
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+                }
 
             </mat-card-content>
 
