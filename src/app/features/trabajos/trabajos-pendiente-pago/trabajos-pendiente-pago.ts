@@ -48,6 +48,7 @@ export class TrabajosPendientePagoComponent implements OnInit {
   trabajosFiltrados: TrabajoFinalizado[] = [];
   buscar = '';
   apiUrl = environment.apiUrl;
+  api = environment.api;
 
   displayedColumns = [
     'id',
@@ -58,7 +59,6 @@ export class TrabajosPendientePagoComponent implements OnInit {
     'ciudad',
     'tecnico',
     'tarea',
-    'trabajoRealizado',
     'acciones'
   ];
 
@@ -67,7 +67,7 @@ export class TrabajosPendientePagoComponent implements OnInit {
   }
 
   verFactura(rutaFactura: string): void {
-    const url = this.apiUrl + rutaFactura;
+    const url = this.api + rutaFactura;
 
     window.open(
       url,
@@ -76,7 +76,7 @@ export class TrabajosPendientePagoComponent implements OnInit {
   }
 
   descargarFactura(rutaFactura: string): void {
-    const url = this.apiUrl + rutaFactura;
+    const url = this.api + rutaFactura;
     const enlace = document.createElement('a');
 
     enlace.href = url;
