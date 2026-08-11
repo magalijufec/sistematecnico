@@ -1,64 +1,145 @@
 <h1>Dashboard</h1>
 
+
+<!-- ========================= -->
+<!-- ESTADOS DE TRABAJOS -->
+<!-- ========================= -->
+
 <div class="cards">
+
+    <!-- PENDIENTE -->
 
     <div class="card pendiente">
 
-        <h2>{{dashboard?.pendientes}}</h2>
+        <h2>
+            {{ dashboard?.pendientes }}
+        </h2>
 
-        <span>Pendientes</span>
+        <span>
+            Pendientes
+        </span>
 
     </div>
+
+
+    <!-- EN PROCESO -->
 
     <div class="card proceso">
 
-        <h2>{{dashboard?.enProceso}}</h2>
+        <h2>
+            {{ dashboard?.enProceso }}
+        </h2>
 
-        <span>En proceso</span>
+        <span>
+            En proceso
+        </span>
 
     </div>
+
+
+    <!-- TRABAJO FINALIZADO -->
+
+    <div class="card trabajo-finalizado">
+
+        <h2>
+            {{ dashboard?.trabajosFinalizados }}
+        </h2>
+
+        <span>
+            Trabajo finalizado
+        </span>
+
+    </div>
+
+
+    <!-- APROBADO -->
+
+    <div class="card aprobado">
+
+        <h2>
+            {{ dashboard?.aprobados }}
+        </h2>
+
+        <span>
+            Aprobados
+        </span>
+
+    </div>
+
+
+    <!-- PENDIENTE DE PAGO -->
 
     <div class="card pago">
 
-        <h2>{{dashboard?.pendientePago}}</h2>
+        <h2>
+            {{ dashboard?.pendientePago }}
+        </h2>
 
-        <span>Pendiente Pago</span>
+        <span>
+            Pendiente de pago
+        </span>
 
     </div>
 
+
+    <!-- FINALIZADO -->
+
     <div class="card finalizado">
 
-        <h2>{{dashboard?.finalizados}}</h2>
+        <h2>
+            {{ dashboard?.finalizados }}
+        </h2>
 
-        <span>Finalizados</span>
+        <span>
+            Finalizados
+        </span>
 
     </div>
 
 </div>
 
+
+<!-- ========================= -->
+<!-- TOTALES -->
+<!-- ========================= -->
+
 <div class="cards">
 
     <div class="card total">
 
-        <h2>{{dashboard?.totalTrabajos}}</h2>
+        <h2>
+            {{ dashboard?.totalTrabajos }}
+        </h2>
 
-        <span>Total Trabajos</span>
-
-    </div>
-
-    <div class="card total">
-
-        <h2>{{dashboard?.totalClientes}}</h2>
-
-        <span>Clientes</span>
+        <span>
+            Total trabajos
+        </span>
 
     </div>
 
+
     <div class="card total">
 
-        <h2>{{dashboard?.totalTecnicos}}</h2>
+        <h2>
+            {{ dashboard?.totalClientes }}
+        </h2>
 
-        <span>Técnicos</span>
+        <span>
+            Clientes
+        </span>
+
+    </div>
+
+
+    <div class="card total">
+
+        <h2>
+            {{ dashboard?.totalTecnicos }}
+        </h2>
+
+        <span>
+            Técnicos
+        </span>
 
     </div>
 

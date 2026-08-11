@@ -1,73 +1,78 @@
-.cards{
-
-    display:flex;
-
-    gap:20px;
-
-    margin-bottom:25px;
-
-    flex-wrap:wrap;
-
+.cards {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
 }
 
-.card{
+.card {
+    flex: 1;
+    min-width: 180px;
 
-    flex:1;
+    border-radius: 12px;
 
-    min-width:180px;
+    color: white;
 
-    border-radius:12px;
+    padding: 25px;
 
-    color:white;
-
-    padding:25px;
-
-    box-shadow:0 5px 15px rgba(0,0,0,.15);
-
+    box-shadow: 0 5px 15px rgba(0, 0, 0, .15);
 }
 
-.card h2{
-
-    font-size:40px;
-
-    margin:0;
-
+.card h2 {
+    font-size: 40px;
+    margin: 0;
 }
 
-.card span{
-
-    font-size:15px;
-
+.card span {
+    font-size: 15px;
 }
 
-.pendiente{
 
-    background:#FB8C00;
+/* ========================= */
+/* ESTADOS */
+/* ========================= */
 
+/* 1 - Pendiente */
+.pendiente {
+    background: #FB8C00;
 }
 
-.proceso{
 
-    background:#1E88E5;
-
+/* 2 - En proceso */
+.proceso {
+    background: #1E88E5;
 }
 
-.pago{
 
-    background:#FDD835;
-
-    color:black;
-
+/* 3 - Trabajo finalizado */
+.trabajo-finalizado {
+    background: #ff0080;
 }
 
-.finalizado{
 
-    background:#43A047;
-
+/* 4 - Aprobado */
+.aprobado {
+    background: #43A047;
 }
 
-.total{
 
-    background:#5E35B1;
+/* 5 - Pendiente pago */
+.pago {
+    background: #FDD835;
+    color: black;
+}
 
+
+/* 6 - Finalizado */
+.finalizado {
+    background: #43A047;
+}
+
+
+/* ========================= */
+/* TOTALES */
+/* ========================= */
+
+.total {
+    background: #5E35B1;
 }
