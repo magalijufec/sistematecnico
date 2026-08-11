@@ -290,7 +290,8 @@ export const routes: Routes = [
                     roleGuard([
                         'Administrador',
                         'Sistemas',
-                        'Pagos'
+                        'Pagos',
+                        'Tecnico'
                     ])
 
                 ]

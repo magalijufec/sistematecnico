@@ -35,7 +35,7 @@ export const MENU: MenuItem[] = [
   { 
     text: 'Trabajos finalizados', 
     icon: 'task_alt', route: '/trabajos-finalizados', 
-    roles: [ 'Administrador', 'Sistemas', 'Pagos' ] 
+    roles: [ 'Administrador', 'Sistemas', 'Pagos', 'Tecnico' ] 
   }
 
 ];

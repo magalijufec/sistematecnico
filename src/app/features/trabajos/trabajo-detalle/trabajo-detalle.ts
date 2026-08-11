@@ -14,6 +14,7 @@ import { TrabajoImagenComparacion } from '../../../core/models/imagen';
 import { TrabajoImagenComparacionService } from '../../../core/services/trabajo.imagen.comparacion.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { ToastService } from '../../../core/services/toast.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-trabajo-detalle',
@@ -48,6 +49,7 @@ export class TrabajoDetalleComponent implements OnInit {
   idTrabajo = 0;
   mostrarSolicitudMejora = false;
   comentarios = '';
+  apiUrl = environment.apiUrl;
 
   ngOnInit(): void {
     this.rolUsuario =
@@ -277,7 +279,7 @@ export class TrabajoDetalleComponent implements OnInit {
   }
 
   obtenerUrlImagen(ruta: string): string {
-    return 'https://localhost:7122' + ruta;
+    return this.apiUrl + ruta;
   }
 
   cancelarSolicitudMejora(): void {
