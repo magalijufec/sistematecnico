@@ -36,46 +36,61 @@ body {
   font: var(--mat-sys-body-medium);
 }
 
+/* =========================================
+   TOAST
+========================================= */
+
+.cdk-overlay-container {
+    z-index: 9999 !important;
+}
+
+
+/* Contenedor */
+
+.mat-mdc-snack-bar-container {
+    --mdc-snackbar-container-shape: 8px !important;
+}
+
 
 /* =========================================
-   TOAST SUCCESS
+   SUCCESS
 ========================================= */
 
 .toast-success {
-  --mdc-snackbar-container-color: #2e7d32 !important;
-  --mdc-snackbar-supporting-text-color: #ffffff !important;
-  --mat-snack-bar-button-color: #ffffff !important;
+    --mdc-snackbar-container-color: #2e7d32 !important;
+    --mdc-snackbar-supporting-text-color: #ffffff !important;
+    --mat-snack-bar-button-color: #ffffff !important;
 }
 
 
 /* =========================================
-   TOAST ERROR
+   ERROR
 ========================================= */
 
 .toast-error {
-  --mdc-snackbar-container-color: #c62828 !important;
-  --mdc-snackbar-supporting-text-color: #ffffff !important;
-  --mat-snack-bar-button-color: #ffffff !important;
+    --mdc-snackbar-container-color: #c62828 !important;
+    --mdc-snackbar-supporting-text-color: #ffffff !important;
+    --mat-snack-bar-button-color: #ffffff !important;
 }
 
 
 /* =========================================
-   TOAST WARNING
+   WARNING
 ========================================= */
 
 .toast-warning {
-  --mdc-snackbar-container-color: #ef6c00 !important;
-  --mdc-snackbar-supporting-text-color: #ffffff !important;
-  --mat-snack-bar-button-color: #ffffff !important;
+    --mdc-snackbar-container-color: #ef6c00 !important;
+    --mdc-snackbar-supporting-text-color: #ffffff !important;
+    --mat-snack-bar-button-color: #ffffff !important;
 }
 
 
 /* =========================================
-   TOAST INFO
+   INFO
 ========================================= */
 
 .toast-info {
-  --mdc-snackbar-container-color: #1565c0 !important;
-  --mdc-snackbar-supporting-text-color: #ffffff !important;
-  --mat-snack-bar-button-color: #ffffff !important;
+    --mdc-snackbar-container-color: #1565c0 !important;
+    --mdc-snackbar-supporting-text-color: #ffffff !important;
+    --mat-snack-bar-button-color: #ffffff !important;
 }

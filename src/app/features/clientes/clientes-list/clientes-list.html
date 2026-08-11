@@ -1,5 +1,4 @@
 <mat-card>
-
   <mat-card-header>
 
     <mat-card-title>
@@ -8,15 +7,13 @@
 
   </mat-card-header>
 
-  <button mat-raised-button color="primary" routerLink="/clientes/nuevo"> 
-    <mat-icon> add </mat-icon> Nuevo Cliente
-  </button>
-
-
   <mat-card-content>
 
-    <div class="filtros">
+    <button mat-raised-button color="primary" routerLink="/clientes/nuevo">
+      <mat-icon> add </mat-icon> Nuevo Cliente
+    </button>
 
+    <div class="filtros">
 
       <!-- BUSCAR -->
       <mat-form-field appearance="outline">
@@ -235,8 +232,8 @@
 
           <td mat-cell *matCellDef="let cliente">
 
-            <button mat-icon-button color="primary" 
-            [routerLink]="['/clientes', cliente.id]" matTooltip="Editar cliente"> 
+            <button mat-icon-button color="primary" [routerLink]="['/clientes', cliente.id]"
+              matTooltip="Editar cliente">
               <mat-icon> edit </mat-icon> </button>
 
           </td>

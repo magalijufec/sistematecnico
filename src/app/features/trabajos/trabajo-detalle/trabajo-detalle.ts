@@ -50,6 +50,7 @@ export class TrabajoDetalleComponent implements OnInit {
   mostrarSolicitudMejora = false;
   comentarios = '';
   apiUrl = environment.apiUrl;
+  api = environment.api;
 
   ngOnInit(): void {
     this.rolUsuario =
@@ -279,7 +280,7 @@ export class TrabajoDetalleComponent implements OnInit {
   }
 
   obtenerUrlImagen(ruta: string): string {
-    return this.apiUrl + ruta;
+    return this.api + ruta;
   }
 
   cancelarSolicitudMejora(): void {
