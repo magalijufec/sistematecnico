@@ -904,7 +904,8 @@
 
         @if (
             trabajo.estado === 'Aprobado'
-            && esRol('Tecnico')
+            && (esRol('Tecnico') || esRol('Administrador') 
+            || esRol('Pagos') )
         ) {
 
         <mat-divider></mat-divider>
