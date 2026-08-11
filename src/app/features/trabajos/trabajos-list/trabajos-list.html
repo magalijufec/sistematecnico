@@ -1,191 +1,369 @@
+<!-- ========================= -->
+<!-- ACCIONES -->
+<!-- ========================= -->
+
 <div class="toolbar">
-    @if (esRol('Sistemas') || esRol('Administrador')) {                                                                        
-    <button mat-raised-button color="primary" routerLink="/trabajos/nuevo">
-        <mat-icon>add</mat-icon>
-        Nuevo Trabajo
-    </button>
+
+    @if (esRol('Sistemas') || esRol('Administrador')) {
+
+        <button
+            mat-raised-button
+            color="primary"
+            routerLink="/trabajos/nuevo">
+
+            <mat-icon>
+                add
+            </mat-icon>
+
+            Nuevo Trabajo
+
+        </button>
+
     }
 
 </div>
 
-<mat-form-field appearance="outline">
-    <mat-label>Buscar</mat-label>
 
-    <input matInput [(ngModel)]="buscar" (input)="filtrar()" placeholder="Cliente, técnico o tarea">
-</mat-form-field>
+<!-- ========================= -->
+<!-- FILTROS -->
+<!-- ========================= -->
 
-<mat-form-field appearance="outline">
-    <mat-label>Estado</mat-label>
+<div class="filtros">
 
-    <mat-select [(ngModel)]="estadoSeleccionado" (selectionChange)="filtrar()">
+    <!-- BUSCAR -->
 
-        <mat-option value="">
-            Todos
-        </mat-option>
+    <mat-form-field
+        appearance="outline"
+        class="filtro-buscar">
 
-        @for (estado of estados; track estado.id) {
-        <mat-option [value]="estado.id">
-            {{ estado.nombre }}
-        </mat-option>
-        }
+        <mat-label>
+            Buscar
+        </mat-label>
 
-    </mat-select>
-</mat-form-field>
+        <input
+            matInput
+            [(ngModel)]="buscar"
+            (input)="filtrar()"
+            placeholder="Cliente, técnico o tarea">
 
-<button mat-stroked-button (click)="limpiarFiltros()">
+    </mat-form-field>
 
-    <mat-icon>filter_alt_off</mat-icon>
 
-    Limpiar
+    <!-- ESTADO -->
 
-</button>
+    <mat-form-field
+        appearance="outline"
+        class="filtro-estado">
+
+        <mat-label>
+            Estado
+        </mat-label>
+
+        <mat-select
+            [(ngModel)]="estadoSeleccionado"
+            (selectionChange)="filtrar()">
+
+            <mat-option value="">
+                Todos
+            </mat-option>
+
+            @for (estado of estados; track estado.id) {
+
+                <mat-option [value]="estado.id">
+                    {{ estado.nombre }}
+                </mat-option>
+
+            }
+
+        </mat-select>
+
+    </mat-form-field>
+
+
+    <!-- LIMPIAR -->
+
+    <button
+        mat-stroked-button
+        class="btn-limpiar"
+        type="button"
+        (click)="limpiarFiltros()">
+
+        <mat-icon>
+            filter_alt_off
+        </mat-icon>
+
+        Limpiar
+
+    </button>
+
+</div>
+
+
+<!-- ========================= -->
+<!-- TABLA -->
+<!-- ========================= -->
 
 <mat-card>
 
     <mat-card-header>
 
         <mat-card-title>
-
             Trabajos
-
         </mat-card-title>
 
     </mat-card-header>
 
+
     <mat-card-content>
 
-        <table mat-table [dataSource]="trabajosFiltrados">
+        <div class="tabla-container">
 
-            <!-- ID -->
+            <table
+                mat-table
+                [dataSource]="trabajosFiltrados">
 
-            <ng-container matColumnDef="id">
+                <!-- ID -->
 
-                <th mat-header-cell *matHeaderCellDef>N°</th>
+                <ng-container matColumnDef="id">
 
-                <td mat-cell *matCellDef="let t">
+                    <th
+                        mat-header-cell
+                        *matHeaderCellDef>
 
-                    {{t.id}}
+                        N°
 
-                </td>
+                    </th>
 
-            </ng-container>
+                    <td
+                        mat-cell
+                        *matCellDef="let t">
 
-            <!-- Cliente -->
+                        {{ t.id }}
 
-            <ng-container matColumnDef="cliente">
+                    </td>
 
-                <th mat-header-cell *matHeaderCellDef>Cliente</th>
+                </ng-container>
 
-                <td mat-cell *matCellDef="let t">
 
-                    {{t.cliente}}
+                <!-- Cliente -->
 
-                </td>
+                <ng-container matColumnDef="cliente">
 
-            </ng-container>
+                    <th
+                        mat-header-cell
+                        *matHeaderCellDef>
 
-            <!-- Provincia -->
+                        Cliente
 
-            <ng-container matColumnDef="provincia">
+                    </th>
 
-                <th mat-header-cell *matHeaderCellDef>Provincia</th>
+                    <td
+                        mat-cell
+                        *matCellDef="let t">
 
-                <td mat-cell *matCellDef="let t">
+                        {{ t.cliente }}
 
-                    {{t.provincia}}
+                    </td>
 
-                </td>
+                </ng-container>
 
-            </ng-container>
 
-            <!-- Ciudad -->
+                <!-- Provincia -->
 
-            <ng-container matColumnDef="ciudad">
+                <ng-container matColumnDef="provincia">
 
-                <th mat-header-cell *matHeaderCellDef>Ciudad</th>
+                    <th
+                        mat-header-cell
+                        *matHeaderCellDef>
 
-                <td mat-cell *matCellDef="let t">
+                        Provincia
 
-                    {{t.ciudad}}
+                    </th>
 
-                </td>
+                    <td
+                        mat-cell
+                        *matCellDef="let t">
 
-            </ng-container>
+                        {{ t.provincia }}
 
-            <!-- Técnico -->
+                    </td>
 
-            <ng-container matColumnDef="tecnico">
+                </ng-container>
 
-                <th mat-header-cell *matHeaderCellDef>Técnico</th>
 
-                <td mat-cell *matCellDef="let t">
+                <!-- Ciudad -->
 
-                    {{t.tecnico}}
+                <ng-container matColumnDef="ciudad">
 
-                </td>
+                    <th
+                        mat-header-cell
+                        *matHeaderCellDef>
 
-            </ng-container>
+                        Ciudad
 
-            <!-- Tarea -->
+                    </th>
 
-            <ng-container matColumnDef="tarea">
+                    <td
+                        mat-cell
+                        *matCellDef="let t">
 
-                <th mat-header-cell *matHeaderCellDef>Tarea</th>
+                        {{ t.ciudad }}
 
-                <td mat-cell *matCellDef="let t">
+                    </td>
 
-                    {{t.tarea}}
+                </ng-container>
 
-                </td>
 
-            </ng-container>
+                <!-- Técnico -->
 
-            <!-- Estado -->
+                <ng-container matColumnDef="tecnico">
 
-            <ng-container matColumnDef="estado">
+                    <th
+                        mat-header-cell
+                        *matHeaderCellDef>
 
-                <th mat-header-cell *matHeaderCellDef>Estado</th>
+                        Técnico
 
-                <td mat-cell *matCellDef="let t">
+                    </th>
 
-                    <span class="estado" [style.background]="t.estadoColor">
+                    <td
+                        mat-cell
+                        *matCellDef="let t">
 
-                        {{t.estado}}
+                        {{ t.tecnico }}
 
-                    </span>
+                    </td>
 
-                </td>
+                </ng-container>
 
-            </ng-container>
 
-            <!-- Acciones -->
+                <!-- Tarea -->
 
-            <ng-container matColumnDef="acciones">
+                <ng-container matColumnDef="tarea">
 
-                <th mat-header-cell *matHeaderCellDef></th>
+                    <th
+                        mat-header-cell
+                        *matHeaderCellDef>
 
-                <td mat-cell *matCellDef="let t">
+                        Tarea
 
-                    <button mat-icon-button color="primary" [routerLink]="['/trabajos', t.id]">
+                    </th>
 
-                        <mat-icon>visibility</mat-icon>
+                    <td
+                        mat-cell
+                        *matCellDef="let t">
 
-                    </button>
-                    @if (esRol('Sistemas') || esRol('Administrador')) {
-                    <button mat-icon-button color="accent" [routerLink]="['/trabajos', t.id, 'editar']">
-                        <mat-icon>edit</mat-icon>
-                    </button>
-                    }
+                        {{ t.tarea }}
 
-                </td>
+                    </td>
 
-            </ng-container>
+                </ng-container>
 
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
 
-            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                <!-- Estado -->
 
-        </table>
+                <ng-container matColumnDef="estado">
+
+                    <th
+                        mat-header-cell
+                        *matHeaderCellDef>
+
+                        Estado
+
+                    </th>
+
+                    <td
+                        mat-cell
+                        *matCellDef="let t">
+
+                        <span
+                            class="estado"
+                            [style.background]="t.estadoColor">
+
+                            {{ t.estado }}
+
+                        </span>
+
+                    </td>
+
+                </ng-container>
+
+
+                <!-- Acciones -->
+
+                <ng-container matColumnDef="acciones">
+
+                    <th
+                        mat-header-cell
+                        *matHeaderCellDef>
+
+                    </th>
+
+                    <td
+                        mat-cell
+                        *matCellDef="let t">
+
+                        <button
+                            mat-icon-button
+                            color="primary"
+                            matTooltip="Ver trabajo"
+                            [routerLink]="[
+                                '/trabajos',
+                                t.id
+                            ]">
+
+                            <mat-icon>
+                                visibility
+                            </mat-icon>
+
+                        </button>
+
+
+                        @if (
+                            esRol('Sistemas')
+                            || esRol('Administrador')
+                        ) {
+
+                            <button
+                                mat-icon-button
+                                color="accent"
+                                matTooltip="Editar trabajo"
+                                [routerLink]="[
+                                    '/trabajos',
+                                    t.id,
+                                    'editar'
+                                ]">
+
+                                <mat-icon>
+                                    edit
+                                </mat-icon>
+
+                            </button>
+
+                        }
+
+                    </td>
+
+                </ng-container>
+
+
+                <tr
+                    mat-header-row
+                    *matHeaderRowDef="displayedColumns">
+                </tr>
+
+
+                <tr
+                    mat-row
+                    *matRowDef="
+                        let row;
+                        columns: displayedColumns
+                    ">
+                </tr>
+
+            </table>
+
+        </div>
 
     </mat-card-content>
 
