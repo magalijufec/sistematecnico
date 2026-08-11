@@ -1,0 +1,143 @@
+.pagina {
+    width: 100%;
+    max-width: 100%;
+}
+
+/* =========================================
+   TITULO
+========================================= */
+
+.toolbar {
+    margin-bottom: 15px;
+}
+
+.toolbar h2 {
+    margin: 0;
+}
+
+
+/* =========================================
+   FILTROS
+========================================= */
+
+.filtros {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.filtros mat-form-field {
+    width: 400px;
+}
+
+.filtros button {
+    height: 56px;
+}
+
+
+/* =========================================
+   TABLA
+========================================= */
+
+.tabla-container {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+table {
+    width: 100%;
+    min-width: 1100px;
+}
+
+
+/* Evita que las celdas se aplasten */
+
+th,
+td {
+    white-space: nowrap;
+}
+
+
+/* Trabajo realizado puede ocupar más */
+
+td.mat-column-trabajoRealizado {
+    white-space: normal;
+    min-width: 250px;
+    max-width: 350px;
+}
+
+
+/* Acciones */
+
+td.mat-column-acciones {
+    white-space: nowrap;
+    width: 130px;
+}
+
+
+/* Hover */
+
+.mat-mdc-row:hover {
+    background: #f5f5f5;
+}
+
+
+/* =========================================
+   CELULAR
+========================================= */
+
+@media (max-width: 768px) {
+
+    .toolbar {
+        margin-bottom: 10px;
+    }
+
+    .toolbar h2 {
+        font-size: 22px;
+    }
+
+    .filtros {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+
+    .filtros mat-form-field {
+        width: 100%;
+    }
+
+    .filtros button {
+        width: 100%;
+        height: 48px;
+    }
+
+    mat-card {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    mat-card-header {
+        padding: 12px 16px;
+    }
+
+    mat-card-title {
+        font-size: 18px;
+    }
+
+    mat-card-content {
+        padding: 0 !important;
+    }
+
+    .tabla-container {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    table {
+        min-width: 1100px;
+    }
+
+}
