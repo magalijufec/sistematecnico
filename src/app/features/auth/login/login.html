@@ -19,17 +19,12 @@
 
         <mat-card-content>
 
-            <form
-                [formGroup]="form"
-                (ngSubmit)="login()"
-                class="login-form">
+            <form [formGroup]="form" (ngSubmit)="login()" class="login-form">
 
 
                 <!-- USUARIO -->
 
-                <mat-form-field
-                    appearance="outline"
-                    class="w-100">
+                <mat-form-field appearance="outline" class="w-100">
 
                     <mat-label>
                         Usuario
@@ -39,19 +34,14 @@
                         person
                     </mat-icon>
 
-                    <input
-                        matInput
-                        formControlName="userName"
-                        autocomplete="username">
+                    <input matInput formControlName="userName" autocomplete="username">
 
                 </mat-form-field>
 
 
                 <!-- CONTRASEÑA -->
 
-                <mat-form-field
-                    appearance="outline"
-                    class="w-100">
+                <mat-form-field appearance="outline" class="w-100">
 
                     <mat-label>
                         Contraseña
@@ -61,11 +51,7 @@
                         lock
                     </mat-icon>
 
-                    <input
-                        matInput
-                        type="password"
-                        formControlName="password"
-                        autocomplete="current-password">
+                    <input matInput type="password" formControlName="password" autocomplete="current-password">
 
                 </mat-form-field>
 
@@ -74,35 +60,46 @@
 
                 @if (error) {
 
-                    <div class="login-error">
+                <div class="login-error">
 
-                        <mat-icon>
-                            error
-                        </mat-icon>
+                    <mat-icon>
+                        error
+                    </mat-icon>
 
-                        <span>
-                            {{ error }}
-                        </span>
+                    <span>
+                        {{ error }}
+                    </span>
 
-                    </div>
+                </div>
 
                 }
 
 
                 <!-- BOTÓN -->
 
-                <button
-                    mat-raised-button
-                    color="primary"
-                    type="submit"
-                    class="login-button"
-                    [disabled]="form.invalid">
+                <button mat-raised-button color="primary" type="submit" class="login-button"
+                    [disabled]="form.invalid || cargando">
+
+                    @if (cargando) {
+
+                    <mat-spinner diameter="20">
+                    </mat-spinner>
+
+                    <span>
+                        Ingresando...
+                    </span>
+
+                    } @else {
 
                     <mat-icon>
                         login
                     </mat-icon>
 
-                    Ingresar
+                    <span>
+                        Ingresar
+                    </span>
+
+                    }
 
                 </button>
 

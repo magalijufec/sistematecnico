@@ -2,7 +2,7 @@ import {
   Component,
   inject
 } from '@angular/core';
-
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import {
   FormBuilder,
   ReactiveFormsModule,
@@ -44,7 +44,8 @@ import { MatIconModule } from '@angular/material/icon';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    MatProgressSpinnerModule
   ],
 
   templateUrl: './login.html',
@@ -63,6 +64,7 @@ export class LoginComponent {
 
   error = '';
   respuesta: any;
+  cargando = false;
 
   form = this.fb.group({
 
@@ -84,7 +86,7 @@ export class LoginComponent {
     if (this.form.invalid)
       return;
 
-
+    this.cargando = true;
     this.error = '';
 
 
@@ -100,13 +102,13 @@ export class LoginComponent {
       .subscribe({
 
         next: respuesta => {
-
+          this.cargando = false;
           console.log('Respuesta login:', respuesta);
 
-      localStorage.setItem(
-        'token',
-        respuesta.token
-      );
+          localStorage.setItem(
+            'token',
+            respuesta.token
+          );
 
           this.router.navigate([
             '/dashboard'
@@ -115,7 +117,7 @@ export class LoginComponent {
         },
 
         error: error => {
-
+          this.cargando = false;
           console.error(
             'Error login',
             error
