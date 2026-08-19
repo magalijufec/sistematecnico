@@ -31,9 +31,27 @@ export class TrabajoService {
     return this.http.get<Trabajo>(`${this.api}/${id}`);
   }
 
+  // crear(trabajo: TrabajoCreate): Observable<Trabajo> {
+  //   return this.http.post<Trabajo>(this.api, trabajo);
+  // }
   crear(trabajo: TrabajoCreate): Observable<Trabajo> {
-    return this.http.post<Trabajo>(this.api, trabajo);
-  }
+
+  const formData = new FormData();
+
+  formData.append('IdCliente', trabajo.idCliente.toString());
+  formData.append('IdTecnico', trabajo.idTecnico.toString());
+  formData.append('IdTarea', trabajo.idTarea.toString());
+  formData.append('Comentarios', trabajo.comentarios ?? '');
+
+  trabajo.archivos?.forEach(a => {
+    formData.append('Archivos', a);
+  });
+
+  return this.http.post<Trabajo>(
+    this.api,
+    formData
+  );
+}
 
   actualizar(id: number, trabajo: TrabajoCreate): Observable<void> {
     return this.http.put<void>(`${this.api}/${id}`, trabajo);
@@ -90,34 +108,18 @@ export class TrabajoService {
     );
   }
 
-  // registrarPago(id: number): Observable<void> {
-  //   return this.http.put<void>(
-  //     `${this.api}/${id}/registrar-pago`,
-  //     {}
+  // subirImagenes(idTrabajo: number, archivos: File[], tipo: number) {
+  //   const formData = new FormData();
+  //   formData.append("tipo", tipo.toString());
+  //   archivos.forEach(x => {
+  //     formData.append("files", x);
+  //   });
+
+  //   return this.http.post(
+  //     `${this.api}/${idTrabajo}/imagenes`,
+  //     formData
   //   );
   // }
-
-  // guardarTrabajoRealizado(id: number, texto: string) {
-  //   return this.http.put(
-  //     `${this.api}/${id}/trabajo-realizado`,
-  //     {
-  //       trabajoRealizado: texto
-  //     }
-  //   );
-  // }
-
-  subirImagenes(idTrabajo: number, archivos: File[], tipo: number) {
-    const formData = new FormData();
-    formData.append("tipo", tipo.toString());
-    archivos.forEach(x => {
-      formData.append("files", x);
-    });
-
-    return this.http.post(
-      `${this.api}/${idTrabajo}/imagenes`,
-      formData
-    );
-  }
 
   subirImagen(
     idTrabajo: number,

@@ -6,11 +6,11 @@
 
             @if (!esEdicion) {
 
-                Nueva Solicitud de Trabajo
+            Nueva Solicitud de Trabajo
 
             } @else {
 
-                Editar Trabajo #{{ idTrabajo }}
+            Editar Trabajo #{{ idTrabajo }}
 
             }
 
@@ -21,37 +21,25 @@
 
     <mat-card-content>
 
-        <form
-            [formGroup]="form"
-            class="formulario">
+        <form [formGroup]="form" class="formulario">
 
 
             <!-- ============================== -->
             <!-- CLIENTE -->
             <!-- ============================== -->
 
-            <mat-form-field
-                appearance="outline">
+            <mat-form-field appearance="outline">
 
                 <mat-label>
                     Cliente
                 </mat-label>
 
 
-                <mat-select
-
-                    formControlName="idCliente"
-
-                    (selectionChange)="cambioCliente()">
+                <mat-select formControlName="idCliente" (selectionChange)="cambioCliente()">
 
                     <mat-option>
 
-                        <ngx-mat-select-search
-
-                            [formControl]="clienteFiltro"
-
-                            placeholderLabel="Buscar cliente..."
-
+                        <ngx-mat-select-search [formControl]="clienteFiltro" placeholderLabel="Buscar cliente..."
                             noEntriesFoundLabel="No se encontraron clientes">
 
                         </ngx-mat-select-search>
@@ -59,11 +47,7 @@
                     </mat-option>
 
 
-                    <mat-option
-
-                        *ngFor="let cliente of clientesFiltrados"
-
-                        [value]="cliente.id">
+                    <mat-option *ngFor="let cliente of clientesFiltrados" [value]="cliente.id">
 
                         {{ cliente.nombre }}
 
@@ -78,25 +62,17 @@
             <!-- TÉCNICO -->
             <!-- ============================== -->
 
-            <mat-form-field
-                appearance="outline">
+            <mat-form-field appearance="outline">
 
                 <mat-label>
                     Técnico
                 </mat-label>
 
 
-                <mat-select
-
-                    formControlName="idTecnico"
-
-                    [disabled]="tecnicosFiltrados.length === 0">
+                <mat-select formControlName="idTecnico" [disabled]="tecnicosFiltrados.length === 0">
 
 
-                    <mat-option
-                        *ngFor="let t of tecnicosFiltrados"
-
-                        [value]="t.id">
+                    <mat-option *ngFor="let t of tecnicosFiltrados" [value]="t.id">
 
                         {{ t.nombre }}
 
@@ -112,24 +88,17 @@
             <!-- TAREA -->
             <!-- ============================== -->
 
-            <mat-form-field
-                appearance="outline">
+            <mat-form-field appearance="outline">
 
                 <mat-label>
                     Tarea
                 </mat-label>
 
 
-                <mat-select
-
-                    formControlName="idTarea">
+                <mat-select formControlName="idTarea">
 
 
-                    <mat-option
-
-                        *ngFor="let t of tareas"
-
-                        [value]="t.id">
+                    <mat-option *ngFor="let t of tareas" [value]="t.id">
 
                         {{ t.nombre }}
 
@@ -145,11 +114,7 @@
             <!-- COMENTARIOS -->
             <!-- ============================== -->
 
-            <mat-form-field
-
-                appearance="outline"
-
-                class="comentarios">
+            <mat-form-field appearance="outline" class="comentarios">
 
 
                 <mat-label>
@@ -157,18 +122,68 @@
                 </mat-label>
 
 
-                <textarea
-
-                    matInput
-
-                    rows="5"
-
-                    formControlName="comentarios">
+                <textarea matInput rows="5" formControlName="comentarios">
 
                 </textarea>
 
 
             </mat-form-field>
+
+            <div class="seccion-imagenes">
+
+                <h3>
+                    Imágenes del trabajo
+                </h3>
+
+                <p>
+                    Podés seleccionar una o varias imágenes.
+                </p>
+
+                <input #imagenesInput type="file" accept="image/*" multiple hidden
+                    (change)="seleccionarArchivos($event)">
+
+
+                <button mat-stroked-button color="primary" type="button" (click)="imagenesInput.click()">
+
+                    <mat-icon>
+                        photo_library
+                    </mat-icon>
+
+                    Seleccionar imágenes
+
+                </button>
+
+
+                @if (archivos.length > 0) {
+
+                <div class="lista-imagenes">
+
+                    <p>
+                        {{ archivos.length }}
+                        imagen(es) seleccionada(s)
+                    </p>
+
+                    @for (archivo of archivos; track archivo.name) {
+
+                    <div class="archivo">
+
+                        <mat-icon>
+                            image
+                        </mat-icon>
+
+                        <span>
+                            {{ archivo.name }}
+                        </span>
+
+                    </div>
+
+                    }
+
+                </div>
+
+                }
+
+            </div>
 
 
             <!-- ============================== -->
@@ -178,39 +193,23 @@
             <div class="botones">
 
 
-                <button
-
-                    mat-stroked-button
-
-                    color="warn"
-
-                    type="button"
-
-                    (click)="cancelar()">
+                <button mat-stroked-button color="warn" type="button" (click)="cancelar()">
 
                     Cancelar
 
                 </button>
 
 
-                <button
-
-                    mat-raised-button
-
-                    color="primary"
-
-                    type="button"
-
-                    (click)="guardar()">
+                <button mat-raised-button color="primary" type="button" (click)="guardar()">
 
 
                     @if (!esEdicion) {
 
-                        Crear Trabajo
+                    Crear Trabajo
 
                     } @else {
 
-                        Guardar Cambios
+                    Guardar Cambios
 
                     }
 

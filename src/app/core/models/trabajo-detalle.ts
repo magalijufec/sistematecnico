@@ -27,7 +27,7 @@ export interface TrabajoDetalle {
 
   tieneFactura: boolean;
 
-  cantidadImagenes: number;
+  //cantidadImagenes: number;
   
   solicitante: string | null;
 

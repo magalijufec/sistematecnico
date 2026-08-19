@@ -3,101 +3,75 @@ import {
   OnInit,
   inject
 } from '@angular/core';
-
 import {
   FormBuilder,
   FormControl,
   ReactiveFormsModule,
   Validators
 } from '@angular/forms';
-
 import {
   CommonModule
 } from '@angular/common';
-
 import {
   ActivatedRoute,
   Router
 } from '@angular/router';
-
 import {
   ClienteService
 } from '../../../core/services/cliente.service';
-
 import {
   UsuarioService
 } from '../../../core/services/usuario.service';
-
 import {
   TareaService
 } from '../../../core/services/tarea.service';
-
 import {
   TrabajoService
 } from '../../../core/services/trabajo.service';
-
 import {
   Combo
 } from '../../../core/models/combo';
-
 import {
   TrabajoCreate
 } from '../../../core/models/trabajo-create';
-
 import {
   MatFormFieldModule
 } from '@angular/material/form-field';
-
 import {
   MatInputModule
 } from '@angular/material/input';
-
 import {
   MatSelectModule
 } from '@angular/material/select';
-
 import {
   MatButtonModule
 } from '@angular/material/button';
-
 import {
   MatCardModule
 } from '@angular/material/card';
-
 import {
   NgxMatSelectSearchModule
 } from 'ngx-mat-select-search';
-
 import {
   TecnicoCombo
 } from '../../../core/models/tecnico-combo';
 import { ClienteCombo } from '../../../core/models/cliente-combo';
 import { ToastService } from '../../../core/services/toast.service';
-
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-trabajo-form',
-
   standalone: true,
-
   imports: [
-
     ReactiveFormsModule,
-
     CommonModule,
-
     MatFormFieldModule,
-
     MatInputModule,
-
     MatSelectModule,
-
     MatButtonModule,
-
     MatCardModule,
-
-    NgxMatSelectSearchModule
-
+    NgxMatSelectSearchModule,
+    MatIconModule
   ],
 
   templateUrl: './trabajo-form.html',
@@ -105,53 +79,28 @@ import { ToastService } from '../../../core/services/toast.service';
   styleUrl: './trabajo-form.scss'
 
 })
-export class TrabajoFormComponent
-  implements OnInit {
+export class TrabajoFormComponent implements OnInit {
 
-  private fb =
-    inject(FormBuilder);
-
-  private route =
-    inject(ActivatedRoute);
-
-  private router =
-    inject(Router);
-
-  private clienteService =
-    inject(ClienteService);
-
-  private usuarioService =
-    inject(UsuarioService);
-
-  private tareaService =
-    inject(TareaService);
-
+  private fb = inject(FormBuilder);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private clienteService = inject(ClienteService);
+  private usuarioService = inject(UsuarioService);
+  private tareaService = inject(TareaService);
   private trabajoService = inject(TrabajoService);
   private toastService = inject(ToastService);
 
-
-  clienteFiltro =
-    new FormControl('');
-
-
+  clienteFiltro = new FormControl('');
+  archivos: File[] = [];
   clientesFiltrados: ClienteCombo[] = [];
-
   clientes: ClienteCombo[] = [];
-
-
   tecnicos: TecnicoCombo[] = [];
-
   tecnicosFiltrados: TecnicoCombo[] = [];
-
-
   tareas: Combo[] = [];
-
 
   // Guardamos los IDs para la edición
   private clienteSeleccionadoId: number = 0;
-
   private tecnicoSeleccionadoId: number = 0;
-
 
   form = this.fb.nonNullable.group({
 
@@ -256,11 +205,6 @@ export class TrabajoFormComponent
 
   }
 
-
-  // =====================================================
-  // CARGAR TRABAJO
-  // =====================================================
-
   cargarTrabajo(): void {
 
     this.trabajoService
@@ -332,11 +276,6 @@ export class TrabajoFormComponent
 
   }
 
-
-  // =====================================================
-  // CARGAR CLIENTES
-  // =====================================================
-
   cargarClientes(): void {
 
     this.clienteService
@@ -389,11 +328,6 @@ export class TrabajoFormComponent
       });
 
   }
-
-
-  // =====================================================
-  // CARGAR TÉCNICOS
-  // =====================================================
 
   cargarTecnicos(): void {
 
@@ -448,11 +382,6 @@ export class TrabajoFormComponent
       });
 
   }
-
-
-  // =====================================================
-  // FILTRAR TÉCNICOS POR PROVINCIA
-  // =====================================================
 
   filtrarTecnicosPorCliente(
 
@@ -569,11 +498,6 @@ export class TrabajoFormComponent
 
   }
 
-
-  // =====================================================
-  // CAMBIO DE CLIENTE
-  // =====================================================
-
   cambioCliente(): void {
 
 
@@ -625,11 +549,6 @@ export class TrabajoFormComponent
 
   }
 
-
-  // =====================================================
-  // CARGAR TAREAS
-  // =====================================================
-
   cargarTareas(): void {
 
     this.tareaService
@@ -661,71 +580,76 @@ export class TrabajoFormComponent
 
   }
 
+  seleccionarArchivos(event: Event): void {
 
-  // =====================================================
-  // GUARDAR
-  // =====================================================
+    const input = event.target as HTMLInputElement;
+
+    if (!input.files) {
+      return;
+    }
+
+    this.archivos = Array.from(input.files);
+
+    console.log('Archivos seleccionados:', this.archivos);
+  }
 
   guardar(): void {
-    if (
-      this.form.invalid
-    ) {
+
+    if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
 
-    const trabajo:
-      TrabajoCreate =
+    const valores = this.form.getRawValue();
 
-      this.form.getRawValue();
+    const trabajo: TrabajoCreate = {
+      idCliente: valores.idCliente,
+      idTecnico: valores.idTecnico,
+      idTarea: valores.idTarea,
+      comentarios: valores.comentarios,
+      archivos: this.archivos
+    };
 
-
-    // ==========================================
-    // CREAR
-    // ==========================================
-
-    if (
-      !this.esEdicion
-    ) {
+    if (!this.esEdicion) {
 
       this.trabajoService
-
         .crear(trabajo)
-
         .subscribe({
 
           next: () => {
+
             this.toastService.success(
               'Trabajo creado correctamente'
             );
 
-
             this.router.navigate(
-
               ['/trabajos']
-
             );
 
           },
 
-
           error: error => {
 
             console.error(
-
               'Error al crear trabajo',
-
               error
+            );
 
+            console.error(
+              'Respuesta backend:',
+              error.error
+            );
+
+            this.toastService.error(
+              error.error?.mensaje ??
+              'No se pudo crear el trabajo'
             );
 
           }
 
         });
 
-
       return;
-
     }
 
 
@@ -734,40 +658,39 @@ export class TrabajoFormComponent
     // ==========================================
 
     this.trabajoService
-
       .actualizar(
-
         this.idTrabajo,
-
         trabajo
-
       )
-
       .subscribe({
 
         next: () => {
+
           this.toastService.success(
             'Trabajo actualizado correctamente'
           );
 
-
           this.router.navigate(
-
             ['/trabajos']
-
           );
 
         },
 
-
         error: error => {
 
           console.error(
-
             'Error al actualizar trabajo',
-
             error
+          );
 
+          console.error(
+            'Respuesta backend:',
+            error.error
+          );
+
+          this.toastService.error(
+            error.error?.mensaje ??
+            'No se pudo actualizar el trabajo'
           );
 
         }
@@ -775,11 +698,6 @@ export class TrabajoFormComponent
       });
 
   }
-
-
-  // =====================================================
-  // CANCELAR
-  // =====================================================
 
   cancelar(): void {
 

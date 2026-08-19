@@ -1,6 +1,6 @@
 export const environment = { 
     production: true, 
     environmentName: 'production', 
-    apiUrl: 'https://tudominio.com/api',
-    api: 'https://tudominio.com'  
+    apiUrl: 'http://192.168.0.143/sistemaTecnicoApi/api',
+    api: 'http://192.168.0.143'
 };

@@ -903,7 +903,8 @@
         <!-- ================================================= -->
 
         @if (
-            trabajo.estado === 'Aprobado'
+            (trabajo.estado === 'Aprobado' || trabajo.estado === 'Pendiente pago' 
+            || trabajo.estado === 'Finalizado')
             && (esRol('Tecnico') || esRol('Administrador') 
             || esRol('Pagos') )
         ) {

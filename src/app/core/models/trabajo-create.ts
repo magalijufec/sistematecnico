@@ -3,4 +3,5 @@ export interface TrabajoCreate {
     idTecnico: number;
     idTarea: number;
     comentarios: string;
+    archivos?: File[];
 }
