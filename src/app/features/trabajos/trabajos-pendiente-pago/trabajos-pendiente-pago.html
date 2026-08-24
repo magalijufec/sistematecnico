@@ -8,31 +8,282 @@
     </div>
 
 
-    <div class="filtros">
+    <mat-card class="filtros-card">
 
-        <mat-form-field appearance="outline">
+    <mat-card-content>
 
-            <mat-label>
-                Buscar
-            </mat-label>
+        <div class="filtros-header">
 
-            <input matInput [(ngModel)]="buscar" (input)="filtrar()"
-                placeholder="Cliente, técnico, tarea, provincia o ciudad">
+            <div>
 
-        </mat-form-field>
+                <h3>
+                    Filtros
+                </h3>
+
+                <span class="resultado-filtro">
+
+                    Se encontraron
+
+                    <strong>
+                        {{ trabajosFiltrados.length }}
+                    </strong>
+
+                    trabajos
+
+                </span>
+
+            </div>
+
+            <button
+                mat-stroked-button
+                type="button"
+                [disabled]="!hayFiltrosAplicados()"
+                (click)="limpiarFiltros()">
+
+                <mat-icon>
+                    filter_alt_off
+                </mat-icon>
+
+                Limpiar filtros
+
+            </button>
+
+        </div>
 
 
-        <button mat-stroked-button (click)="limpiarFiltros()">
+        <!-- ================================= -->
+        <!-- FILTROS GENERALES -->
+        <!-- ================================= -->
 
-            <mat-icon>
-                filter_alt_off
-            </mat-icon>
+        <div class="filtros-grid">   
 
-            Limpiar
+            <!-- Provincia -->
 
-        </button>
+            <mat-form-field appearance="outline">
 
-    </div>
+                <mat-label>
+                    Provincia
+                </mat-label>
+
+                <mat-select
+                    [(ngModel)]="provinciaSeleccionada"
+                    (selectionChange)="cambiarProvincia()">
+
+                    <mat-option value="">
+                        Todas las provincias
+                    </mat-option>
+
+                    @for (
+                        provincia of provincias;
+                        track provincia
+                    ) {
+
+                        <mat-option [value]="provincia">
+                            {{ provincia }}
+                        </mat-option>
+
+                    }
+
+                </mat-select>
+
+            </mat-form-field>
+
+
+            <!-- Ciudad -->
+
+            <mat-form-field appearance="outline">
+
+                <mat-label>
+                    Ciudad
+                </mat-label>
+
+                <mat-select
+                    [(ngModel)]="ciudadSeleccionada"
+                    (selectionChange)="filtrar()">
+
+                    <mat-option value="">
+                        Todas las ciudades
+                    </mat-option>
+
+                    @for (
+                        ciudad of ciudades;
+                        track ciudad
+                    ) {
+
+                        <mat-option [value]="ciudad">
+                            {{ ciudad }}
+                        </mat-option>
+
+                    }
+
+                </mat-select>
+
+            </mat-form-field>
+
+
+            <!-- Cliente -->
+
+            <mat-form-field appearance="outline">
+
+                <mat-label>
+                    Cliente
+                </mat-label>
+
+                <mat-select
+                    [(ngModel)]="clienteSeleccionado"
+                    (selectionChange)="filtrar()">
+
+                    <mat-option value="">
+                        Todos los clientes
+                    </mat-option>
+
+                    @for (
+                        cliente of clientes;
+                        track cliente
+                    ) {
+
+                        <mat-option [value]="cliente">
+                            {{ cliente }}
+                        </mat-option>
+
+                    }
+
+                </mat-select>
+
+            </mat-form-field>
+
+
+            <!-- Técnico -->
+
+            <mat-form-field appearance="outline">
+
+                <mat-label>
+                    Técnico
+                </mat-label>
+
+                <mat-select
+                    [(ngModel)]="tecnicoSeleccionado"
+                    (selectionChange)="filtrar()">
+
+                    <mat-option value="">
+                        Todos los técnicos
+                    </mat-option>
+
+                    @for (
+                        tecnico of tecnicos;
+                        track tecnico
+                    ) {
+
+                        <mat-option [value]="tecnico">
+                            {{ tecnico }}
+                        </mat-option>
+
+                    }
+
+                </mat-select>
+
+            </mat-form-field>
+
+
+            <!-- Tarea -->
+
+            <mat-form-field appearance="outline">
+
+                <mat-label>
+                    Tarea
+                </mat-label>
+
+                <mat-select
+                    [(ngModel)]="tareaSeleccionada"
+                    (selectionChange)="filtrar()">
+
+                    <mat-option value="">
+                        Todas las tareas
+                    </mat-option>
+
+                    @for (
+                        tarea of tareas;
+                        track tarea
+                    ) {
+
+                        <mat-option [value]="tarea">
+                            {{ tarea }}
+                        </mat-option>
+
+                    }
+
+                </mat-select>
+
+            </mat-form-field>
+
+        </div>
+
+
+        <!-- ================================= -->
+        <!-- FILTROS DE FECHAS -->
+        <!-- ================================= -->
+
+        <h4 class="titulo-fechas">
+            Fechas
+        </h4>
+
+        <div class="filtros-fechas">
+
+            <!-- Fecha solicitud -->
+
+            <mat-form-field appearance="outline">
+
+                <mat-label>
+                    Fecha de solicitud
+                </mat-label>
+
+                <input
+                    matInput
+                    type="date"
+                    [(ngModel)]="fechaSolicitudSeleccionada"
+                    (ngModelChange)="filtrar()">
+
+            </mat-form-field>
+
+
+            <!-- Fecha inicio -->
+
+            <mat-form-field appearance="outline">
+
+                <mat-label>
+                    Fecha de inicio
+                </mat-label>
+
+                <input
+                    matInput
+                    type="date"
+                    [(ngModel)]="fechaInicioSeleccionada"
+                    (ngModelChange)="filtrar()">
+
+            </mat-form-field>
+
+
+            <!-- Fecha finalización -->
+
+            <mat-form-field appearance="outline">
+
+                <mat-label>
+                    Fecha de finalización
+                </mat-label>
+
+                <input
+                    matInput
+                    type="date"
+                    [(ngModel)]="fechaFinalizadoSeleccionada"
+                    (ngModelChange)="filtrar()">
+
+            </mat-form-field>
+
+        </div>
+
+    </mat-card-content>
+
+</mat-card>
 
 
     <mat-card>

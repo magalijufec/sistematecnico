@@ -22,21 +22,76 @@
 /* =========================================
    FILTROS
 ========================================= */
+/* =========================================
+   FILTROS
+========================================= */
 
-.filtros {
+.filtros-card {
+    width: 100%;
+    margin-bottom: 18px;
+    box-sizing: border-box;
+}
+
+.filtros-card mat-card-content {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.filtros-header {
     display: flex;
+    justify-content: space-between;
     align-items: center;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.filtros-header h3 {
+    margin: 0 0 4px;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.resultado-filtro {
+    color: #666;
+    font-size: 14px;
+}
+
+.filtros-grid {
+    display: grid;
+    grid-template-columns:
+        repeat(auto-fit,
+            minmax(210px, 1fr));
     gap: 12px;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
+    width: 100%;
 }
 
-.filtros mat-form-field {
-    width: 400px;
+.filtro-buscar {
+    grid-column: span 2;
 }
 
-.filtros button {
-    height: 56px;
+.filtros-grid mat-form-field,
+.filtros-fechas mat-form-field {
+    width: 100%;
+}
+
+.titulo-fechas {
+    margin: 8px 0 14px;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.filtros-fechas {
+    display: grid;
+    grid-template-columns:
+        repeat(3,
+            minmax(210px, 1fr));
+    gap: 12px;
+    width: 100%;
+}
+
+.tabla-card {
+    width: 100%;
+    box-sizing: border-box;
 }
 
 
@@ -216,23 +271,25 @@ td.mat-column-acciones {
     }
 
 
-    .filtros {
+    .filtros-header {
         flex-direction: column;
         align-items: stretch;
-        gap: 8px;
     }
 
-
-    .filtros mat-form-field {
-        width: 100%;
-    }
-
-
-    .filtros button {
+    .filtros-header button {
         width: 100%;
         height: 48px;
     }
 
+    .filtros-grid,
+    .filtros-fechas {
+        grid-template-columns: 1fr;
+        gap: 4px;
+    }
+
+    .filtro-buscar {
+        grid-column: span 1;
+    }
 
     mat-card {
         width: 100%;
