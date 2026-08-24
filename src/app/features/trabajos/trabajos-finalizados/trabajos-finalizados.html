@@ -4,23 +4,262 @@
 
 <div class="filtros">
 
-    <mat-form-field appearance="outline">
+    <mat-card class="filtros-card">
 
-        <mat-label>
-            Buscar
-        </mat-label>
+        <mat-card-content>
 
-        <input
-            matInput
-            [(ngModel)]="buscar"
-            (input)="filtrar()"
-            placeholder="Cliente, técnico, tarea, provincia o ciudad">
+            <div class="filtros-header">
 
-    </mat-form-field>
+                <div>
 
-    <button
-        mat-stroked-button
-        (click)="limpiarFiltros()">
+                    <h3>
+                        Filtros
+                    </h3>
+
+                    <span class="resultado-filtro">
+                        Se encontraron
+                        {{ trabajosFiltrados.length }}
+                        trabajos
+                    </span>
+
+                </div>
+
+                <button mat-stroked-button type="button" [disabled]="!hayFiltrosAplicados()" (click)="limpiarFiltros()">
+
+                    <mat-icon>
+                        filter_alt_off
+                    </mat-icon>
+
+                    Limpiar filtros
+
+                </button>
+
+            </div>
+
+            <div class="filtros-grid">
+
+                <!-- ================================= -->
+                <!-- PROVINCIA -->
+                <!-- ================================= -->
+
+                <mat-form-field appearance="outline">
+
+                    <mat-label>
+                        Provincia
+                    </mat-label>
+
+                    <mat-select [(ngModel)]="provinciaSeleccionada" (selectionChange)="cambiarProvincia()">
+
+                        <mat-option value="">
+                            Todas las provincias
+                        </mat-option>
+
+                        @for (
+                        provincia of provincias;
+                        track provincia
+                        ) {
+
+                        <mat-option [value]="provincia">
+                            {{ provincia }}
+                        </mat-option>
+
+                        }
+
+                    </mat-select>
+
+                </mat-form-field>
+
+
+                <!-- ================================= -->
+                <!-- CIUDAD DEPENDIENTE DE PROVINCIA -->
+                <!-- ================================= -->
+
+                <mat-form-field appearance="outline">
+
+                    <mat-label>
+                        Ciudad
+                    </mat-label>
+
+                    <mat-select [(ngModel)]="ciudadSeleccionada" (selectionChange)="filtrar()">
+
+                        <mat-option value="">
+                            Todas las ciudades
+                        </mat-option>
+
+                        @for (
+                        ciudad of ciudades;
+                        track ciudad
+                        ) {
+
+                        <mat-option [value]="ciudad">
+                            {{ ciudad }}
+                        </mat-option>
+
+                        }
+
+                    </mat-select>
+
+                </mat-form-field>
+
+
+                <!-- ================================= -->
+                <!-- CLIENTE -->
+                <!-- ================================= -->
+
+                <mat-form-field appearance="outline">
+
+                    <mat-label>
+                        Cliente
+                    </mat-label>
+
+                    <mat-select [(ngModel)]="clienteSeleccionado" (selectionChange)="filtrar()">
+
+                        <mat-option value="">
+                            Todos los clientes
+                        </mat-option>
+
+                        @for (
+                        cliente of clientes;
+                        track cliente
+                        ) {
+
+                        <mat-option [value]="cliente">
+                            {{ cliente }}
+                        </mat-option>
+
+                        }
+
+                    </mat-select>
+
+                </mat-form-field>
+
+
+                <!-- ================================= -->
+                <!-- TÉCNICO -->
+                <!-- ================================= -->
+
+                <mat-form-field appearance="outline">
+
+                    <mat-label>
+                        Técnico
+                    </mat-label>
+
+                    <mat-select [(ngModel)]="tecnicoSeleccionado" (selectionChange)="filtrar()">
+
+                        <mat-option value="">
+                            Todos los técnicos
+                        </mat-option>
+
+                        @for (
+                        tecnico of tecnicos;
+                        track tecnico
+                        ) {
+
+                        <mat-option [value]="tecnico">
+                            {{ tecnico }}
+                        </mat-option>
+
+                        }
+
+                    </mat-select>
+
+                </mat-form-field>
+
+
+                <!-- ================================= -->
+                <!-- TAREA -->
+                <!-- ================================= -->
+
+                <mat-form-field appearance="outline">
+
+                    <mat-label>
+                        Tarea
+                    </mat-label>
+
+                    <mat-select [(ngModel)]="tareaSeleccionada" (selectionChange)="filtrar()">
+
+                        <mat-option value="">
+                            Todas las tareas
+                        </mat-option>
+
+                        @for (
+                        tarea of tareas;
+                        track tarea
+                        ) {
+
+                        <mat-option [value]="tarea">
+                            {{ tarea }}
+                        </mat-option>
+
+                        }
+
+                    </mat-select>
+
+                </mat-form-field>
+
+            </div>
+
+
+            <!-- ================================= -->
+            <!-- FILTROS POR FECHA -->
+            <!-- ================================= -->
+
+            <h4 class="titulo-fechas">
+                Filtrar por fecha exacta
+            </h4>
+
+            <div class="filtros-fechas">
+
+                <mat-form-field appearance="outline">
+
+                    <mat-label>
+                        Fecha de solicitud
+                    </mat-label>
+
+                    <input matInput type="date" [(ngModel)]="fechaSolicitudSeleccionada" (ngModelChange)="filtrar()">
+
+                </mat-form-field>
+
+
+                <mat-form-field appearance="outline">
+
+                    <mat-label>
+                        Fecha de inicio
+                    </mat-label>
+
+                    <input matInput type="date" [(ngModel)]="fechaInicioSeleccionada" (ngModelChange)="filtrar()">
+
+                </mat-form-field>
+
+
+                <mat-form-field appearance="outline">
+
+                    <mat-label>
+                        Fecha de finalización
+                    </mat-label>
+
+                    <input matInput type="date" [(ngModel)]="fechaFinalizadoSeleccionada" (ngModelChange)="filtrar()">
+
+                </mat-form-field>
+
+
+                <mat-form-field appearance="outline">
+
+                    <mat-label>
+                        Fecha de pago
+                    </mat-label>
+
+                    <input matInput type="date" [(ngModel)]="fechaPagadoSeleccionada" (ngModelChange)="filtrar()">
+
+                </mat-form-field>
+
+            </div>
+
+        </mat-card-content>
+
+    </mat-card>
+
+    <button mat-stroked-button (click)="limpiarFiltros()">
 
         <mat-icon>
             filter_alt_off
@@ -43,9 +282,7 @@
 
         <div class="tabla-container">
 
-            <table
-                mat-table
-                [dataSource]="trabajosFiltrados">
+            <table mat-table [dataSource]="trabajosFiltrados">
 
                 <!-- ID -->
 
@@ -104,11 +341,11 @@
 
                         @if (trabajo.fechaFinalizado) {
 
-                            {{ trabajo.fechaFinalizado | date:'dd/MM/yyyy' }}
+                        {{ trabajo.fechaFinalizado | date:'dd/MM/yyyy' }}
 
                         } @else {
 
-                            -
+                        -
 
                         }
 
@@ -129,11 +366,11 @@
 
                         @if (trabajo.fechaPagado) {
 
-                            {{ trabajo.fechaPagado | date:'dd/MM/yyyy' }}
+                        {{ trabajo.fechaPagado | date:'dd/MM/yyyy' }}
 
                         } @else {
 
-                            -
+                        -
 
                         }
 
@@ -226,11 +463,7 @@
 
                     <td mat-cell *matCellDef="let trabajo">
 
-                        <button
-                            mat-icon-button
-                            color="primary"
-                            type="button"
-                            matTooltip="Ver trabajo"
+                        <button mat-icon-button color="primary" type="button" matTooltip="Ver trabajo"
                             (click)="verTrabajo(trabajo.id)">
 
                             <mat-icon>
@@ -244,14 +477,10 @@
                 </ng-container>
 
 
-                <tr
-                    mat-header-row
-                    *matHeaderRowDef="displayedColumns">
+                <tr mat-header-row *matHeaderRowDef="displayedColumns">
                 </tr>
 
-                <tr
-                    mat-row
-                    *matRowDef="
+                <tr mat-row *matRowDef="
                         let row;
                         columns: displayedColumns
                     ">
@@ -274,162 +503,158 @@
 
     @for (trabajo of trabajosFiltrados; track trabajo.id) {
 
-        <mat-card class="trabajo-card">
+    <mat-card class="trabajo-card">
 
-            <mat-card-header>
+        <mat-card-header>
 
-                <mat-card-title>
+            <mat-card-title>
 
-                    Trabajo #{{ trabajo.id }}
+                Trabajo #{{ trabajo.id }}
 
-                </mat-card-title>
+            </mat-card-title>
 
-                <mat-card-subtitle>
+            <mat-card-subtitle>
 
-                    {{ trabajo.cliente }}
+                {{ trabajo.cliente }}
 
-                </mat-card-subtitle>
+            </mat-card-subtitle>
 
-            </mat-card-header>
+        </mat-card-header>
 
 
-            <mat-card-content>
+        <mat-card-content>
 
-                <div class="dato">
+            <div class="dato">
 
-                    <span class="label">
-                        Técnico
-                    </span>
+                <span class="label">
+                    Técnico
+                </span>
 
-                    <span>
-                        {{ trabajo.tecnico }}
-                    </span>
+                <span>
+                    {{ trabajo.tecnico }}
+                </span>
 
-                </div>
+            </div>
 
 
-                <div class="dato">
+            <div class="dato">
 
-                    <span class="label">
-                        Tarea
-                    </span>
+                <span class="label">
+                    Tarea
+                </span>
 
-                    <span>
-                        {{ trabajo.tarea }}
-                    </span>
+                <span>
+                    {{ trabajo.tarea }}
+                </span>
 
-                </div>
+            </div>
 
 
-                <div class="dato">
+            <div class="dato">
 
-                    <span class="label">
-                        Provincia
-                    </span>
+                <span class="label">
+                    Provincia
+                </span>
 
-                    <span>
-                        {{ trabajo.provincia }}
-                    </span>
+                <span>
+                    {{ trabajo.provincia }}
+                </span>
 
-                </div>
+            </div>
 
 
-                <div class="dato">
+            <div class="dato">
 
-                    <span class="label">
-                        Ciudad
-                    </span>
+                <span class="label">
+                    Ciudad
+                </span>
 
-                    <span>
-                        {{ trabajo.ciudad }}
-                    </span>
+                <span>
+                    {{ trabajo.ciudad }}
+                </span>
 
-                </div>
+            </div>
 
 
-                <div class="dato">
+            <div class="dato">
 
-                    <span class="label">
-                        Fecha solicitud
-                    </span>
+                <span class="label">
+                    Fecha solicitud
+                </span>
 
-                    <span>
-                        {{ trabajo.fechaSolicitud | date:'dd/MM/yyyy' }}
-                    </span>
+                <span>
+                    {{ trabajo.fechaSolicitud | date:'dd/MM/yyyy' }}
+                </span>
 
-                </div>
+            </div>
 
 
-                <div class="dato">
+            <div class="dato">
 
-                    <span class="label">
-                        Fecha inicio
-                    </span>
+                <span class="label">
+                    Fecha inicio
+                </span>
 
-                    <span>
-                        {{ trabajo.fechaInicio | date:'dd/MM/yyyy' }}
-                    </span>
+                <span>
+                    {{ trabajo.fechaInicio | date:'dd/MM/yyyy' }}
+                </span>
 
-                </div>
+            </div>
 
 
-                <div class="dato">
+            <div class="dato">
 
-                    <span class="label">
-                        Finalizado
-                    </span>
+                <span class="label">
+                    Finalizado
+                </span>
 
-                    <span>
-                        {{ trabajo.fechaFinalizado | date:'dd/MM/yyyy' }}
-                    </span>
+                <span>
+                    {{ trabajo.fechaFinalizado | date:'dd/MM/yyyy' }}
+                </span>
 
-                </div>
+            </div>
 
 
-                <div class="dato">
+            <div class="dato">
 
-                    <span class="label">
-                        Pagado
-                    </span>
+                <span class="label">
+                    Pagado
+                </span>
 
-                    <span>
+                <span>
 
-                        @if (trabajo.fechaPagado) {
+                    @if (trabajo.fechaPagado) {
 
-                            {{ trabajo.fechaPagado | date:'dd/MM/yyyy' }}
+                    {{ trabajo.fechaPagado | date:'dd/MM/yyyy' }}
 
-                        } @else {
+                    } @else {
 
-                            Pendiente
+                    Pendiente
 
-                        }
+                    }
 
-                    </span>
+                </span>
 
-                </div>
+            </div>
 
-            </mat-card-content>
+        </mat-card-content>
 
 
-            <mat-card-actions>
+        <mat-card-actions>
 
-                <button
-                    mat-raised-button
-                    color="primary"
-                    type="button"
-                    (click)="verTrabajo(trabajo.id)">
+            <button mat-raised-button color="primary" type="button" (click)="verTrabajo(trabajo.id)">
 
-                    <mat-icon>
-                        visibility
-                    </mat-icon>
+                <mat-icon>
+                    visibility
+                </mat-icon>
 
-                    Ver trabajo
+                Ver trabajo
 
-                </button>
+            </button>
 
-            </mat-card-actions>
+        </mat-card-actions>
 
-        </mat-card>
+    </mat-card>
 
     }
 
