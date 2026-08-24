@@ -72,6 +72,32 @@
   margin-top: 24px;
 }
 
+.trabajo-realizado-texto {
+  width: 100%;
+  padding: 16px;
+  background: #f5f5f5;
+  border-left: 4px solid #1976d2;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.trabajo-realizado-texto p {
+  margin: 0;
+  white-space: pre-line;
+}
+
+.seccion-trabajo-realizado {
+  width: 100%;
+}
+
+.seccion-trabajo-realizado mat-card-content {
+  width: 100%;
+}
+
+ .w-100 {
+    width: 100%;
+  }
+
 @media (max-width: 768px) {
 
   .comparacion-row {
@@ -111,11 +137,7 @@
     justify-content: flex-end;
     gap: 12px;
     margin-top: 10px;
-  }
-
-  .w-100 {
-    width: 100%;
-  }
+  } 
 
   .trabajo-realizado {
     background: #f5f5f5;

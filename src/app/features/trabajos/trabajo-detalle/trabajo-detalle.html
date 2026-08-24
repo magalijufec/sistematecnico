@@ -48,9 +48,7 @@
 
                 <div class="estado-container">
 
-                    <span
-                        class="estado"
-                        [style.background]="trabajo.estadoColor">
+                    <span class="estado" [style.background]="trabajo.estadoColor">
 
                         {{ trabajo.estado }}
 
@@ -67,7 +65,7 @@
 
                 <p>
                     {{ trabajo.fechaSolicitud
-                        | date:'dd/MM/yyyy HH:mm' }}
+                    | date:'dd/MM/yyyy HH:mm' }}
                 </p>
 
             </div>
@@ -81,7 +79,7 @@
 
                 <p>
                     {{ trabajo.fechaInicio
-                        | date:'dd/MM/yyyy HH:mm' }}
+                    | date:'dd/MM/yyyy HH:mm' }}
                 </p>
 
             </div>
@@ -97,7 +95,7 @@
 
                 <p>
                     {{ trabajo.fechaFinalizado
-                        | date:'dd/MM/yyyy HH:mm' }}
+                    | date:'dd/MM/yyyy HH:mm' }}
                 </p>
 
             </div>
@@ -113,7 +111,7 @@
 
                 <p>
                     {{ trabajo.fechaPagado
-                        | date:'dd/MM/yyyy HH:mm' }}
+                    | date:'dd/MM/yyyy HH:mm' }}
                 </p>
 
             </div>
@@ -166,11 +164,7 @@
 
                 @if (esRol('Tecnico')) {
 
-                <button
-                    mat-raised-button
-                    color="primary"
-                    type="button"
-                    (click)="iniciarTrabajo()">
+                <button mat-raised-button color="primary" type="button" (click)="iniciarTrabajo()">
 
                     <mat-icon>
                         play_arrow
@@ -196,8 +190,8 @@
         <!-- ================================================= -->
 
         @if (
-            trabajo.trabajoRealizado ||
-            comparaciones.length > 0
+        trabajo.trabajoRealizado ||
+        comparaciones.length > 0
         ) {
 
         <mat-divider></mat-divider>
@@ -244,7 +238,9 @@
                 <!-- IMÁGENES DE COMPARACIÓN -->
                 <!-- ========================================= -->
 
-                @if (comparaciones.length > 0) {
+                @if (trabajo.estado !== 'En proceso' &&(
+                trabajo.trabajoRealizado ||
+                comparaciones.length > 0)) {
 
                 <mat-divider></mat-divider>
 
@@ -257,8 +253,8 @@
                 <div class="comparaciones">
 
                     @for (
-                        comparacion of comparaciones;
-                        track comparacion.id
+                    comparacion of comparaciones;
+                    track comparacion.id
                     ) {
 
                     <div class="comparacion-row">
@@ -277,12 +273,9 @@
 
                             @if (comparacion.imagenAntes) {
 
-                            <img
-                                class="imagen-trabajo"
-                                [src]="obtenerUrlImagen(
+                            <img class="imagen-trabajo" [src]="obtenerUrlImagen(
                                     comparacion.imagenAntes.rutaArchivo
-                                )"
-                                alt="Imagen antes">
+                                )" alt="Imagen antes">
 
                             }
 
@@ -319,12 +312,9 @@
 
                             @if (comparacion.imagenDespues) {
 
-                            <img
-                                class="imagen-trabajo"
-                                [src]="obtenerUrlImagen(
+                            <img class="imagen-trabajo" [src]="obtenerUrlImagen(
                                     comparacion.imagenDespues.rutaArchivo
-                                )"
-                                alt="Imagen después">
+                                )" alt="Imagen después">
 
                             }
 
@@ -368,8 +358,8 @@
         <!-- ================================================= -->
 
         @if (
-            trabajo.estado === 'En proceso'
-            && esRol('Tecnico')
+        trabajo.estado === 'En proceso'
+        && esRol('Tecnico')
         ) {
 
         <mat-divider></mat-divider>
@@ -401,8 +391,8 @@
                 <div class="comparaciones">
 
                     @for (
-                        comparacion of comparaciones;
-                        track comparacion.id
+                    comparacion of comparaciones;
+                    track comparacion.id
                     ) {
 
                     <div class="comparacion-row">
@@ -421,12 +411,9 @@
 
                             @if (comparacion.imagenAntes) {
 
-                            <img
-                                class="imagen-trabajo"
-                                [src]="obtenerUrlImagen(
+                            <img class="imagen-trabajo" [src]="obtenerUrlImagen(
                                     comparacion.imagenAntes.rutaArchivo
-                                )"
-                                alt="Imagen antes">
+                                )" alt="Imagen antes">
 
                             }
 
@@ -447,12 +434,7 @@
                             }
 
 
-                            <input
-                                #inputAntes
-                                type="file"
-                                accept="image/*"
-                                hidden
-                                (change)="
+                            <input #inputAntes type="file" accept="image/*" hidden (change)="
                                     subirAntes(
                                         $event,
                                         comparacion
@@ -460,11 +442,7 @@
                                 ">
 
 
-                            <button
-                                mat-stroked-button
-                                color="primary"
-                                type="button"
-                                (click)="inputAntes.click()">
+                            <button mat-stroked-button color="primary" type="button" (click)="inputAntes.click()">
 
                                 <mat-icon>
                                     upload
@@ -502,12 +480,9 @@
 
                             @if (comparacion.imagenDespues) {
 
-                            <img
-                                class="imagen-trabajo"
-                                [src]="obtenerUrlImagen(
+                            <img class="imagen-trabajo" [src]="obtenerUrlImagen(
                                     comparacion.imagenDespues.rutaArchivo
-                                )"
-                                alt="Imagen después">
+                                )" alt="Imagen después">
 
                             }
 
@@ -528,12 +503,7 @@
                             }
 
 
-                            <input
-                                #inputDespues
-                                type="file"
-                                accept="image/*"
-                                hidden
-                                (change)="
+                            <input #inputDespues type="file" accept="image/*" hidden (change)="
                                     subirDespues(
                                         $event,
                                         comparacion
@@ -541,11 +511,7 @@
                                 ">
 
 
-                            <button
-                                mat-stroked-button
-                                color="primary"
-                                type="button"
-                                (click)="inputDespues.click()">
+                            <button mat-stroked-button color="primary" type="button" (click)="inputDespues.click()">
 
                                 <mat-icon>
                                     upload
@@ -576,11 +542,7 @@
 
                         <div class="acciones-comparacion">
 
-                            <button
-                                mat-icon-button
-                                color="warn"
-                                matTooltip="Eliminar comparación"
-                                type="button"
+                            <button mat-icon-button color="warn" matTooltip="Eliminar comparación" type="button"
                                 (click)="
                                     eliminarComparacion(
                                         comparacion
@@ -609,11 +571,7 @@
 
                 <div class="agregar-comparacion">
 
-                    <button
-                        mat-raised-button
-                        color="primary"
-                        type="button"
-                        (click)="agregarComparacion()">
+                    <button mat-raised-button color="primary" type="button" (click)="agregarComparacion()">
 
                         <mat-icon>
                             add
@@ -640,19 +598,14 @@
                 </h3>
 
 
-                <mat-form-field
-                    appearance="outline"
-                    class="w-100">
+                <mat-form-field appearance="outline" class="w-100">
 
                     <mat-label>
                         Detalle del trabajo realizado
                     </mat-label>
 
 
-                    <textarea
-                        matInput
-                        rows="6"
-                        [(ngModel)]="trabajo.trabajoRealizado">
+                    <textarea matInput rows="6" [(ngModel)]="trabajo.trabajoRealizado">
 
                     </textarea>
 
@@ -666,11 +619,7 @@
 
                 <div class="acciones">
 
-                    <button
-                        mat-raised-button
-                        color="accent"
-                        type="button"
-                        (click)="finalizarTrabajo()">
+                    <button mat-raised-button color="accent" type="button" (click)="finalizarTrabajo()">
 
                         <mat-icon>
                             check
@@ -695,8 +644,8 @@
         <!-- ================================================= -->
 
         @if (
-            trabajo.estado === 'Trabajo finalizado'
-            && esRol('Tecnico')
+        trabajo.estado === 'Trabajo finalizado'
+        && esRol('Tecnico')
         ) {
 
         <mat-divider></mat-divider>
@@ -732,8 +681,8 @@
         <!-- ================================================= -->
 
         @if (
-            trabajo.estado === 'Trabajo finalizado'
-            && esRol('Sistemas')
+        trabajo.estado === 'Trabajo finalizado'
+        && esRol('Sistemas')
         ) {
 
         <mat-divider></mat-divider>
@@ -768,11 +717,7 @@
 
                     <!-- APROBAR -->
 
-                    <button
-                        mat-raised-button
-                        color="primary"
-                        type="button"
-                        (click)="aprobarTrabajo()">
+                    <button mat-raised-button color="primary" type="button" (click)="aprobarTrabajo()">
 
                         <mat-icon>
                             verified
@@ -786,11 +731,7 @@
 
                     <!-- SOLICITAR MEJORA -->
 
-                    <button
-                        mat-stroked-button
-                        color="warn"
-                        type="button"
-                        (click)="
+                    <button mat-stroked-button color="warn" type="button" (click)="
                             mostrarSolicitudMejora = true
                         ">
 
@@ -826,19 +767,14 @@
                     </p>
 
 
-                    <mat-form-field
-                        appearance="outline"
-                        class="w-100">
+                    <mat-form-field appearance="outline" class="w-100">
 
                         <mat-label>
                             Motivo de la mejora
                         </mat-label>
 
 
-                        <textarea
-                            matInput
-                            rows="5"
-                            [(ngModel)]="comentarios"
+                        <textarea matInput rows="5" [(ngModel)]="comentarios"
                             placeholder="Describí qué debe corregirse o realizarse nuevamente...">
 
                         </textarea>
@@ -851,10 +787,7 @@
 
                         <!-- CANCELAR -->
 
-                        <button
-                            mat-stroked-button
-                            type="button"
-                            (click)="
+                        <button mat-stroked-button type="button" (click)="
                                 cancelarSolicitudMejora()
                             ">
 
@@ -870,11 +803,7 @@
 
                         <!-- SOLICITAR -->
 
-                        <button
-                            mat-raised-button
-                            color="warn"
-                            type="button"
-                            (click)="solicitarMejora()">
+                        <button mat-raised-button color="warn" type="button" (click)="solicitarMejora()">
 
                             <mat-icon>
                                 replay
@@ -903,10 +832,10 @@
         <!-- ================================================= -->
 
         @if (
-            (trabajo.estado === 'Aprobado' || trabajo.estado === 'Pendiente pago' 
-            || trabajo.estado === 'Finalizado')
-            && (esRol('Tecnico') || esRol('Administrador') 
-            || esRol('Pagos') )
+        (trabajo.estado === 'Aprobado' || trabajo.estado === 'Pendiente pago'
+        || trabajo.estado === 'Finalizado')
+        && (esRol('Tecnico') || esRol('Administrador')
+        || esRol('Pagos') )
         ) {
 
         <mat-divider></mat-divider>
@@ -942,11 +871,7 @@
                 </p>
 
 
-                <a
-                    mat-raised-button
-                    color="primary"
-                    [href]="apiUrl + trabajo.factura"
-                    target="_blank">
+                <a mat-raised-button color="primary" [href]="apiUrl + trabajo.factura" target="_blank">
 
                     <mat-icon>
                         picture_as_pdf
@@ -965,21 +890,12 @@
                 </p>
 
 
-                <input
-                    #facturaInput
-                    type="file"
-                    accept="application/pdf"
-                    hidden
-                    (change)="
+                <input #facturaInput type="file" accept="application/pdf" hidden (change)="
                         subirFactura($event)
                     ">
 
 
-                <button
-                    mat-raised-button
-                    color="primary"
-                    type="button"
-                    (click)="facturaInput.click()">
+                <button mat-raised-button color="primary" type="button" (click)="facturaInput.click()">
 
                     <mat-icon>
                         upload_file
@@ -1004,8 +920,8 @@
         <!-- ================================================= -->
 
         @if (
-            trabajo.estado === 'Pendiente pago'
-            && esRol('Pagos')
+        trabajo.estado === 'Pendiente pago'
+        && esRol('Pagos')
         ) {
 
         <mat-divider></mat-divider>
@@ -1031,11 +947,7 @@
 
                 @if (trabajo.factura) {
 
-                <a
-                    mat-raised-button
-                    color="primary"
-                    [href]="apiUrl + trabajo.factura"
-                    target="_blank">
+                <a mat-raised-button color="primary" [href]="apiUrl + trabajo.factura" target="_blank">
 
                     <mat-icon>
                         picture_as_pdf
@@ -1048,11 +960,7 @@
                 }
 
 
-                <button
-                    mat-raised-button
-                    color="primary"
-                    type="button"
-                    (click)="registrarPago()">
+                <button mat-raised-button color="primary" type="button" (click)="registrarPago()">
 
                     <mat-icon>
                         payments
@@ -1075,7 +983,7 @@
         <!-- ================================================= -->
 
         @if (
-            trabajo.estado === 'Finalizado'
+        trabajo.estado === 'Finalizado'
         ) {
 
         <mat-divider></mat-divider>
@@ -1108,7 +1016,7 @@
                     </strong>
 
                     {{ trabajo.fechaPagado
-                        | date:'dd/MM/yyyy HH:mm' }}
+                    | date:'dd/MM/yyyy HH:mm' }}
 
                 </p>
 
