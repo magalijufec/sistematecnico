@@ -67,17 +67,14 @@ export class TrabajosPendientePagoComponent implements OnInit {
   apiUrl = environment.apiUrl;
   api = environment.api;
 
-  displayedColumns = [
-    'id',
-    'fechaSolicitud',
-    'fechaFinalizado',
-    'cliente',
-    'provincia',
-    'ciudad',
-    'tecnico',
-    'tarea',
-    'acciones'
-  ];
+  columnas = [
+  'id',
+  'cliente',
+  'tecnico',
+  'fechaFinalizado',
+  'factura',
+  'acciones'
+];
 
   ngOnInit(): void {
     this.cargarTrabajos();

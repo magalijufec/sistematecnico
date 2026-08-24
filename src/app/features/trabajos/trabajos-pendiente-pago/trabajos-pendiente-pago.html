@@ -1,561 +1,757 @@
 <div class="pagina">
+
+    <!-- =========================================
+         TÍTULO
+    ========================================== -->
+
     <div class="toolbar">
-
-        <h2>
-            Trabajos Pendientes de pago
-        </h2>
-
+        <h2>Trabajos pendientes de pago</h2>
     </div>
 
 
+    <!-- =========================================
+         FILTROS
+    ========================================== -->
+
     <mat-card class="filtros-card">
-
-    <mat-card-content>
-
-        <div class="filtros-header">
-
-            <div>
-
-                <h3>
-                    Filtros
-                </h3>
-
-                <span class="resultado-filtro">
-
-                    Se encontraron
-
-                    <strong>
-                        {{ trabajosFiltrados.length }}
-                    </strong>
-
-                    trabajos
-
-                </span>
-
-            </div>
-
-            <button
-                mat-stroked-button
-                type="button"
-                [disabled]="!hayFiltrosAplicados()"
-                (click)="limpiarFiltros()">
-
-                <mat-icon>
-                    filter_alt_off
-                </mat-icon>
-
-                Limpiar filtros
-
-            </button>
-
-        </div>
-
-
-        <!-- ================================= -->
-        <!-- FILTROS GENERALES -->
-        <!-- ================================= -->
-
-        <div class="filtros-grid">   
-
-            <!-- Provincia -->
-
-            <mat-form-field appearance="outline">
-
-                <mat-label>
-                    Provincia
-                </mat-label>
-
-                <mat-select
-                    [(ngModel)]="provinciaSeleccionada"
-                    (selectionChange)="cambiarProvincia()">
-
-                    <mat-option value="">
-                        Todas las provincias
-                    </mat-option>
-
-                    @for (
-                        provincia of provincias;
-                        track provincia
-                    ) {
-
-                        <mat-option [value]="provincia">
-                            {{ provincia }}
-                        </mat-option>
-
-                    }
-
-                </mat-select>
-
-            </mat-form-field>
-
-
-            <!-- Ciudad -->
-
-            <mat-form-field appearance="outline">
-
-                <mat-label>
-                    Ciudad
-                </mat-label>
-
-                <mat-select
-                    [(ngModel)]="ciudadSeleccionada"
-                    (selectionChange)="filtrar()">
-
-                    <mat-option value="">
-                        Todas las ciudades
-                    </mat-option>
-
-                    @for (
-                        ciudad of ciudades;
-                        track ciudad
-                    ) {
-
-                        <mat-option [value]="ciudad">
-                            {{ ciudad }}
-                        </mat-option>
-
-                    }
-
-                </mat-select>
-
-            </mat-form-field>
-
-
-            <!-- Cliente -->
-
-            <mat-form-field appearance="outline">
-
-                <mat-label>
-                    Cliente
-                </mat-label>
-
-                <mat-select
-                    [(ngModel)]="clienteSeleccionado"
-                    (selectionChange)="filtrar()">
-
-                    <mat-option value="">
-                        Todos los clientes
-                    </mat-option>
-
-                    @for (
-                        cliente of clientes;
-                        track cliente
-                    ) {
-
-                        <mat-option [value]="cliente">
-                            {{ cliente }}
-                        </mat-option>
-
-                    }
-
-                </mat-select>
-
-            </mat-form-field>
-
-
-            <!-- Técnico -->
-
-            <mat-form-field appearance="outline">
-
-                <mat-label>
-                    Técnico
-                </mat-label>
-
-                <mat-select
-                    [(ngModel)]="tecnicoSeleccionado"
-                    (selectionChange)="filtrar()">
-
-                    <mat-option value="">
-                        Todos los técnicos
-                    </mat-option>
-
-                    @for (
-                        tecnico of tecnicos;
-                        track tecnico
-                    ) {
-
-                        <mat-option [value]="tecnico">
-                            {{ tecnico }}
-                        </mat-option>
-
-                    }
-
-                </mat-select>
-
-            </mat-form-field>
-
-
-            <!-- Tarea -->
-
-            <mat-form-field appearance="outline">
-
-                <mat-label>
-                    Tarea
-                </mat-label>
-
-                <mat-select
-                    [(ngModel)]="tareaSeleccionada"
-                    (selectionChange)="filtrar()">
-
-                    <mat-option value="">
-                        Todas las tareas
-                    </mat-option>
-
-                    @for (
-                        tarea of tareas;
-                        track tarea
-                    ) {
-
-                        <mat-option [value]="tarea">
-                            {{ tarea }}
-                        </mat-option>
-
-                    }
-
-                </mat-select>
-
-            </mat-form-field>
-
-        </div>
-
-
-        <!-- ================================= -->
-        <!-- FILTROS DE FECHAS -->
-        <!-- ================================= -->
-
-        <h4 class="titulo-fechas">
-            Fechas
-        </h4>
-
-        <div class="filtros-fechas">
-
-            <!-- Fecha solicitud -->
-
-            <mat-form-field appearance="outline">
-
-                <mat-label>
-                    Fecha de solicitud
-                </mat-label>
-
-                <input
-                    matInput
-                    type="date"
-                    [(ngModel)]="fechaSolicitudSeleccionada"
-                    (ngModelChange)="filtrar()">
-
-            </mat-form-field>
-
-
-            <!-- Fecha inicio -->
-
-            <mat-form-field appearance="outline">
-
-                <mat-label>
-                    Fecha de inicio
-                </mat-label>
-
-                <input
-                    matInput
-                    type="date"
-                    [(ngModel)]="fechaInicioSeleccionada"
-                    (ngModelChange)="filtrar()">
-
-            </mat-form-field>
-
-
-            <!-- Fecha finalización -->
-
-            <mat-form-field appearance="outline">
-
-                <mat-label>
-                    Fecha de finalización
-                </mat-label>
-
-                <input
-                    matInput
-                    type="date"
-                    [(ngModel)]="fechaFinalizadoSeleccionada"
-                    (ngModelChange)="filtrar()">
-
-            </mat-form-field>
-
-        </div>
-
-    </mat-card-content>
-
-</mat-card>
-
-
-    <mat-card>
-
-        <mat-card-header>
-
-            <mat-card-title>
-
-                Trabajos pendientes de pago
-
-            </mat-card-title>
-
-        </mat-card-header>
-
 
         <mat-card-content>
 
-            <div class="tabla-container">
+            <div class="filtros-header">
 
-                <table mat-table [dataSource]="trabajosFiltrados">
+                <div>
+                    <strong>Filtros</strong>
 
-                    <ng-container matColumnDef="id">
+                    <span class="resultado-filtro">
+                        {{ trabajosFiltrados.length }}
+                        resultado(s)
+                    </span>
+                </div>
 
-                        <th mat-header-cell *matHeaderCellDef>
+                @if (hayFiltrosAplicados()) {
 
-                            Id
+                    <button
+                        mat-stroked-button
+                        type="button"
+                        (click)="limpiarFiltros()">
 
-                        </th>
+                        <mat-icon>
+                            clear
+                        </mat-icon>
 
-                        <td mat-cell *matCellDef="let trabajo">
+                        Limpiar filtros
 
-                            {{ trabajo.id }}
+                    </button>
 
-                        </td>
+                }
 
-                    </ng-container>
+            </div>
 
-                    <!-- Fecha solicitud -->
 
-                    <ng-container matColumnDef="fechaSolicitud">
+            <!-- =====================================
+                 BÚSQUEDA
+            ====================================== -->
 
-                        <th mat-header-cell *matHeaderCellDef>
+            <div class="filtros-grid">
 
-                            Fecha solicitud
+                <mat-form-field
+                    appearance="outline">
 
-                        </th>
+                    <mat-label>
+                        Buscar
+                    </mat-label>
 
-                        <td mat-cell *matCellDef="let trabajo">
+                    <mat-icon matPrefix>
+                        search
+                    </mat-icon>
 
-                            {{ trabajo.fechaSolicitud
-                            | date:'dd/MM/yyyy' }}
+                    <input
+                        matInput
+                        [(ngModel)]="buscar"
+                        (ngModelChange)="filtrar()"
+                        placeholder="ID, cliente, técnico, tarea...">
 
-                        </td>
+                </mat-form-field>
 
-                    </ng-container>
 
+                <!-- PROVINCIA -->
 
-                    <!-- Fecha trabajo -->
+                <mat-form-field appearance="outline">
 
-                    <ng-container matColumnDef="fechaFinalizado">
+                    <mat-label>
+                        Provincia
+                    </mat-label>
 
-                        <th mat-header-cell *matHeaderCellDef>
+                    <mat-select
+                        [(ngModel)]="provinciaSeleccionada"
+                        (selectionChange)="cambiarProvincia()">
 
-                            Fecha finalización
+                        <mat-option value="">
+                            Todas
+                        </mat-option>
 
-                        </th>
+                        @for (
+                            provincia of provincias;
+                            track provincia
+                        ) {
 
-                        <td mat-cell *matCellDef="let trabajo">
+                            <mat-option [value]="provincia">
+                                {{ provincia }}
+                            </mat-option>
 
-                            @if (trabajo.fechaFinalizado) {
+                        }
 
-                            {{ trabajo.fechaFinalizado
-                            | date:'dd/MM/yyyy' }}
+                    </mat-select>
 
-                            } @else {
+                </mat-form-field>
 
-                            -
 
-                            }
+                <!-- CIUDAD -->
 
-                        </td>
+                <mat-form-field appearance="outline">
 
-                    </ng-container>
+                    <mat-label>
+                        Ciudad
+                    </mat-label>
 
+                    <mat-select
+                        [(ngModel)]="ciudadSeleccionada"
+                        (selectionChange)="filtrar()">
 
-                    <!-- Cliente -->
+                        <mat-option value="">
+                            Todas
+                        </mat-option>
 
-                    <ng-container matColumnDef="cliente">
+                        @for (
+                            ciudad of ciudades;
+                            track ciudad
+                        ) {
 
-                        <th mat-header-cell *matHeaderCellDef>
+                            <mat-option [value]="ciudad">
+                                {{ ciudad }}
+                            </mat-option>
 
-                            Cliente
+                        }
 
-                        </th>
+                    </mat-select>
 
-                        <td mat-cell *matCellDef="let trabajo">
+                </mat-form-field>
 
-                            {{ trabajo.cliente }}
 
-                        </td>
+                <!-- CLIENTE -->
 
-                    </ng-container>
+                <mat-form-field appearance="outline">
 
+                    <mat-label>
+                        Cliente
+                    </mat-label>
 
-                    <!-- Provincia -->
+                    <mat-select
+                        [(ngModel)]="clienteSeleccionado"
+                        (selectionChange)="filtrar()">
 
-                    <ng-container matColumnDef="provincia">
+                        <mat-option value="">
+                            Todos
+                        </mat-option>
 
-                        <th mat-header-cell *matHeaderCellDef>
+                        @for (
+                            cliente of clientes;
+                            track cliente
+                        ) {
 
-                            Provincia
+                            <mat-option [value]="cliente">
+                                {{ cliente }}
+                            </mat-option>
 
-                        </th>
+                        }
 
-                        <td mat-cell *matCellDef="let trabajo">
+                    </mat-select>
 
-                            {{ trabajo.provincia }}
+                </mat-form-field>
 
-                        </td>
 
-                    </ng-container>
+                <!-- TÉCNICO -->
 
+                <mat-form-field appearance="outline">
 
-                    <!-- Ciudad -->
+                    <mat-label>
+                        Técnico
+                    </mat-label>
 
-                    <ng-container matColumnDef="ciudad">
+                    <mat-select
+                        [(ngModel)]="tecnicoSeleccionado"
+                        (selectionChange)="filtrar()">
 
-                        <th mat-header-cell *matHeaderCellDef>
+                        <mat-option value="">
+                            Todos
+                        </mat-option>
 
-                            Ciudad
+                        @for (
+                            tecnico of tecnicos;
+                            track tecnico
+                        ) {
 
-                        </th>
+                            <mat-option [value]="tecnico">
+                                {{ tecnico }}
+                            </mat-option>
 
-                        <td mat-cell *matCellDef="let trabajo">
+                        }
 
-                            {{ trabajo.ciudad }}
+                    </mat-select>
 
-                        </td>
+                </mat-form-field>
 
-                    </ng-container>
 
+                <!-- TAREA -->
 
-                    <!-- Técnico -->
+                <mat-form-field appearance="outline">
 
-                    <ng-container matColumnDef="tecnico">
+                    <mat-label>
+                        Tarea
+                    </mat-label>
 
-                        <th mat-header-cell *matHeaderCellDef>
+                    <mat-select
+                        [(ngModel)]="tareaSeleccionada"
+                        (selectionChange)="filtrar()">
 
-                            Técnico
+                        <mat-option value="">
+                            Todas
+                        </mat-option>
 
-                        </th>
+                        @for (
+                            tarea of tareas;
+                            track tarea
+                        ) {
 
-                        <td mat-cell *matCellDef="let trabajo">
+                            <mat-option [value]="tarea">
+                                {{ tarea }}
+                            </mat-option>
 
-                            {{ trabajo.tecnico }}
+                        }
 
-                        </td>
+                    </mat-select>
 
-                    </ng-container>
+                </mat-form-field>
 
+            </div>
 
-                    <!-- Tarea -->
 
-                    <ng-container matColumnDef="tarea">
+            <!-- =====================================
+                 FECHAS
+            ====================================== -->
 
-                        <th mat-header-cell *matHeaderCellDef>
+            <div class="filtros-fechas">
 
-                            Tarea
+                <mat-form-field appearance="outline">
 
-                        </th>
+                    <mat-label>
+                        Fecha solicitud
+                    </mat-label>
 
-                        <td mat-cell *matCellDef="let trabajo">
+                    <input
+                        matInput
+                        type="date"
+                        [(ngModel)]="fechaSolicitudSeleccionada"
+                        (ngModelChange)="filtrar()">
 
-                            {{ trabajo.tarea }}
+                </mat-form-field>
 
-                        </td>
 
-                    </ng-container>
+                <mat-form-field appearance="outline">
 
-                    <!-- Trabajo realizado -->
+                    <mat-label>
+                        Fecha inicio
+                    </mat-label>
 
-                    <ng-container matColumnDef="trabajoRealizado">
+                    <input
+                        matInput
+                        type="date"
+                        [(ngModel)]="fechaInicioSeleccionada"
+                        (ngModelChange)="filtrar()">
 
-                        <th mat-header-cell *matHeaderCellDef>
+                </mat-form-field>
 
-                            Trabajo realizado
 
-                        </th>
+                <mat-form-field appearance="outline">
 
-                        <td mat-cell *matCellDef="let trabajo">
+                    <mat-label>
+                        Fecha finalizado
+                    </mat-label>
 
-                            {{ trabajo.trabajoRealizado || '-' }}
+                    <input
+                        matInput
+                        type="date"
+                        [(ngModel)]="fechaFinalizadoSeleccionada"
+                        (ngModelChange)="filtrar()">
 
-                        </td>
-
-                    </ng-container>
-
-
-                    <!-- Acciones -->
-
-                    <ng-container matColumnDef="acciones">
-
-                        <th mat-header-cell *matHeaderCellDef>
-                            Acciones
-                        </th>
-
-                        <td mat-cell *matCellDef="let trabajo">
-                            <!-- ========================= -->
-                            <!-- VER FACTURA -->
-                            <!-- ========================= -->
-                            @if (trabajo.factura) {
-                            <button mat-icon-button color="primary" matTooltip="Ver factura" type="button"
-                                (click)="verFactura(trabajo.factura)">
-
-                                <mat-icon>
-                                    visibility
-                                </mat-icon>
-
-                            </button>
-
-
-                            <!-- ========================= -->
-                            <!-- DESCARGAR -->
-                            <!-- ========================= -->
-
-                            <button mat-icon-button color="primary" matTooltip="Descargar factura" type="button"
-                                (click)="descargarFactura(trabajo.factura)">
-
-                                <mat-icon>
-                                    download
-                                </mat-icon>
-
-                            </button>
-
-                            }
-
-
-                            <!-- ========================= -->
-                            <!-- PAGAR -->
-                            <!-- ========================= -->
-
-                            <button mat-icon-button color="accent" matTooltip="Registrar pago" type="button"
-                                (click)="pagarTrabajo(trabajo)">
-
-                                <mat-icon>
-                                    payments
-                                </mat-icon>
-
-                            </button>
-
-                        </td>
-
-                    </ng-container>
-
-                    <tr mat-header-row *matHeaderRowDef="displayedColumns">
-
-                    </tr>
-
-
-                    <tr mat-row *matRowDef="
-                        let row;
-                        columns: displayedColumns
-                    ">
-
-                    </tr>
-
-
-                </table>
+                </mat-form-field>
 
             </div>
 
         </mat-card-content>
 
     </mat-card>
+
+
+
+    <!-- =====================================================
+         DESKTOP / TABLET
+    ====================================================== -->
+
+    <mat-card class="tabla-card escritorio">
+
+        <div class="tabla-container">
+
+            <table
+                mat-table
+                [dataSource]="trabajosFiltrados">
+
+
+                <!-- ID -->
+
+                <ng-container matColumnDef="id">
+
+                    <th
+                        mat-header-cell
+                        *matHeaderCellDef>
+
+                        Nº
+
+                    </th>
+
+                    <td
+                        mat-cell
+                        *matCellDef="let trabajo">
+
+                        <strong>
+                            #{{ trabajo.id }}
+                        </strong>
+
+                    </td>
+
+                </ng-container>
+
+
+                <!-- CLIENTE -->
+
+                <ng-container matColumnDef="cliente">
+
+                    <th
+                        mat-header-cell
+                        *matHeaderCellDef>
+
+                        Cliente
+
+                    </th>
+
+                    <td
+                        mat-cell
+                        *matCellDef="let trabajo">
+
+                        {{ trabajo.cliente }}
+
+                    </td>
+
+                </ng-container>
+
+
+                <!-- TÉCNICO -->
+
+                <ng-container matColumnDef="tecnico">
+
+                    <th
+                        mat-header-cell
+                        *matHeaderCellDef>
+
+                        Técnico
+
+                    </th>
+
+                    <td
+                        mat-cell
+                        *matCellDef="let trabajo">
+
+                        {{ trabajo.tecnico }}
+
+                    </td>
+
+                </ng-container>
+
+
+                <!-- FECHA FINALIZADO -->
+
+                <ng-container matColumnDef="fechaFinalizado">
+
+                    <th
+                        mat-header-cell
+                        *matHeaderCellDef>
+
+                        Finalizado
+
+                    </th>
+
+                    <td
+                        mat-cell
+                        *matCellDef="let trabajo">
+
+                        {{ trabajo.fechaFinalizado | date:'dd/MM/yyyy HH:mm' }}
+
+                    </td>
+
+                </ng-container>
+
+
+                <!-- FACTURA -->
+
+                <ng-container matColumnDef="factura">
+
+                    <th
+                        mat-header-cell
+                        *matHeaderCellDef>
+
+                        Factura
+
+                    </th>
+
+                    <td
+                        mat-cell
+                        *matCellDef="let trabajo">
+
+                        @if (trabajo.rutaFactura) {
+
+                            <div class="acciones-factura">
+
+                                <button
+                                    mat-icon-button
+                                    matTooltip="Ver factura"
+                                    type="button"
+                                    (click)="verFactura(trabajo.rutaFactura)">
+
+                                    <mat-icon>
+                                        visibility
+                                    </mat-icon>
+
+                                </button>
+
+
+                                <button
+                                    mat-icon-button
+                                    matTooltip="Descargar factura"
+                                    type="button"
+                                    (click)="descargarFactura(trabajo.rutaFactura)">
+
+                                    <mat-icon>
+                                        download
+                                    </mat-icon>
+
+                                </button>
+
+                            </div>
+
+                        }
+                        @else {
+
+                            <span class="sin-factura">
+                                Sin factura
+                            </span>
+
+                        }
+
+                    </td>
+
+                </ng-container>
+
+
+                <!-- ACCIONES -->
+
+                <ng-container matColumnDef="acciones">
+
+                    <th
+                        mat-header-cell
+                        *matHeaderCellDef>
+
+                        Acciones
+
+                    </th>
+
+                    <td
+                        mat-cell
+                        *matCellDef="let trabajo">
+
+                        <div class="acciones">
+
+                            <button
+                                mat-raised-button
+                                color="primary"
+                                type="button"
+                                (click)="pagarTrabajo(trabajo)">
+
+                                <mat-icon>
+                                    payments
+                                </mat-icon>
+
+                                Registrar pago
+
+                            </button>
+
+                        </div>
+
+                    </td>
+
+                </ng-container>
+
+
+                <tr
+                    mat-header-row
+                    *matHeaderRowDef="columnas">
+                </tr>
+
+                <tr
+                    mat-row
+                    *matRowDef="let row; columns: columnas;">
+                </tr>
+
+            </table>
+
+
+            <!-- SIN RESULTADOS -->
+
+            @if (trabajosFiltrados.length === 0) {
+
+                <div class="sin-resultados">
+
+                    <mat-icon>
+                        payments
+                    </mat-icon>
+
+                    <p>
+                        No hay trabajos pendientes de pago.
+                    </p>
+
+                </div>
+
+            }
+
+        </div>
+
+    </mat-card>
+
+
+
+    <!-- =====================================================
+         MÓVIL - CARDS
+    ====================================================== -->
+
+    <div class="cards-movil">
+
+        @if (trabajosFiltrados.length > 0) {
+
+            @for (
+                trabajo of trabajosFiltrados;
+                track trabajo.id
+            ) {
+
+                <mat-card class="trabajo-card">
+
+                    <!-- CABECERA -->
+
+                    <div class="card-header">
+
+                        <div class="card-id">
+
+                            <span>
+                                Trabajo
+                            </span>
+
+                            <strong>
+                                #{{ trabajo.id }}
+                            </strong>
+
+                        </div>
+
+                        <div class="card-icon">
+
+                            <mat-icon>
+                                payments
+                            </mat-icon>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- DATOS -->
+
+                    <div class="card-datos">
+
+
+                        <div class="dato">
+
+                            <mat-icon>
+                                business
+                            </mat-icon>
+
+                            <div>
+
+                                <span>
+                                    Cliente
+                                </span>
+
+                                <strong>
+                                    {{ trabajo.cliente }}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="dato">
+
+                            <mat-icon>
+                                person
+                            </mat-icon>
+
+                            <div>
+
+                                <span>
+                                    Técnico
+                                </span>
+
+                                <strong>
+                                    {{ trabajo.tecnico }}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="dato">
+
+                            <mat-icon>
+                                event
+                            </mat-icon>
+
+                            <div>
+
+                                <span>
+                                    Finalizado
+                                </span>
+
+                                <strong>
+                                    {{ trabajo.fechaFinalizado | date:'dd/MM/yyyy HH:mm' }}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- FACTURA -->
+
+                        <div class="dato factura-dato">
+
+                            <mat-icon>
+                                receipt_long
+                            </mat-icon>
+
+                            <div>
+
+                                <span>
+                                    Factura
+                                </span>
+
+                                @if (trabajo.rutaFactura) {
+
+                                    <div class="factura-mobile">
+
+                                        <button
+                                            mat-stroked-button
+                                            type="button"
+                                            (click)="verFactura(trabajo.rutaFactura)">
+
+                                            <mat-icon>
+                                                visibility
+                                            </mat-icon>
+
+                                            Ver
+
+                                        </button>
+
+
+                                        <button
+                                            mat-stroked-button
+                                            type="button"
+                                            (click)="descargarFactura(trabajo.rutaFactura)">
+
+                                            <mat-icon>
+                                                download
+                                            </mat-icon>
+
+                                            Descargar
+
+                                        </button>
+
+                                    </div>
+
+                                }
+                                @else {
+
+                                    <strong class="sin-factura">
+                                        Sin factura
+                                    </strong>
+
+                                }
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ACCIÓN -->
+
+                    <div class="card-acciones">
+
+                        <button
+                            mat-raised-button
+                            color="primary"
+                            type="button"
+                            (click)="pagarTrabajo(trabajo)">
+
+                            <mat-icon>
+                                payments
+                            </mat-icon>
+
+                            Registrar pago
+
+                        </button>
+
+                    </div>
+
+                </mat-card>
+
+            }
+
+        }
+        @else {
+
+            <div class="sin-resultados">
+
+                <mat-icon>
+                    payments
+                </mat-icon>
+
+                <p>
+                    No hay trabajos pendientes de pago.
+                </p>
+
+            </div>
+
+        }
+
+    </div>
+
 </div>
