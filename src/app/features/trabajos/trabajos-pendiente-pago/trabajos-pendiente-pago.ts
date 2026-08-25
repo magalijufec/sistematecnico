@@ -11,7 +11,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -46,6 +46,7 @@ export class TrabajosPendientePagoComponent implements OnInit {
 
   private trabajoService = inject(TrabajoService);
   private toastService = inject(ToastService);
+  private router = inject(Router);
   trabajos: TrabajoFinalizado[] = [];
   trabajosFiltrados: TrabajoFinalizado[] = [];
   buscar = '';
@@ -68,20 +69,20 @@ export class TrabajosPendientePagoComponent implements OnInit {
   api = environment.api;
 
   columnas = [
-  'id',
-  'cliente',
-  'tecnico',
-  'fechaFinalizado',
-  'factura',
-  'acciones'
-];
+    'id',
+    'cliente',
+    'tecnico',
+    'fechaFinalizado',
+    'factura',
+    'acciones'
+  ];
 
   ngOnInit(): void {
     this.cargarTrabajos();
   }
 
-  verFactura(rutaFactura: string): void {
-    const url = this.api + rutaFactura;
+  verFactura(factura: string): void {
+    const url = this.api + factura;
 
     window.open(
       url,
@@ -89,8 +90,17 @@ export class TrabajosPendientePagoComponent implements OnInit {
     );
   }
 
-  descargarFactura(rutaFactura: string): void {
-    const url = this.api + rutaFactura;
+  verTrabajo(id: number): void {
+
+    this.router.navigate([
+      '/trabajos',
+      id
+    ]);
+
+  }
+
+  descargarFactura(factura: string): void {
+    const url = this.api + factura;
     const enlace = document.createElement('a');
 
     enlace.href = url;

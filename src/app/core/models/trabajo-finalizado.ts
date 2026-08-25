@@ -13,4 +13,5 @@ export interface TrabajoFinalizado {
   provincia: string;
   ciudad: string;
   trabajoRealizado: string | null;
+  factura: string;
 }

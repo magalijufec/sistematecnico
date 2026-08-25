@@ -105,6 +105,7 @@ export class TrabajosListComponent implements OnInit {
 
       const coincideTexto =
         !texto ||
+        trabajo.id.toString().includes(texto) ||
         trabajo.cliente.toLowerCase().includes(texto) ||
         trabajo.tecnico.toLowerCase().includes(texto) ||
         trabajo.tarea.toLowerCase().includes(texto);

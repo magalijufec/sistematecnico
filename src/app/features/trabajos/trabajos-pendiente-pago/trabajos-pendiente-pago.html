@@ -30,18 +30,15 @@
 
                 @if (hayFiltrosAplicados()) {
 
-                    <button
-                        mat-stroked-button
-                        type="button"
-                        (click)="limpiarFiltros()">
+                <button mat-stroked-button type="button" (click)="limpiarFiltros()">
 
-                        <mat-icon>
-                            clear
-                        </mat-icon>
+                    <mat-icon>
+                        clear
+                    </mat-icon>
 
-                        Limpiar filtros
+                    Limpiar filtros
 
-                    </button>
+                </button>
 
                 }
 
@@ -54,8 +51,7 @@
 
             <div class="filtros-grid">
 
-                <mat-form-field
-                    appearance="outline">
+                <mat-form-field appearance="outline">
 
                     <mat-label>
                         Buscar
@@ -65,10 +61,7 @@
                         search
                     </mat-icon>
 
-                    <input
-                        matInput
-                        [(ngModel)]="buscar"
-                        (ngModelChange)="filtrar()"
+                    <input matInput [(ngModel)]="buscar" (ngModelChange)="filtrar()"
                         placeholder="ID, cliente, técnico, tarea...">
 
                 </mat-form-field>
@@ -82,22 +75,20 @@
                         Provincia
                     </mat-label>
 
-                    <mat-select
-                        [(ngModel)]="provinciaSeleccionada"
-                        (selectionChange)="cambiarProvincia()">
+                    <mat-select [(ngModel)]="provinciaSeleccionada" (selectionChange)="cambiarProvincia()">
 
                         <mat-option value="">
                             Todas
                         </mat-option>
 
                         @for (
-                            provincia of provincias;
-                            track provincia
+                        provincia of provincias;
+                        track provincia
                         ) {
 
-                            <mat-option [value]="provincia">
-                                {{ provincia }}
-                            </mat-option>
+                        <mat-option [value]="provincia">
+                            {{ provincia }}
+                        </mat-option>
 
                         }
 
@@ -114,22 +105,20 @@
                         Ciudad
                     </mat-label>
 
-                    <mat-select
-                        [(ngModel)]="ciudadSeleccionada"
-                        (selectionChange)="filtrar()">
+                    <mat-select [(ngModel)]="ciudadSeleccionada" (selectionChange)="filtrar()">
 
                         <mat-option value="">
                             Todas
                         </mat-option>
 
                         @for (
-                            ciudad of ciudades;
-                            track ciudad
+                        ciudad of ciudades;
+                        track ciudad
                         ) {
 
-                            <mat-option [value]="ciudad">
-                                {{ ciudad }}
-                            </mat-option>
+                        <mat-option [value]="ciudad">
+                            {{ ciudad }}
+                        </mat-option>
 
                         }
 
@@ -146,22 +135,20 @@
                         Cliente
                     </mat-label>
 
-                    <mat-select
-                        [(ngModel)]="clienteSeleccionado"
-                        (selectionChange)="filtrar()">
+                    <mat-select [(ngModel)]="clienteSeleccionado" (selectionChange)="filtrar()">
 
                         <mat-option value="">
                             Todos
                         </mat-option>
 
                         @for (
-                            cliente of clientes;
-                            track cliente
+                        cliente of clientes;
+                        track cliente
                         ) {
 
-                            <mat-option [value]="cliente">
-                                {{ cliente }}
-                            </mat-option>
+                        <mat-option [value]="cliente">
+                            {{ cliente }}
+                        </mat-option>
 
                         }
 
@@ -178,22 +165,20 @@
                         Técnico
                     </mat-label>
 
-                    <mat-select
-                        [(ngModel)]="tecnicoSeleccionado"
-                        (selectionChange)="filtrar()">
+                    <mat-select [(ngModel)]="tecnicoSeleccionado" (selectionChange)="filtrar()">
 
                         <mat-option value="">
                             Todos
                         </mat-option>
 
                         @for (
-                            tecnico of tecnicos;
-                            track tecnico
+                        tecnico of tecnicos;
+                        track tecnico
                         ) {
 
-                            <mat-option [value]="tecnico">
-                                {{ tecnico }}
-                            </mat-option>
+                        <mat-option [value]="tecnico">
+                            {{ tecnico }}
+                        </mat-option>
 
                         }
 
@@ -210,22 +195,20 @@
                         Tarea
                     </mat-label>
 
-                    <mat-select
-                        [(ngModel)]="tareaSeleccionada"
-                        (selectionChange)="filtrar()">
+                    <mat-select [(ngModel)]="tareaSeleccionada" (selectionChange)="filtrar()">
 
                         <mat-option value="">
                             Todas
                         </mat-option>
 
                         @for (
-                            tarea of tareas;
-                            track tarea
+                        tarea of tareas;
+                        track tarea
                         ) {
 
-                            <mat-option [value]="tarea">
-                                {{ tarea }}
-                            </mat-option>
+                        <mat-option [value]="tarea">
+                            {{ tarea }}
+                        </mat-option>
 
                         }
 
@@ -248,11 +231,7 @@
                         Fecha solicitud
                     </mat-label>
 
-                    <input
-                        matInput
-                        type="date"
-                        [(ngModel)]="fechaSolicitudSeleccionada"
-                        (ngModelChange)="filtrar()">
+                    <input matInput type="date" [(ngModel)]="fechaSolicitudSeleccionada" (ngModelChange)="filtrar()">
 
                 </mat-form-field>
 
@@ -263,11 +242,7 @@
                         Fecha inicio
                     </mat-label>
 
-                    <input
-                        matInput
-                        type="date"
-                        [(ngModel)]="fechaInicioSeleccionada"
-                        (ngModelChange)="filtrar()">
+                    <input matInput type="date" [(ngModel)]="fechaInicioSeleccionada" (ngModelChange)="filtrar()">
 
                 </mat-form-field>
 
@@ -278,11 +253,7 @@
                         Fecha finalizado
                     </mat-label>
 
-                    <input
-                        matInput
-                        type="date"
-                        [(ngModel)]="fechaFinalizadoSeleccionada"
-                        (ngModelChange)="filtrar()">
+                    <input matInput type="date" [(ngModel)]="fechaFinalizadoSeleccionada" (ngModelChange)="filtrar()">
 
                 </mat-form-field>
 
@@ -302,26 +273,20 @@
 
         <div class="tabla-container">
 
-            <table
-                mat-table
-                [dataSource]="trabajosFiltrados">
+            <table mat-table [dataSource]="trabajosFiltrados">
 
 
                 <!-- ID -->
 
                 <ng-container matColumnDef="id">
 
-                    <th
-                        mat-header-cell
-                        *matHeaderCellDef>
+                    <th mat-header-cell *matHeaderCellDef>
 
                         Nº
 
                     </th>
 
-                    <td
-                        mat-cell
-                        *matCellDef="let trabajo">
+                    <td mat-cell *matCellDef="let trabajo">
 
                         <strong>
                             #{{ trabajo.id }}
@@ -336,17 +301,13 @@
 
                 <ng-container matColumnDef="cliente">
 
-                    <th
-                        mat-header-cell
-                        *matHeaderCellDef>
+                    <th mat-header-cell *matHeaderCellDef>
 
                         Cliente
 
                     </th>
 
-                    <td
-                        mat-cell
-                        *matCellDef="let trabajo">
+                    <td mat-cell *matCellDef="let trabajo">
 
                         {{ trabajo.cliente }}
 
@@ -359,17 +320,13 @@
 
                 <ng-container matColumnDef="tecnico">
 
-                    <th
-                        mat-header-cell
-                        *matHeaderCellDef>
+                    <th mat-header-cell *matHeaderCellDef>
 
                         Técnico
 
                     </th>
 
-                    <td
-                        mat-cell
-                        *matCellDef="let trabajo">
+                    <td mat-cell *matCellDef="let trabajo">
 
                         {{ trabajo.tecnico }}
 
@@ -382,17 +339,13 @@
 
                 <ng-container matColumnDef="fechaFinalizado">
 
-                    <th
-                        mat-header-cell
-                        *matHeaderCellDef>
+                    <th mat-header-cell *matHeaderCellDef>
 
                         Finalizado
 
                     </th>
 
-                    <td
-                        mat-cell
-                        *matCellDef="let trabajo">
+                    <td mat-cell *matCellDef="let trabajo">
 
                         {{ trabajo.fechaFinalizado | date:'dd/MM/yyyy HH:mm' }}
 
@@ -405,55 +358,45 @@
 
                 <ng-container matColumnDef="factura">
 
-                    <th
-                        mat-header-cell
-                        *matHeaderCellDef>
+                    <th mat-header-cell *matHeaderCellDef>
 
                         Factura
 
                     </th>
 
-                    <td
-                        mat-cell
-                        *matCellDef="let trabajo">
+                    <td mat-cell *matCellDef="let trabajo">
 
-                        @if (trabajo.rutaFactura) {
+                        @if (trabajo.factura) {
 
-                            <div class="acciones-factura">
+                        <div class="acciones-factura">
 
-                                <button
-                                    mat-icon-button
-                                    matTooltip="Ver factura"
-                                    type="button"
-                                    (click)="verFactura(trabajo.rutaFactura)">
+                            <button mat-icon-button matTooltip="Ver factura" type="button"
+                                (click)="verFactura(trabajo.factura)">
 
-                                    <mat-icon>
-                                        visibility
-                                    </mat-icon>
+                                <mat-icon>
+                                    visibility
+                                </mat-icon>
 
-                                </button>
+                            </button>
 
 
-                                <button
-                                    mat-icon-button
-                                    matTooltip="Descargar factura"
-                                    type="button"
-                                    (click)="descargarFactura(trabajo.rutaFactura)">
+                            <button mat-icon-button matTooltip="Descargar factura" type="button"
+                                (click)="descargarFactura(trabajo.factura)">
 
-                                    <mat-icon>
-                                        download
-                                    </mat-icon>
+                                <mat-icon>
+                                    download
+                                </mat-icon>
 
-                                </button>
+                            </button>
 
-                            </div>
+                        </div>
 
                         }
                         @else {
 
-                            <span class="sin-factura">
-                                Sin factura
-                            </span>
+                        <span class="sin-factura">
+                            Sin factura
+                        </span>
 
                         }
 
@@ -466,34 +409,23 @@
 
                 <ng-container matColumnDef="acciones">
 
-                    <th
-                        mat-header-cell
-                        *matHeaderCellDef>
+                    <th mat-header-cell *matHeaderCellDef>
 
                         Acciones
 
                     </th>
 
-                    <td
-                        mat-cell
-                        *matCellDef="let trabajo">
+                    <td mat-cell *matCellDef="let trabajo">
 
                         <div class="acciones">
-
-                            <button
-                                mat-raised-button
-                                color="primary"
-                                type="button"
-                                (click)="pagarTrabajo(trabajo)">
-
-                                <mat-icon>
-                                    payments
-                                </mat-icon>
-
-                                Registrar pago
-
+                            <button mat-raised-button color="primary" type="button" (click)="verTrabajo(trabajo.id)">
+                                <mat-icon>visibility</mat-icon>Ver
                             </button>
 
+                            <button mat-raised-button color="primary" type="button" (click)="pagarTrabajo(trabajo)">
+                                <mat-icon>payments</mat-icon>
+                                Registrar pago
+                            </button>
                         </div>
 
                     </td>
@@ -501,14 +433,10 @@
                 </ng-container>
 
 
-                <tr
-                    mat-header-row
-                    *matHeaderRowDef="columnas">
+                <tr mat-header-row *matHeaderRowDef="columnas">
                 </tr>
 
-                <tr
-                    mat-row
-                    *matRowDef="let row; columns: columnas;">
+                <tr mat-row *matRowDef="let row; columns: columnas;">
                 </tr>
 
             </table>
@@ -518,17 +446,17 @@
 
             @if (trabajosFiltrados.length === 0) {
 
-                <div class="sin-resultados">
+            <div class="sin-resultados">
 
-                    <mat-icon>
-                        payments
-                    </mat-icon>
+                <mat-icon>
+                    payments
+                </mat-icon>
 
-                    <p>
-                        No hay trabajos pendientes de pago.
-                    </p>
+                <p>
+                    No hay trabajos pendientes de pago.
+                </p>
 
-                </div>
+            </div>
 
             }
 
@@ -546,209 +474,196 @@
 
         @if (trabajosFiltrados.length > 0) {
 
-            @for (
-                trabajo of trabajosFiltrados;
-                track trabajo.id
-            ) {
+        @for (
+        trabajo of trabajosFiltrados;
+        track trabajo.id
+        ) {
 
-                <mat-card class="trabajo-card">
+        <mat-card class="trabajo-card">
 
-                    <!-- CABECERA -->
+            <!-- CABECERA -->
 
-                    <div class="card-header">
+            <div class="card-header">
 
-                        <div class="card-id">
+                <div class="card-id">
 
-                            <span>
-                                Trabajo
-                            </span>
+                    <span>
+                        Trabajo
+                    </span>
 
-                            <strong>
-                                #{{ trabajo.id }}
-                            </strong>
+                    <strong>
+                        #{{ trabajo.id }}
+                    </strong>
 
-                        </div>
+                </div>
 
-                        <div class="card-icon">
+                <div class="card-icon">
 
-                            <mat-icon>
-                                payments
-                            </mat-icon>
+                    <mat-icon>
+                        payments
+                    </mat-icon>
 
-                        </div>
+                </div>
 
-                    </div>
-
-
-                    <!-- DATOS -->
-
-                    <div class="card-datos">
+            </div>
 
 
-                        <div class="dato">
+            <!-- DATOS -->
 
-                            <mat-icon>
-                                business
-                            </mat-icon>
-
-                            <div>
-
-                                <span>
-                                    Cliente
-                                </span>
-
-                                <strong>
-                                    {{ trabajo.cliente }}
-                                </strong>
-
-                            </div>
-
-                        </div>
+            <div class="card-datos">
 
 
-                        <div class="dato">
+                <div class="dato">
 
-                            <mat-icon>
-                                person
-                            </mat-icon>
+                    <mat-icon>
+                        business
+                    </mat-icon>
 
-                            <div>
+                    <div>
 
-                                <span>
-                                    Técnico
-                                </span>
+                        <span>
+                            Cliente
+                        </span>
 
-                                <strong>
-                                    {{ trabajo.tecnico }}
-                                </strong>
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="dato">
-
-                            <mat-icon>
-                                event
-                            </mat-icon>
-
-                            <div>
-
-                                <span>
-                                    Finalizado
-                                </span>
-
-                                <strong>
-                                    {{ trabajo.fechaFinalizado | date:'dd/MM/yyyy HH:mm' }}
-                                </strong>
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- FACTURA -->
-
-                        <div class="dato factura-dato">
-
-                            <mat-icon>
-                                receipt_long
-                            </mat-icon>
-
-                            <div>
-
-                                <span>
-                                    Factura
-                                </span>
-
-                                @if (trabajo.rutaFactura) {
-
-                                    <div class="factura-mobile">
-
-                                        <button
-                                            mat-stroked-button
-                                            type="button"
-                                            (click)="verFactura(trabajo.rutaFactura)">
-
-                                            <mat-icon>
-                                                visibility
-                                            </mat-icon>
-
-                                            Ver
-
-                                        </button>
-
-
-                                        <button
-                                            mat-stroked-button
-                                            type="button"
-                                            (click)="descargarFactura(trabajo.rutaFactura)">
-
-                                            <mat-icon>
-                                                download
-                                            </mat-icon>
-
-                                            Descargar
-
-                                        </button>
-
-                                    </div>
-
-                                }
-                                @else {
-
-                                    <strong class="sin-factura">
-                                        Sin factura
-                                    </strong>
-
-                                }
-
-                            </div>
-
-                        </div>
+                        <strong>
+                            {{ trabajo.cliente }}
+                        </strong>
 
                     </div>
 
+                </div>
 
-                    <!-- ACCIÓN -->
 
-                    <div class="card-acciones">
+                <div class="dato">
 
-                        <button
-                            mat-raised-button
-                            color="primary"
-                            type="button"
-                            (click)="pagarTrabajo(trabajo)">
+                    <mat-icon>
+                        person
+                    </mat-icon>
 
-                            <mat-icon>
-                                payments
-                            </mat-icon>
+                    <div>
 
-                            Registrar pago
+                        <span>
+                            Técnico
+                        </span>
 
-                        </button>
+                        <strong>
+                            {{ trabajo.tecnico }}
+                        </strong>
 
                     </div>
 
-                </mat-card>
+                </div>
 
-            }
+
+                <div class="dato">
+
+                    <mat-icon>
+                        event
+                    </mat-icon>
+
+                    <div>
+
+                        <span>
+                            Finalizado
+                        </span>
+
+                        <strong>
+                            {{ trabajo.fechaFinalizado | date:'dd/MM/yyyy HH:mm' }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- FACTURA -->
+
+                <div class="dato factura-dato">
+
+                    <mat-icon>
+                        receipt_long
+                    </mat-icon>
+
+                    <div>
+
+                        <span>
+                            Factura
+                        </span>
+
+                        @if (trabajo.factura) {
+
+                        <div class="factura-mobile">
+
+                            <button mat-stroked-button type="button" (click)="verFactura(trabajo.factura)">
+
+                                <mat-icon>
+                                    visibility
+                                </mat-icon>
+
+                                Ver
+
+                            </button>
+
+
+                            <button mat-stroked-button type="button" (click)="descargarFactura(trabajo.factura)">
+
+                                <mat-icon>
+                                    download
+                                </mat-icon>
+
+                                Descargar
+
+                            </button>
+
+                        </div>
+
+                        }
+                        @else {
+
+                        <strong class="sin-factura">
+                            Sin factura
+                        </strong>
+
+                        }
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- ACCIÓN -->
+
+            <div class="card-acciones">
+                <button mat-raised-button color="primary" type="button" (click)="verTrabajo(trabajo.id)">
+                    <mat-icon>visibility</mat-icon>
+                    Ver trabajo
+                </button>
+
+                <button mat-raised-button color="primary" type="button" (click)="pagarTrabajo(trabajo)">
+                    <mat-icon>payments</mat-icon>
+                    Registrar pago
+                </button>
+            </div>
+
+        </mat-card>
+
+        }
 
         }
         @else {
 
-            <div class="sin-resultados">
+        <div class="sin-resultados">
 
-                <mat-icon>
-                    payments
-                </mat-icon>
+            <mat-icon>
+                payments
+            </mat-icon>
 
-                <p>
-                    No hay trabajos pendientes de pago.
-                </p>
+            <p>
+                No hay trabajos pendientes de pago.
+            </p>
 
-            </div>
+        </div>
 
         }
 
