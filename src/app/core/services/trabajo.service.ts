@@ -31,13 +31,8 @@ export class TrabajoService {
     return this.http.get<Trabajo>(`${this.api}/${id}`);
   }
 
-  // crear(trabajo: TrabajoCreate): Observable<Trabajo> {
-  //   return this.http.post<Trabajo>(this.api, trabajo);
-  // }
   crear(trabajo: TrabajoCreate): Observable<Trabajo> {
-
     const formData = new FormData();
-
     formData.append('IdCliente', trabajo.idCliente.toString());
     formData.append('IdTecnico', trabajo.idTecnico.toString());
     formData.append('IdTarea', trabajo.idTarea.toString());
@@ -115,23 +110,7 @@ export class TrabajoService {
         responseType: 'blob'
       }
     );
-  }
-
-  subirImagen(
-    idTrabajo: number,
-    archivo: File,
-    esAntes: boolean) {
-
-    const form = new FormData();
-
-    form.append('archivo', archivo);
-    form.append('esAntes', esAntes.toString());
-
-    return this.http.post(
-      `${this.api}/${idTrabajo}/imagenes`,
-      form
-    );
-  }
+  }  
 
   subirFactura(
     idTrabajo: number,
