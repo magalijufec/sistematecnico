@@ -549,4 +549,39 @@ export class TrabajoDetalleComponent implements OnInit {
 
   }
 
+  descargarInforme(id: number): void {
+    this.trabajoService
+      .descargarInformePdf(id)
+      .subscribe({
+        next: (blob: Blob) => {
+          const url =
+            window.URL.createObjectURL(blob);
+
+          const link =
+            document.createElement('a');
+
+          link.href = url;
+          link.download =
+            `Informe-Trabajo-${id}.pdf`;
+
+          link.click();
+          window.URL.revokeObjectURL(url);
+        },
+
+        error: error => {
+          console.error(
+            'Error al descargar informe PDF',
+            error
+          );
+
+          this.toastService.error(
+            'No se pudo descargar el informe.'
+          );
+
+        }
+
+      });
+
+  }
+
 }

@@ -36,22 +36,22 @@ export class TrabajoService {
   // }
   crear(trabajo: TrabajoCreate): Observable<Trabajo> {
 
-  const formData = new FormData();
+    const formData = new FormData();
 
-  formData.append('IdCliente', trabajo.idCliente.toString());
-  formData.append('IdTecnico', trabajo.idTecnico.toString());
-  formData.append('IdTarea', trabajo.idTarea.toString());
-  formData.append('Comentarios', trabajo.comentarios ?? '');
+    formData.append('IdCliente', trabajo.idCliente.toString());
+    formData.append('IdTecnico', trabajo.idTecnico.toString());
+    formData.append('IdTarea', trabajo.idTarea.toString());
+    formData.append('Comentarios', trabajo.comentarios ?? '');
 
-  trabajo.archivos?.forEach(a => {
-    formData.append('Archivos', a);
-  });
+    trabajo.archivos?.forEach(a => {
+      formData.append('Archivos', a);
+    });
 
-  return this.http.post<Trabajo>(
-    this.api,
-    formData
-  );
-}
+    return this.http.post<Trabajo>(
+      this.api,
+      formData
+    );
+  }
 
   actualizar(id: number, trabajo: TrabajoCreate): Observable<void> {
     return this.http.put<void>(`${this.api}/${id}`, trabajo);
@@ -108,18 +108,14 @@ export class TrabajoService {
     );
   }
 
-  // subirImagenes(idTrabajo: number, archivos: File[], tipo: number) {
-  //   const formData = new FormData();
-  //   formData.append("tipo", tipo.toString());
-  //   archivos.forEach(x => {
-  //     formData.append("files", x);
-  //   });
-
-  //   return this.http.post(
-  //     `${this.api}/${idTrabajo}/imagenes`,
-  //     formData
-  //   );
-  // }
+  descargarInformePdf(id: number): Observable<Blob> {
+    return this.http.get(
+      `${this.api}/${id}/informe-pdf`,
+      {
+        responseType: 'blob'
+      }
+    );
+  }
 
   subirImagen(
     idTrabajo: number,
