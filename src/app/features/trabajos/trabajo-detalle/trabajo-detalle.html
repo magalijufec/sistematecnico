@@ -136,6 +136,34 @@
             {{ trabajo.comentarios || 'Sin comentarios' }}
         </p>
 
+        @if (
+        trabajo.imagenesSolicitud &&
+        trabajo.imagenesSolicitud.length > 0
+        ) {
+
+        <mat-divider></mat-divider>
+
+        <h3>
+            Imágenes de la solicitud
+        </h3>
+
+        <div class="imagenes-solicitud">
+
+            @for (
+            imagen of trabajo.imagenesSolicitud;
+            track imagen.id
+            ) {
+
+            <img class="imagen-solicitud" [src]="obtenerUrlImagen(
+            imagen.rutaArchivo
+        )" alt="Imagen solicitud">
+
+            }
+
+        </div>
+
+        }
+
 
 
         <!-- ================================================= -->
@@ -656,26 +684,26 @@
 
         }
 
-        @if (trabajo.estado === 'Trabajo finalizado' || 
-        trabajo.estado === 'Aprobado' || 
-        trabajo.estado === 'Pendiente pago' || 
+        @if (trabajo.estado === 'Trabajo finalizado' ||
+        trabajo.estado === 'Aprobado' ||
+        trabajo.estado === 'Pendiente pago' ||
         trabajo.estado === 'Finalizado') {
-        <mat-card class="seccion-accion">            
+        <mat-card class="seccion-accion">
             <mat-card-header>
-                <mat-card-title>                    
-                    Informe del trabajo                    
+                <mat-card-title>
+                    Informe del trabajo
                 </mat-card-title>
             </mat-card-header>
             <mat-card-content>
                 <p>Descargá el informe PDF completo del trabajo.
                 </p>
                 <button 20 mat-raised-button 21 color="warn" 22 type="button" 23 (click)="descargarInforme(trabajo.id)">
-                    <mat-icon>                        
-                        picture_as_pdf                        
+                    <mat-icon>
+                        picture_as_pdf
                     </mat-icon>
                     Descargar informe PDF
-                </button>                
-            </mat-card-content>            
+                </button>
+            </mat-card-content>
         </mat-card>
         }
 

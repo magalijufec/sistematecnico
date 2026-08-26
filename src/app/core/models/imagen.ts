@@ -14,3 +14,8 @@ export interface TrabajoImagenComparacion {
   imagenAntes: Imagen | null;
   imagenDespues: Imagen | null;
 }
+
+export interface ImagenSolicitud {
+  id: number;
+  rutaArchivo: string;
+}
