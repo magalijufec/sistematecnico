@@ -30,12 +30,12 @@ export const MENU: MenuItem[] = [
     text: 'Pendientes de pago', 
     icon: 'payments', 
     route: '/trabajos-pendiente-pago', 
-    roles: [ 'Administrador', 'Pagos' ] 
+    roles: [ 'Administrador', 'Pagos', 'Farmacia' ] 
   },
   { 
     text: 'Trabajos finalizados', 
     icon: 'task_alt', route: '/trabajos-finalizados', 
-    roles: [ 'Administrador', 'Sistemas', 'Pagos', 'Tecnico' ] 
+    roles: [ 'Administrador', 'Sistemas', 'Pagos', 'Tecnico', 'Farmacia' ] 
   }
 
 ];
