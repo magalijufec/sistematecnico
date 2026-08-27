@@ -260,11 +260,8 @@
     <mat-card class="tabla-card escritorio">
 
         <div class="tabla-container">
-
             <table mat-table [dataSource]="trabajosFiltrados">
-
                 <!-- ID -->
-
                 <ng-container matColumnDef="id">
 
                     <th mat-header-cell *matHeaderCellDef>
@@ -283,9 +280,7 @@
 
                 </ng-container>
 
-
                 <!-- CLIENTE -->
-
                 <ng-container matColumnDef="cliente">
 
                     <th mat-header-cell *matHeaderCellDef>
@@ -302,48 +297,43 @@
 
                 </ng-container>
 
-
                 <!-- TÉCNICO -->
-
                 <ng-container matColumnDef="tecnico">
-
-                    <th mat-header-cell *matHeaderCellDef>
-
-                        Técnico
-
-                    </th>
-
-                    <td mat-cell *matCellDef="let trabajo">
-
-                        {{ trabajo.tecnico }}
-
-                    </td>
-
+                    <th mat-header-cell *matHeaderCellDef>Técnico</th>
+                    <td mat-cell *matCellDef="let trabajo">{{ trabajo.tecnico }}</td>
                 </ng-container>
 
+                <!-- TAREA -->
+                <ng-container matColumnDef="tarea">
+                    <th mat-header-cell *matHeaderCellDef>Tarea</th>
+                    <td mat-cell *matCellDef="let trabajo">{{ trabajo.tarea }}</td>
+                </ng-container>
+
+                <!-- FECHA SOLICITUD -->
+                <ng-container matColumnDef="fechaSolicitud">
+                    <th mat-header-cell *matHeaderCellDef>Solicitud</th>
+                    <td mat-cell *matCellDef="let trabajo">
+                        {{ trabajo.fechaSolicitud | date:'dd/MM/yy HH:mm' }}
+                    </td>
+                </ng-container>
+
+                <!-- FECHA INICIO -->
+                <ng-container matColumnDef="fechaInicio">
+                    <th mat-header-cell *matHeaderCellDef>Inicio</th>
+                    <td mat-cell *matCellDef="let trabajo">
+                        {{ trabajo.fechaInicio | date:'dd/MM/yy HH:mm' }}
+                    </td>
+                </ng-container>
 
                 <!-- FECHA FINALIZADO -->
-
                 <ng-container matColumnDef="fechaFinalizado">
-
-                    <th mat-header-cell *matHeaderCellDef>
-
-                        Finalizado
-
-                    </th>
-
+                    <th mat-header-cell *matHeaderCellDef>Finalizado</th>
                     <td mat-cell *matCellDef="let trabajo">
-
-                        {{ trabajo.fechaFinalizado | date:'dd/MM/yyyy HH:mm' }}
-
+                        {{ trabajo.fechaFinalizado | date:'dd/MM/yy HH:mm' }}
                     </td>
-
                 </ng-container>
 
-                <!-- ========================================= -->
                 <!-- ACCIONES Y FACTURAS -->
-                <!-- ========================================= -->
-
                 <ng-container matColumnDef="acciones">
                     <th mat-header-cell *matHeaderCellDef>
                         Acciones
@@ -352,12 +342,9 @@
                     <td mat-cell *matCellDef="let trabajo">
                         <div class="acciones-contenedor">
                             <!-- VER TRABAJO -->
-
                             <div class="accion-ver-trabajo">
-
                                 <button mat-stroked-button color="primary" type="button"
                                     (click)="verTrabajo(trabajo.id)">
-
                                     <mat-icon>
                                         visibility
                                     </mat-icon>
@@ -366,12 +353,10 @@
                             </div>
 
                             <!-- FACTURAS -->
-
                             @if (
                             trabajo.facturas &&
                             trabajo.facturas.length > 0
                             ) {
-
                             <div class="facturas-listado">
 
                                 @for (
@@ -533,15 +518,12 @@
                     </mat-icon>
 
                     <div>
-
                         <span>
                             Cliente
                         </span>
-
                         <strong>
                             {{ trabajo.cliente }}
                         </strong>
-
                     </div>
 
                 </div>
@@ -549,43 +531,50 @@
 
                 <div class="dato">
 
-                    <mat-icon>
-                        person
-                    </mat-icon>
-
+                    <mat-icon>person</mat-icon>
                     <div>
-
-                        <span>
-                            Técnico
-                        </span>
-
-                        <strong>
-                            {{ trabajo.tecnico }}
-                        </strong>
-
+                        <span>Técnico</span>
+                        <strong>{{ trabajo.tecnico }}</strong>
                     </div>
 
                 </div>
 
+                <div class="dato">
+                    <mat-icon>event</mat-icon>
+                    <div>
+                        <span>Solicitud</span>
+                        <strong>
+                            {{ trabajo.fechaSolicitud | date:'dd/MM/yy HH:mm' }}
+                        </strong>
+                    </div>
+                </div>
 
                 <div class="dato">
-
                     <mat-icon>
                         event
                     </mat-icon>
-
                     <div>
+                        <span>
+                            Inicio
+                        </span>
+                        <strong>
+                            {{ trabajo.fechaInicio | date:'dd/MM/yy HH:mm' }}
+                        </strong>
+                    </div>
+                </div>
 
+                <div class="dato">
+                    <mat-icon>
+                        event
+                    </mat-icon>
+                    <div>
                         <span>
                             Finalizado
                         </span>
-
                         <strong>
-                            {{ trabajo.fechaFinalizado | date:'dd/MM/yyyy HH:mm' }}
+                            {{ trabajo.fechaFinalizado | date:'dd/MM/yy HH:mm' }}
                         </strong>
-
                     </div>
-
                 </div>
 
                 <!-- ========================================= -->

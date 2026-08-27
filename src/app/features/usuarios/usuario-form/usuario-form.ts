@@ -1,7 +1,10 @@
 import { Component, OnInit, inject } from '@angular/core';
 import {
+  AbstractControl,
   FormBuilder,
   ReactiveFormsModule,
+  ValidationErrors,
+  ValidatorFn,
   Validators
 } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -103,7 +106,7 @@ export class UsuarioFormComponent implements OnInit {
     cambiarPassword: [false],
     password: [''],
     confirmarPassword: ['']
-  });
+  }, { validators: [this.passwordsIguales()] });
 
   ngOnInit(): void {
     this.idUsuario = Number(this.route.snapshot.paramMap.get('id'));
@@ -332,7 +335,43 @@ export class UsuarioFormComponent implements OnInit {
       .updateValueAndValidity();
   }
 
+  private passwordsIguales(): ValidatorFn {
+    return (
+      control: AbstractControl
+    ): ValidationErrors | null => {
+
+      const password =
+        control.get('password')?.value;
+
+      const confirmar =
+        control.get('confirmarPassword')?.value;
+
+      if (!password && !confirmar) {
+        return null;
+      }
+
+      return password === confirmar
+        ? null
+        : { passwordsDistintas: true };
+
+    };
+
+  }
+
   guardar(): void {
+
+    if (
+      this.form.hasError(
+        'passwordsDistintas'
+      )
+    ) {
+
+      this.toastService.warning(
+        'Las contraseñas no coinciden.'
+      );
+
+      return;
+    }
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       console.log('Formulario inválido', this.form.value);

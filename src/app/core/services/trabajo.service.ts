@@ -64,10 +64,7 @@ export class TrabajoService {
     );
   }
 
-  finalizarTrabajo(
-    id: number,
-    trabajoRealizado: string
-  ): Observable<any> {
+  finalizarTrabajo(id: number, trabajoRealizado: string): Observable<any> {
 
     return this.http.put(
       `${this.api}/${id}/finalizar`,
@@ -77,16 +74,10 @@ export class TrabajoService {
     );
   }
 
-  solicitarMejora(
-    id: number,
-    comentario: string
-  ): Observable<any> {
-
+  solicitarMejora(id: number, comentario: string): Observable<any> {
     return this.http.put(
       `${this.api}/${id}/solicitar-mejora`,
-      {
-        comentario: comentario
-      }
+      { comentario: comentario }
     );
   }
 
@@ -97,9 +88,7 @@ export class TrabajoService {
     );
   }
 
-  registrarPagoFactura(
-    idTrabajo: number,
-    idFactura: number
+  registrarPagoFactura(idTrabajo: number, idFactura: number
   ): Observable<RegistrarPagoFacturaResponse> {
 
     return this.http.put<RegistrarPagoFacturaResponse>(

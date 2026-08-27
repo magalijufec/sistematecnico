@@ -72,6 +72,9 @@ export class TrabajosPendientePagoComponent implements OnInit {
     'id',
     'cliente',
     'tecnico',
+    'tarea',
+    'fechaSolicitud',
+    'fechaInicio',
     'fechaFinalizado',
     'acciones'
   ];
