@@ -1,17 +1,9 @@
 <div class="pagina">
-
-    <!-- =========================================
-         TÍTULO
-    ========================================== -->
-
     <div class="toolbar">
         <h2>Trabajos pendientes de pago</h2>
     </div>
 
-
-    <!-- =========================================
-         FILTROS
-    ========================================== -->
+    <!-- FILTROS-->
 
     <mat-card class="filtros-card">
 
@@ -263,18 +255,13 @@
 
     </mat-card>
 
-
-
-    <!-- =====================================================
-         DESKTOP / TABLET
-    ====================================================== -->
+    <!-- DESKTOP / TABLET-->
 
     <mat-card class="tabla-card escritorio">
 
         <div class="tabla-container">
 
             <table mat-table [dataSource]="trabajosFiltrados">
-
 
                 <!-- ID -->
 
@@ -353,88 +340,118 @@
 
                 </ng-container>
 
-
-                <!-- FACTURA -->
-
-                <ng-container matColumnDef="factura">
-
-                    <th mat-header-cell *matHeaderCellDef>
-
-                        Factura
-
-                    </th>
-
-                    <td mat-cell *matCellDef="let trabajo">
-
-                        @if (trabajo.factura) {
-
-                        <div class="acciones-factura">
-
-                            <button mat-icon-button matTooltip="Ver factura" type="button"
-                                (click)="verFactura(trabajo.factura)">
-
-                                <mat-icon>
-                                    visibility
-                                </mat-icon>
-
-                            </button>
-
-
-                            <button mat-icon-button matTooltip="Descargar factura" type="button"
-                                (click)="descargarFactura(trabajo.factura)">
-
-                                <mat-icon>
-                                    download
-                                </mat-icon>
-
-                            </button>
-
-                        </div>
-
-                        }
-                        @else {
-
-                        <span class="sin-factura">
-                            Sin factura
-                        </span>
-
-                        }
-
-                    </td>
-
-                </ng-container>
-
-
-                <!-- ACCIONES -->
+                <!-- ========================================= -->
+                <!-- ACCIONES Y FACTURAS -->
+                <!-- ========================================= -->
 
                 <ng-container matColumnDef="acciones">
-
                     <th mat-header-cell *matHeaderCellDef>
-
                         Acciones
-
                     </th>
 
                     <td mat-cell *matCellDef="let trabajo">
+                        <div class="acciones-contenedor">
+                            <!-- VER TRABAJO -->
 
-                        <div class="acciones">
-                            <button mat-raised-button color="primary" type="button" (click)="verTrabajo(trabajo.id)">
-                                <mat-icon>visibility</mat-icon>Ver
-                            </button>
+                            <div class="accion-ver-trabajo">
 
-                            <button mat-raised-button color="primary" type="button" (click)="pagarTrabajo(trabajo)">
-                                <mat-icon>payments</mat-icon>
-                                Registrar pago
-                            </button>
+                                <button mat-stroked-button color="primary" type="button"
+                                    (click)="verTrabajo(trabajo.id)">
+
+                                    <mat-icon>
+                                        visibility
+                                    </mat-icon>
+                                    Ver trabajo
+                                </button>
+                            </div>
+
+                            <!-- FACTURAS -->
+
+                            @if (
+                            trabajo.facturas &&
+                            trabajo.facturas.length > 0
+                            ) {
+
+                            <div class="facturas-listado">
+
+                                @for (
+                                factura of trabajo.facturas;
+                                track factura.id;
+                                let numero = $index
+                                ) {
+
+                                <div class="fila-factura" [class.factura-pagada]="factura.fechaPagado">
+
+                                    <!-- VER FACTURA -->
+
+                                    <button mat-stroked-button color="primary" type="button" class="boton-factura"
+                                        (click)="verFactura(
+                                    factura.rutaArchivo
+                                )">
+
+                                        <mat-icon>
+                                            picture_as_pdf
+                                        </mat-icon>
+                                        Factura #{{ factura.id }}
+                                    </button>
+
+                                    <!-- ESTADO / PAGO -->
+                                    @if (factura.fechaPagado) {
+                                    <button mat-stroked-button type="button" class="boton-pagado" disabled>
+                                        <mat-icon>
+                                            check_circle
+                                        </mat-icon>
+                                        Pagada
+                                    </button>
+
+                                    <span class="fecha-pago-factura">
+
+                                        Pagada el
+
+                                        {{
+                                        factura.fechaPagado
+                                        | date:'dd/MM/yyyy HH:mm'
+                                        }}
+
+                                    </span>
+
+                                    } @else {
+
+                                    <button mat-raised-button color="accent" type="button" class="boton-registrar-pago"
+                                        [disabled]="!!factura.fechaPagado" (click)="pagarFactura(
+                                        trabajo,
+                                        factura.id
+                                    )">
+
+                                        <mat-icon>
+                                            payments
+                                        </mat-icon>
+
+                                        Registrar pago
+
+                                    </button>
+
+                                    }
+
+                                </div>
+
+                                }
+
+                            </div>
+
+                            } @else {
+
+                            <span class="sin-factura">
+                                Sin facturas
+                            </span>
+
+                            }
+
                         </div>
 
                     </td>
 
                 </ng-container>
-
-
-                <tr mat-header-row *matHeaderRowDef="columnas">
-                </tr>
 
                 <tr mat-row *matRowDef="let row; columns: columnas;">
                 </tr>
@@ -464,11 +481,7 @@
 
     </mat-card>
 
-
-
-    <!-- =====================================================
-         MÓVIL - CARDS
-    ====================================================== -->
+    <!-- MÓVIL - CARDS -->
 
     <div class="cards-movil">
 
@@ -575,8 +588,9 @@
 
                 </div>
 
-
-                <!-- FACTURA -->
+                <!-- ========================================= -->
+                <!-- FACTURAS MÓVIL -->
+                <!-- ========================================= -->
 
                 <div class="dato factura-dato">
 
@@ -584,44 +598,88 @@
                         receipt_long
                     </mat-icon>
 
-                    <div>
+                    <div class="facturas-mobile-contenedor">
 
                         <span>
-                            Factura
+                            Facturas
                         </span>
 
-                        @if (trabajo.factura) {
+                        @if (
+                        trabajo.facturas &&
+                        trabajo.facturas.length > 0
+                        ) {
 
-                        <div class="factura-mobile">
+                        <div class="facturas-listado facturas-mobile">
 
-                            <button mat-stroked-button type="button" (click)="verFactura(trabajo.factura)">
+                            @for (
+                            factura of trabajo.facturas;
+                            track factura.id;
+                            let numero = $index
+                            ) {
 
-                                <mat-icon>
-                                    visibility
-                                </mat-icon>
+                            <div class="fila-factura" [class.factura-pagada]="factura.fechaPagado">
 
-                                Ver
+                                <button mat-stroked-button color="primary" type="button" class="boton-factura" (click)="verFactura(
+                                factura.rutaArchivo
+                            )">
 
-                            </button>
+                                    <mat-icon>
+                                        picture_as_pdf
+                                    </mat-icon>
 
+                                    Factura #{{ numero + 1 }}
 
-                            <button mat-stroked-button type="button" (click)="descargarFactura(trabajo.factura)">
+                                </button>
 
-                                <mat-icon>
-                                    download
-                                </mat-icon>
+                                @if (factura.fechaPagado) {
 
-                                Descargar
+                                <button mat-stroked-button type="button" class="boton-pagado" disabled>
 
-                            </button>
+                                    <mat-icon>
+                                        check_circle
+                                    </mat-icon>
+
+                                    Pagada
+
+                                </button>
+
+                                <span class="fecha-pago-factura">
+
+                                    {{
+                                    factura.fechaPagado
+                                    | date:'dd/MM/yyyy HH:mm'
+                                    }}
+
+                                </span>
+
+                                } @else {
+
+                                <button mat-raised-button color="accent" type="button" class="boton-registrar-pago"
+                                    [disabled]="!!factura.fechaPagado" (click)="pagarFactura(
+                                    trabajo,
+                                    factura.id
+                                )">
+
+                                    <mat-icon>
+                                        payments
+                                    </mat-icon>
+
+                                    Registrar pago
+
+                                </button>
+
+                                }
+
+                            </div>
+
+                            }
 
                         </div>
 
-                        }
-                        @else {
+                        } @else {
 
                         <strong class="sin-factura">
-                            Sin factura
+                            Sin facturas
                         </strong>
 
                         }
@@ -632,18 +690,18 @@
 
             </div>
 
-            <!-- ACCIÓN -->
-
             <div class="card-acciones">
+
                 <button mat-raised-button color="primary" type="button" (click)="verTrabajo(trabajo.id)">
-                    <mat-icon>visibility</mat-icon>
+
+                    <mat-icon>
+                        visibility
+                    </mat-icon>
+
                     Ver trabajo
+
                 </button>
 
-                <button mat-raised-button color="primary" type="button" (click)="pagarTrabajo(trabajo)">
-                    <mat-icon>payments</mat-icon>
-                    Registrar pago
-                </button>
             </div>
 
         </mat-card>

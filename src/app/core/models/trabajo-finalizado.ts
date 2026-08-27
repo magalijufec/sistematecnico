@@ -1,3 +1,5 @@
+import { TrabajoFactura } from "./trabajo-factura";
+
 export interface TrabajoFinalizado {
   id: number;
   fechaSolicitud: string;
@@ -13,5 +15,5 @@ export interface TrabajoFinalizado {
   provincia: string;
   ciudad: string;
   trabajoRealizado: string | null;
-  factura: string;
+  facturas: TrabajoFactura[];
 }

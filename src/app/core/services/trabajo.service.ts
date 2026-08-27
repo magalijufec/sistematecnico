@@ -6,6 +6,7 @@ import { TrabajoCreate } from '../models/trabajo-create';
 import { TrabajoDetalle } from '../models/trabajo-detalle';
 import { TrabajoFinalizado } from '../models/trabajo-finalizado';
 import { environment } from '../../environments/environment';
+import { RegistrarPagoFacturaResponse } from '../models/registrar-pago-factura';
 
 @Injectable({
   providedIn: 'root'
@@ -96,11 +97,16 @@ export class TrabajoService {
     );
   }
 
-  registrarPago(id: number): Observable<any> {
-    return this.http.put(
-      `${this.api}/${id}/registrar-pago`,
+  registrarPagoFactura(
+    idTrabajo: number,
+    idFactura: number
+  ): Observable<RegistrarPagoFacturaResponse> {
+
+    return this.http.put<RegistrarPagoFacturaResponse>(
+      `${this.api}/${idTrabajo}/facturas/${idFactura}/registrar-pago`,
       {}
     );
+
   }
 
   descargarInformePdf(id: number): Observable<Blob> {
@@ -110,21 +116,27 @@ export class TrabajoService {
         responseType: 'blob'
       }
     );
-  }  
+  }
 
-  subirFactura(
-    idTrabajo: number,
-    archivo: File
-  ) {
+  subirFacturas(idTrabajo: number, archivos: File[]) {
     const formData = new FormData();
-    formData.append('archivo', archivo);
 
-    return this.http.post(
-      `${this.api}/${idTrabajo}/factura`,
+    archivos.forEach(archivo => {
+      formData.append(
+        'archivos',
+        archivo,
+        archivo.name
+      );
+    });
+
+    return this.http.post<{
+      mensaje: string;
+      cantidad: number;
+    }>(
+      `${this.api}/${idTrabajo}/facturas`,
       formData
     );
   }
-
 
 
 }

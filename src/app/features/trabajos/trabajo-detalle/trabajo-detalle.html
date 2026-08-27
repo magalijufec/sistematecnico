@@ -164,53 +164,34 @@
 
         }
 
-
-
-        <!-- ================================================= -->
         <!-- ESTADO: PENDIENTE -->
-        <!-- ================================================= -->
 
         @if (trabajo.estado === 'Pendiente') {
 
         <mat-card class="seccion-accion">
-
             <mat-card-header>
-
                 <mat-card-title>
                     Trabajo pendiente
                 </mat-card-title>
-
             </mat-card-header>
 
-
             <mat-card-content>
-
                 <p>
                     El trabajo está pendiente de inicio.
                 </p>
 
-
                 @if (esRol('Tecnico')) {
-
                 <button mat-raised-button color="primary" type="button" (click)="iniciarTrabajo()">
-
                     <mat-icon>
                         play_arrow
                     </mat-icon>
-
                     Iniciar trabajo
-
                 </button>
-
                 }
 
             </mat-card-content>
-
         </mat-card>
-
         }
-
-
 
         <!-- ================================================= -->
         <!-- TRABAJO REALIZADO E IMÁGENES -->
@@ -235,48 +216,30 @@
 
             </mat-card-header>
 
-
             <mat-card-content>
-
-
-                <!-- ========================================= -->
                 <!-- DETALLE DEL TRABAJO REALIZADO -->
-                <!-- ========================================= -->
-
                 @if (trabajo.trabajoRealizado) {
-
                 <h3>
                     Detalle del trabajo realizado
                 </h3>
 
-
                 <div class="trabajo-realizado-texto">
-
                     <p>
                         {{ trabajo.trabajoRealizado }}
                     </p>
-
                 </div>
-
                 }
 
-
-
-                <!-- ========================================= -->
                 <!-- IMÁGENES DE COMPARACIÓN -->
-                <!-- ========================================= -->
 
                 @if (trabajo.estado !== 'En proceso' &&(
                 trabajo.trabajoRealizado ||
                 comparaciones.length > 0)) {
-
                 <mat-divider></mat-divider>
-
 
                 <h3>
                     Imágenes del trabajo
                 </h3>
-
 
                 <div class="comparaciones">
 
@@ -286,18 +249,11 @@
                     ) {
 
                     <div class="comparacion-row">
-
-
-                        <!-- ================================= -->
                         <!-- IMAGEN ANTES -->
-                        <!-- ================================= -->
-
                         <div class="imagen-columna">
-
                             <h3>
                                 Antes
                             </h3>
-
 
                             @if (comparacion.imagenAntes) {
 
@@ -324,8 +280,6 @@
                             }
 
                         </div>
-
-
 
                         <!-- ================================= -->
                         <!-- IMAGEN DESPUÉS -->
@@ -375,10 +329,7 @@
             </mat-card-content>
 
         </mat-card>
-
         }
-
-
 
         <!-- ================================================= -->
         <!-- ESTADO: EN PROCESO -->
@@ -403,18 +354,11 @@
 
             </mat-card-header>
 
-
             <mat-card-content>
-
-
-                <!-- ========================================= -->
                 <!-- IMÁGENES EDITABLES -->
-                <!-- ========================================= -->
-
                 <h3>
                     Imágenes del trabajo
                 </h3>
-
 
                 <div class="comparaciones">
 
@@ -425,10 +369,7 @@
 
                     <div class="comparacion-row">
 
-
-                        <!-- ================================= -->
                         <!-- ANTES -->
-                        <!-- ================================= -->
 
                         <div class="imagen-columna">
 
@@ -856,11 +797,7 @@
 
         }
 
-
-
-        <!-- ================================================= -->
         <!-- ESTADO: APROBADO -->
-        <!-- ================================================= -->
 
         @if (
         (trabajo.estado === 'Aprobado' || trabajo.estado === 'Pendiente pago'
@@ -891,40 +828,67 @@
 
 
                 <h3>
-                    Factura
+                    Facturas
                 </h3>
 
-
-                @if (trabajo.factura) {
+                @if (
+                trabajo.facturas &&
+                trabajo.facturas.length > 0
+                ) {
 
                 <p>
-                    Factura cargada correctamente.
+                    Facturas cargadas:
                 </p>
 
+                <div class="lista-facturas">
 
-                <a mat-raised-button color="primary" [href]="apiUrl + trabajo.factura" target="_blank">
+                    @for (
+                    factura of trabajo.facturas;
+                    track factura.id
+                    ) {
+
+                    <a mat-raised-button color="primary" [href]="api + factura.rutaArchivo" target="_blank">
+
+                        <mat-icon>
+                            picture_as_pdf
+                        </mat-icon>
+
+                        Factura {{ factura.id }}
+
+                    </a>
+
+                    }
+
+                </div>
+
+                @if (esRol('Tecnico')) {
+
+                <br>
+
+                <input #facturaInput type="file" multiple accept="application/pdf" hidden
+                    (change)="subirFactura($event)">
+
+                <button mat-stroked-button color="primary" type="button" (click)="facturaInput.click()">
 
                     <mat-icon>
-                        picture_as_pdf
+                        add
                     </mat-icon>
 
-                    Ver factura
+                    Agregar más facturas
 
-                </a>
+                </button>
 
                 }
 
+                }
                 @else {
 
                 <p>
-                    El técnico debe cargar la factura.
+                    El técnico debe cargar las facturas.
                 </p>
 
-
-                <input #facturaInput type="file" accept="application/pdf" hidden (change)="
-                        subirFactura($event)
-                    ">
-
+                <input #facturaInput type="file" multiple accept="application/pdf" hidden
+                    (change)="subirFactura($event)">
 
                 <button mat-raised-button color="primary" type="button" (click)="facturaInput.click()">
 
@@ -932,11 +896,12 @@
                         upload_file
                     </mat-icon>
 
-                    Cargar factura
+                    Cargar facturas
 
                 </button>
 
                 }
+
 
             </mat-card-content>
 
@@ -972,34 +937,21 @@
             <mat-card-content>
 
                 <p>
-                    El trabajo fue aprobado y la factura está pendiente de pago.
+                    El trabajo fue aprobado y la/s factura/s está pendiente de pago.
                 </p>
 
-
-                @if (trabajo.factura) {
-
-                <a mat-raised-button color="primary" [href]="apiUrl + trabajo.factura" target="_blank">
+                @for (
+                factura of trabajo.facturas;
+                track factura.id
+                ) {
+                <a mat-raised-button color="primary" [href]="api + factura.rutaArchivo" target="_blank">
 
                     <mat-icon>
                         picture_as_pdf
                     </mat-icon>
-
-                    Ver factura
-
+                    Factura {{ factura.id }}
                 </a>
-
                 }
-
-
-                <button mat-raised-button color="primary" type="button" (click)="registrarPago()">
-
-                    <mat-icon>
-                        payments
-                    </mat-icon>
-
-                    Registrar pago
-
-                </button>
 
             </mat-card-content>
 

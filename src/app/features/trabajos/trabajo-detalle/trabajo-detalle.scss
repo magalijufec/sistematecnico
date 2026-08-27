@@ -59,6 +59,13 @@
   color: #888;
 }
 
+.lista-facturas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
 .acciones-comparacion {
   display: flex;
   align-items: center;

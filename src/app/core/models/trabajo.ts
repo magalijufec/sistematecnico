@@ -1,3 +1,5 @@
+import { TrabajoFactura } from "./trabajo-factura";
+
 export interface Trabajo {
 
   id: number;
@@ -34,7 +36,5 @@ export interface Trabajo {
 
   tieneFactura: boolean;
 
-  factura: string | null;
-
-  //cantidadImagenes: number;
+  facturas: TrabajoFactura[]
 }

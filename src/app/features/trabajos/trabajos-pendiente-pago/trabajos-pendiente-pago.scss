@@ -117,12 +117,6 @@ tr.mat-mdc-row:hover {
     white-space: nowrap;
 }
 
-.acciones-factura {
-    display: flex;
-    align-items: center;
-    gap: 2px;
-}
-
 
 /* =========================================
    FACTURA
@@ -295,20 +289,21 @@ tr.mat-mdc-row:hover {
     align-items: flex-start;
 }
 
-.factura-mobile {
+.facturas-listado {
     display: flex;
-
-    gap: 8px;
-
-    margin-top: 5px;
-
-    flex-wrap: wrap;
+    flex-direction: column;
+    gap: 6px;
 }
 
-.factura-mobile button {
-    min-height: 38px;
+.facturas-listado {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
 }
 
+.facturas-listado button {
+    justify-content: flex-start;
+}
 
 /* =========================================
    ACCIONES CARD

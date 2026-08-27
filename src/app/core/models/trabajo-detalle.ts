@@ -1,4 +1,5 @@
 import { ImagenSolicitud } from "./imagen";
+import { TrabajoFactura } from "./trabajo-factura";
 
 export interface TrabajoDetalle {
   id: number;
@@ -13,7 +14,7 @@ export interface TrabajoDetalle {
   estadoColor: string;
   comentarios: string | null;
   trabajoRealizado: string;
-  factura: string | null;
+  facturas: TrabajoFactura[];
   tieneFactura: boolean;
   imagenesSolicitud: ImagenSolicitud[];  
   solicitante: string | null;

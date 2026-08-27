@@ -73,7 +73,6 @@ export class TrabajosPendientePagoComponent implements OnInit {
     'cliente',
     'tecnico',
     'fechaFinalizado',
-    'factura',
     'acciones'
   ];
 
@@ -81,13 +80,16 @@ export class TrabajosPendientePagoComponent implements OnInit {
     this.cargarTrabajos();
   }
 
-  verFactura(factura: string): void {
-    const url = this.api + factura;
+  verFactura(rutaArchivo: string): void {
+
+    const url =
+      this.api + rutaArchivo;
 
     window.open(
       url,
       '_blank'
     );
+
   }
 
   verTrabajo(id: number): void {
@@ -99,38 +101,27 @@ export class TrabajosPendientePagoComponent implements OnInit {
 
   }
 
-  descargarFactura(factura: string): void {
-    const url = this.api + factura;
-    const enlace = document.createElement('a');
-
-    enlace.href = url;
-    enlace.target = '_blank';
-    enlace.download = '';
-
-    document.body.appendChild(enlace);
-    enlace.click();
-    document.body.removeChild(enlace);
-  }
-
-  pagarTrabajo(trabajo: TrabajoFinalizado): void {
+  pagarFactura(trabajo: TrabajoFinalizado, facturaId: number): void {
 
     if (
       !confirm(
-        `¿Confirma registrar el pago del trabajo #${trabajo.id}?`
+        `¿Confirma registrar el pago de la factura #${facturaId} del trabajo #${trabajo.id}?`
       )
     ) {
       return;
     }
 
     this.trabajoService
-      .registrarPago(trabajo.id)
+      .registrarPagoFactura(
+        trabajo.id,
+        facturaId
+      )
       .subscribe({
 
         next: response => {
 
           this.toastService.success(
-            response?.mensaje ??
-            'Pago registrado correctamente.'
+            response.mensaje
           );
 
           this.cargarTrabajos();
@@ -140,50 +131,38 @@ export class TrabajosPendientePagoComponent implements OnInit {
         error: error => {
 
           console.error(
-            'Error al registrar pago',
+            'Error al registrar pago de factura',
             error
           );
 
           this.toastService.error(
             error.error?.mensaje ??
-            'No se pudo registrar el pago.'
+            'No se pudo registrar el pago de la factura.'
           );
 
         }
 
       });
-
   }
 
   cargarTrabajos(): void {
-
     this.trabajoService
       .obtenerPendientePago()
       .subscribe({
-
         next: data => {
-
           this.trabajos = data ?? [];
-
           this.trabajosFiltrados = [
             ...this.trabajos
           ];
-
           this.cargarOpcionesFiltros();
-
         },
-
         error: error => {
-
           console.error(
             'Error al cargar trabajos pendientes de pago',
             error
           );
-
         }
-
       });
-
   }
 
   cargarOpcionesFiltros(): void {
@@ -229,7 +208,6 @@ export class TrabajosPendientePagoComponent implements OnInit {
 
   }
 
-
   actualizarCiudades(): void {
 
     let trabajosParaCiudades = this.trabajos;
@@ -251,7 +229,6 @@ export class TrabajosPendientePagoComponent implements OnInit {
     );
 
   }
-
 
   obtenerValoresUnicos(
     valores: Array<string | null | undefined>
@@ -399,7 +376,6 @@ export class TrabajosPendientePagoComponent implements OnInit {
 
   }
 
-
   normalizarTexto(
     valor: string | null | undefined
   ): string {
@@ -414,7 +390,6 @@ export class TrabajosPendientePagoComponent implements OnInit {
       .trim();
 
   }
-
 
   hayFiltrosAplicados(): boolean {
 
@@ -431,7 +406,6 @@ export class TrabajosPendientePagoComponent implements OnInit {
     );
 
   }
-
 
   limpiarFiltros(): void {
 

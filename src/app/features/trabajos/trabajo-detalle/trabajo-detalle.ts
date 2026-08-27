@@ -15,6 +15,7 @@ import { TrabajoImagenComparacionService } from '../../../core/services/trabajo.
 import { AuthService } from '../../../core/services/auth.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { environment } from '../../../environments/environment';
+import { TrabajoFactura } from '../../../core/models/trabajo-factura';
 
 @Component({
   selector: 'app-trabajo-detalle',
@@ -44,7 +45,7 @@ export class TrabajoDetalleComponent implements OnInit {
 
   comparaciones: TrabajoImagenComparacion[] = [];
   trabajo?: TrabajoDetalle;
-  factura?: string | null;
+  facturas?: TrabajoFactura;
   rolUsuario: string | null = null;
   idTrabajo = 0;
   mostrarSolicitudMejora = false;
@@ -344,36 +345,56 @@ export class TrabajoDetalleComponent implements OnInit {
   }
 
   subirFactura(event: Event) {
-    const input = event.target as HTMLInputElement;
-    if (!input.files || input.files.length === 0) {
+
+    const input =
+      event.target as HTMLInputElement;
+
+    if (
+      !input.files ||
+      input.files.length === 0
+    ) {
       return;
     }
+
     if (!this.trabajo) {
       return;
     }
-    const archivo = input.files[0];
+
+    const archivos =
+      Array.from(input.files);
 
     this.trabajoService
-      .subirFactura(
+      .subirFacturas(
         this.trabajo.id,
-        archivo
+        archivos
       )
       .subscribe({
+
         next: () => {
+
           this.toastService.success(
-            'Factura cargada correctamente'
+            archivos.length === 1
+              ? 'Factura cargada correctamente'
+              : `${archivos.length} facturas cargadas correctamente`
           );
+
           this.cargarTrabajo();
+
         },
+
         error: err => {
+
           console.error(
             'Error al cargar factura',
             err
           );
+
           this.toastService.error(
             'No se pudo cargar la factura'
           );
+
         }
+
       });
   }
 
@@ -508,46 +529,7 @@ export class TrabajoDetalleComponent implements OnInit {
 
       });
 
-  }
-
-  registrarPago(): void {
-
-    if (!confirm(
-      '¿Confirma que desea registrar el pago?'
-    )) {
-      return;
-    }
-
-    this.trabajoService
-      .registrarPago(this.idTrabajo)
-      .subscribe({
-
-        next: () => {
-
-          this.toastService.success(
-            'Pago registrado correctamente.'
-          );
-
-          this.cargarTrabajo();
-
-        },
-
-        error: error => {
-
-          console.error(
-            'Error al registrar pago',
-            error
-          );
-          this.toastService.error(
-            error.error?.mensaje ??
-            'No se pudo registrar el pago.'
-          );
-
-        }
-
-      });
-
-  }
+  }  
 
   descargarInforme(id: number): void {
     this.trabajoService
