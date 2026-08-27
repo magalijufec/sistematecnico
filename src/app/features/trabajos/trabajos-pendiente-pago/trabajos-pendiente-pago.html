@@ -265,17 +265,13 @@
                 <ng-container matColumnDef="id">
 
                     <th mat-header-cell *matHeaderCellDef>
-
                         Nº
-
                     </th>
 
                     <td mat-cell *matCellDef="let trabajo">
-
                         <strong>
                             #{{ trabajo.id }}
                         </strong>
-
                     </td>
 
                 </ng-container>
@@ -437,6 +433,8 @@
                     </td>
 
                 </ng-container>
+
+                 <tr mat-header-row *matHeaderRowDef="columnas"></tr>
 
                 <tr mat-row *matRowDef="let row; columns: columnas;">
                 </tr>

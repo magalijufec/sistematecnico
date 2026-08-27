@@ -1,0 +1,98 @@
+mat-card {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+mat-card-header {
+  margin-bottom: 20px;
+}
+
+mat-card-title {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ============================
+   GRID PRINCIPAL
+============================ */
+
+.grid-form {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(320px, 1fr)
+    );
+
+  gap: 16px;
+}
+
+/* TODOS LOS CAMPOS */
+
+.grid-form mat-form-field {
+  width: 100%;
+}
+
+/* ============================
+   CONTRASEÑA
+============================ */
+
+.cambiar-password {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.seccion-password {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ============================
+   CHECKBOX + BOTONES
+============================ */
+
+.acciones-finales {
+  margin-top: 10px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.botones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.botones button {
+  min-width: 160px;
+}
+
+/* ============================
+   MÓVIL
+============================ */
+
+@media (max-width: 768px) {
+
+  .grid-form {
+    grid-template-columns: 1fr;
+  }
+
+  .botones {
+    flex-direction: column;
+  }
+
+  .botones button {
+    width: 100%;
+  }
+
+}
