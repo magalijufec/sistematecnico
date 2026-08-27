@@ -212,7 +212,8 @@ export const routes: Routes = [
                         'Administrador',
                         'Sistemas',
                         'Tecnico',
-                        'Farmacia'
+                        'Farmacia',
+                        'Pagos'
                     ])
 
                 ],

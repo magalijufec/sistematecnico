@@ -12,7 +12,7 @@ export const MENU: MenuItem[] = [
     text: 'Trabajos',     
     icon: 'engineering', 
     route: '/trabajos', 
-    roles: [ 'Administrador', 'Sistemas', 'Tecnico', 'Farmacia' ] 
+    roles: [ 'Administrador', 'Sistemas', 'Tecnico', 'Farmacia', 'Pagos' ] 
   }, 
   { 
     text: 'Usuarios', 
