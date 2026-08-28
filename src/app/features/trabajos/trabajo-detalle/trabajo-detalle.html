@@ -800,10 +800,9 @@
         <!-- ESTADO: APROBADO -->
 
         @if (
-        (trabajo.estado === 'Aprobado' || trabajo.estado === 'Pendiente pago'
-        || trabajo.estado === 'Finalizado')
+        (trabajo.estado === 'Aprobado' || trabajo.estado === 'Finalizado')
         && (esRol('Tecnico') || esRol('Administrador')
-        || esRol('Pagos') )
+        || esRol('Pagos')  )
         ) {
 
         <mat-divider></mat-divider>
@@ -917,7 +916,7 @@
 
         @if (
         trabajo.estado === 'Pendiente pago'
-        && esRol('Pagos')
+        && (esRol('Pagos') || esRol('Farmacia') )
         ) {
 
         <mat-divider></mat-divider>
