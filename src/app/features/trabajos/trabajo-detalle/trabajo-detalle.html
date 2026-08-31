@@ -628,7 +628,7 @@
         @if (trabajo.estado === 'Trabajo finalizado' ||
         trabajo.estado === 'Aprobado' ||
         trabajo.estado === 'Pendiente pago' ||
-        trabajo.estado === 'Finalizado') {
+        trabajo.estado === 'Pagado') {
         <mat-card class="seccion-accion">
             <mat-card-header>
                 <mat-card-title>
@@ -800,7 +800,7 @@
         <!-- ESTADO: APROBADO -->
 
         @if (
-        (trabajo.estado === 'Aprobado' || trabajo.estado === 'Finalizado')
+        (trabajo.estado === 'Aprobado' || trabajo.estado === 'Pagado')
         && (esRol('Tecnico') || esRol('Administrador')
         || esRol('Pagos')  )
         ) {
@@ -961,11 +961,11 @@
 
 
         <!-- ================================================= -->
-        <!-- ESTADO: FINALIZADO -->
+        <!-- ESTADO: Pagado -->
         <!-- ================================================= -->
 
         @if (
-        trabajo.estado === 'Finalizado'
+        trabajo.estado === 'Pagado'
         ) {
 
         <mat-divider></mat-divider>

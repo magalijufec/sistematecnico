@@ -77,11 +77,11 @@ import {
     MatTooltipModule    
   ],
 
-  templateUrl: './trabajos-finalizados.html',
+  templateUrl: './trabajos-pagados.html',
 
-  styleUrl: './trabajos-finalizados.scss'
+  styleUrl: './trabajos-pagados.scss'
 })
-export class TrabajosFinalizadosComponent implements OnInit {
+export class TrabajosPagadosComponent implements OnInit {
 
   private trabajoService = inject(TrabajoService);
   private router = inject(Router);
@@ -139,7 +139,7 @@ export class TrabajosFinalizadosComponent implements OnInit {
   cargarTrabajos(): void {
 
     this.trabajoService
-      .obtenerFinalizados()
+      .obtenerPagados()
       .subscribe({
 
         next: data => {

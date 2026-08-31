@@ -4,7 +4,7 @@ export interface Dashboard {
   trabajosFinalizados: number;
   aprobados: number;
   pendientePago: number;
-  finalizados: number;
+  pagados: number;
 
   totalTrabajos: number;
   totalClientes: number;

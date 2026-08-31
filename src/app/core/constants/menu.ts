@@ -33,8 +33,8 @@ export const MENU: MenuItem[] = [
     roles: [ 'Administrador', 'Pagos', 'Farmacia' ] 
   },
   { 
-    text: 'Trabajos finalizados', 
-    icon: 'task_alt', route: '/trabajos-finalizados', 
+    text: 'Trabajos pagados', 
+    icon: 'task_alt', route: '/trabajos-pagados', 
     roles: [ 'Administrador', 'Sistemas', 'Pagos', 'Tecnico', 'Farmacia' ] 
   }
 

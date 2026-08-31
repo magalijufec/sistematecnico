@@ -20,8 +20,8 @@ export class TrabajoService {
     return this.http.get<Trabajo[]>(`${this.api}/no-finalizados`);
   }
 
-  obtenerFinalizados(): Observable<TrabajoFinalizado[]> {
-    return this.http.get<TrabajoFinalizado[]>(`${this.api}/finalizados`);
+  obtenerPagados(): Observable<TrabajoFinalizado[]> {
+    return this.http.get<TrabajoFinalizado[]>(`${this.api}/pagados`);
   }
 
   obtenerPendientePago(): Observable<TrabajoFinalizado[]> {

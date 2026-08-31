@@ -45,8 +45,8 @@ import {
 } from './features/usuarios/cambiar-password/cambiar-password';
 
 import {
-    TrabajosFinalizadosComponent
-} from './features/trabajos/trabajos-finalizados/trabajos-finalizados';
+    TrabajosPagadosComponent
+} from './features/trabajos/trabajos-pagados/trabajos-pagados';
 
 import {
     TrabajosPendientePagoComponent
@@ -274,31 +274,7 @@ export const routes: Routes = [
 
             },
 
-
-            // ============================
-            // TRABAJOS FINALIZADOS
-            // ============================
-
-            {
-                path:
-                    'trabajos-finalizados',
-
-                component:
-                    TrabajosFinalizadosComponent,
-
-                canActivate: [
-
-                    roleGuard([
-                        'Administrador',
-                        'Sistemas',
-                        'Pagos',
-                        'Tecnico',
-                        'Farmacia'
-                    ])
-
-                ]
-
-            },
+            
 
 
             // ============================
@@ -317,6 +293,32 @@ export const routes: Routes = [
                     roleGuard([
                         'Administrador',
                         'Pagos',
+                        'Farmacia'
+                    ])
+
+                ]
+
+            },
+
+
+            // ============================
+            // TRABAJOS PAGADOS
+            // ============================
+
+            {
+                path:
+                    'trabajos-pagados',
+
+                component:
+                    TrabajosPagadosComponent,
+
+                canActivate: [
+
+                    roleGuard([
+                        'Administrador',
+                        'Sistemas',
+                        'Pagos',
+                        'Tecnico',
                         'Farmacia'
                     ])
 
