@@ -16,6 +16,7 @@ import { AuthService } from '../../../core/services/auth.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { environment } from '../../../environments/environment';
 import { TrabajoFactura } from '../../../core/models/trabajo-factura';
+import { QuillModule } from 'ngx-quill';
 
 @Component({
   selector: 'app-trabajo-detalle',
@@ -29,7 +30,7 @@ import { TrabajoFactura } from '../../../core/models/trabajo-factura';
     MatButtonModule,
     MatIconModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule, QuillModule
   ],
   templateUrl: './trabajo-detalle.html',
   styleUrl: './trabajo-detalle.scss'
@@ -65,6 +66,15 @@ export class TrabajoDetalleComponent implements OnInit {
       );
     this.cargarTrabajo();
   }
+
+  quillConfig = {
+    toolbar: [
+      ['bold', 'italic', 'underline'],
+      [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+      ['link'],
+      ['clean']
+    ]
+  };
 
   esRol(...roles: string[]): boolean {
     return this.authService.tieneRol(
@@ -529,7 +539,7 @@ export class TrabajoDetalleComponent implements OnInit {
 
       });
 
-  }  
+  }
 
   descargarInforme(id: number): void {
     this.trabajoService

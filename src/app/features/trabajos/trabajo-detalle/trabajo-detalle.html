@@ -198,36 +198,27 @@
         <!-- SE MUESTRA INDEPENDIENTEMENTE DEL ESTADO -->
         <!-- ================================================= -->
 
-        @if (
-        trabajo.trabajoRealizado ||
-        comparaciones.length > 0
-        ) {
-
+        @if (trabajo.trabajoRealizado || comparaciones.length > 0) {
         <mat-divider></mat-divider>
 
-
         <mat-card class="seccion-trabajo-realizado">
-
+            @if (trabajo.trabajoRealizado) {
             <mat-card-header>
-
-                <mat-card-title>
-                    Trabajo realizado
-                </mat-card-title>
-
+                <mat-card-title>Trabajo realizado</mat-card-title>
             </mat-card-header>
+            }
 
             <mat-card-content>
                 <!-- DETALLE DEL TRABAJO REALIZADO -->
                 @if (trabajo.trabajoRealizado) {
+
                 <h3>
                     Detalle del trabajo realizado
                 </h3>
 
-                <div class="trabajo-realizado-texto">
-                    <p>
-                        {{ trabajo.trabajoRealizado }}
-                    </p>
+                <div class="trabajo-realizado-texto" [innerHTML]="trabajo.trabajoRealizado">
                 </div>
+
                 }
 
                 <!-- IMÁGENES DE COMPARACIÓN -->
@@ -554,31 +545,16 @@
 
                 <mat-divider></mat-divider>
 
-                <!-- ========================================= -->
                 <!-- TRABAJO REALIZADO -->
-                <!-- ========================================= -->
 
                 <h3>
                     Trabajo realizado
                 </h3>
 
+                <quill-editor [(ngModel)]="trabajo.trabajoRealizado" class="editor-trabajo">
+                </quill-editor>
 
-                <mat-form-field appearance="outline" class="w-100">
-
-                    <mat-label>
-                        Detalle del trabajo realizado
-                    </mat-label>
-
-
-                    <textarea matInput rows="6" [(ngModel)]="trabajo.trabajoRealizado">
-
-                    </textarea>
-
-                </mat-form-field>
-
-                <!-- ========================================= -->
                 <!-- FINALIZAR -->
-                <!-- ========================================= -->
 
                 <div class="acciones">
 
@@ -802,7 +778,7 @@
         @if (
         (trabajo.estado === 'Aprobado' || trabajo.estado === 'Pagado')
         && (esRol('Tecnico') || esRol('Administrador')
-        || esRol('Pagos')  )
+        || esRol('Pagos') )
         ) {
 
         <mat-divider></mat-divider>
