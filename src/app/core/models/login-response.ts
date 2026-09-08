@@ -5,4 +5,5 @@ export interface LoginResponse {
   nombreApellido: string;
   idPerfil: number;
   perfil: string;
+  clienteId: number | null;
 }

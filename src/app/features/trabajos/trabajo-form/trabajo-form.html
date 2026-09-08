@@ -1,152 +1,445 @@
-<mat-card>
+<mat-card class="trabajo-form-card">
 
     <mat-card-header>
 
         <mat-card-title>
 
             @if (!esEdicion) {
-
-            Nueva Solicitud de Trabajo
-
+                Nueva solicitud de trabajo
             } @else {
-
-            Editar Trabajo #{{ idTrabajo }}
-
+                Editar trabajo #{{ idTrabajo }}
             }
 
         </mat-card-title>
+
+        <mat-card-subtitle>
+
+            Complete los datos obligatorios para registrar
+            la solicitud.
+
+        </mat-card-subtitle>
 
     </mat-card-header>
 
 
     <mat-card-content>
 
-        <form [formGroup]="form" class="formulario">
+        <form
+            [formGroup]="form"
+            class="formulario"
+            (ngSubmit)="guardar()">
 
 
-            <!-- ============================== -->
-            <!-- CLIENTE -->
-            <!-- ============================== -->
+            <!-- ========================================= -->
+            <!-- DATOS PRINCIPALES -->
+            <!-- ========================================= -->
 
-            <mat-form-field appearance="outline">
+            <section class="seccion-formulario">
 
-                <mat-label>
-                    Cliente
-                </mat-label>
+                <div class="seccion-titulo">
 
+                    <mat-icon>
+                        assignment
+                    </mat-icon>
 
-                <mat-select formControlName="idCliente" (selectionChange)="cambioCliente()">
+                    <div>
 
-                    <mat-option>
+                        <h3>
+                            Datos de la solicitud
+                        </h3>
 
-                        <ngx-mat-select-search [formControl]="clienteFiltro" placeholderLabel="Buscar cliente..."
-                            noEntriesFoundLabel="No se encontraron clientes">
+                        <p>
+                            Seleccione el cliente, sector y tarea.
+                        </p>
 
-                        </ngx-mat-select-search>
+                    </div>
 
-                    </mat-option>
-
-
-                    <mat-option *ngFor="let cliente of clientesFiltrados" [value]="cliente.id">
-
-                        {{ cliente.nombre }}
-
-                    </mat-option>
-
-                </mat-select>
-
-            </mat-form-field>
+                </div>
 
 
-            <!-- ============================== -->
-            <!-- TÉCNICO -->
-            <!-- ============================== -->
-
-            <mat-form-field appearance="outline">
-
-                <mat-label>
-                    Técnico
-                </mat-label>
+                <div class="form-grid">
 
 
-                <mat-select formControlName="idTecnico" [disabled]="tecnicosFiltrados.length === 0">
+                    <!-- CLIENTE -->
+
+                    @if (puedeSeleccionarCliente) {
+
+                        <mat-form-field appearance="outline">
+
+                            <mat-label>
+                                Cliente
+                            </mat-label>
+
+                            <mat-select
+                                formControlName="idCliente">
+
+                                <mat-option>
+
+                                    <ngx-mat-select-search
+                                        [formControl]="clienteFiltro"
+                                        placeholderLabel="Buscar cliente..."
+                                        noEntriesFoundLabel="No se encontraron clientes">
+
+                                    </ngx-mat-select-search>
+
+                                </mat-option>
+
+                                @for (
+                                    cliente of clientesFiltrados;
+                                    track cliente.id
+                                ) {
+
+                                    <mat-option
+                                        [value]="cliente.id">
+
+                                        {{ cliente.nombre }}
+
+                                    </mat-option>
+
+                                }
+
+                            </mat-select>
+
+                            @if (
+                                form.controls.idCliente.touched &&
+                                form.controls.idCliente.invalid
+                            ) {
+
+                                <mat-error>
+                                    Debe seleccionar un cliente.
+                                </mat-error>
+
+                            }
+
+                        </mat-form-field>
+
+                    } @else {
+
+                        <div class="campo-informativo">
+
+                            <mat-icon>
+                                business
+                            </mat-icon>
+
+                            <div>
+
+                                <span>
+                                    Cliente
+                                </span>
+
+                                <strong>
+                                    Cliente asociado al usuario
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    }
 
 
-                    <mat-option *ngFor="let t of tecnicosFiltrados" [value]="t.id">
+                    <!-- SECTOR -->
 
-                        {{ t.nombre }}
+                    <mat-form-field appearance="outline">
 
-                    </mat-option>
+                        <mat-label>
+                            Sector
+                        </mat-label>
+
+                        <mat-select
+                            formControlName="idSector">
+
+                            @for (
+                                sector of sectores;
+                                track sector.id
+                            ) {
+
+                                <mat-option
+                                    [value]="sector.id">
+
+                                    {{ sector.nombre }}
+
+                                </mat-option>
+
+                            }
+
+                        </mat-select>
+
+                        @if (
+                            form.controls.idSector.touched &&
+                            form.controls.idSector.invalid
+                        ) {
+
+                            <mat-error>
+                                Debe seleccionar un sector.
+                            </mat-error>
+
+                        }
+
+                    </mat-form-field>
 
 
-                </mat-select>
+                    <!-- TAREA -->
 
-            </mat-form-field>
+                    <mat-form-field appearance="outline">
+
+                        <mat-label>
+                            Tarea
+                        </mat-label>
+
+                        <mat-select
+                            formControlName="idTarea"
+                            [disabled]="
+                                form.controls.idSector.value <= 0 ||
+                                cargandoTareas
+                            ">
+
+                            @for (
+                                tarea of tareas;
+                                track tarea.id
+                            ) {
+
+                                <mat-option
+                                    [value]="tarea.id">
+
+                                    {{ tarea.nombre }}
+
+                                </mat-option>
+
+                            }
+
+                        </mat-select>
+
+                        @if (cargandoTareas) {
+
+                            <mat-hint>
+                                Cargando tareas del sector...
+                            </mat-hint>
+
+                        } @else if (
+                            form.controls.idSector.value > 0 &&
+                            tareas.length === 0
+                        ) {
+
+                            <mat-hint>
+                                El sector no tiene tareas disponibles.
+                            </mat-hint>
+
+                        }
+
+                        @if (
+                            form.controls.idTarea.touched &&
+                            form.controls.idTarea.invalid
+                        ) {
+
+                            <mat-error>
+                                Debe seleccionar una tarea.
+                            </mat-error>
+
+                        }
+
+                    </mat-form-field>
+
+                </div>
+
+            </section>
 
 
-            <!-- ============================== -->
-            <!-- TAREA -->
-            <!-- ============================== -->
+            <!-- ========================================= -->
+            <!-- TÉCNICOS -->
+            <!-- ========================================= -->
 
-            <mat-form-field appearance="outline">
+            @if (puedeAsignarTecnicos) {
 
-                <mat-label>
-                    Tarea
-                </mat-label>
+                <section class="seccion-formulario">
+
+                    <div class="seccion-titulo">
+
+                        <mat-icon>
+                            engineering
+                        </mat-icon>
+
+                        <div>
+
+                            <h3>
+                                Técnicos
+                            </h3>
+
+                            <p>
+                                Seleccione uno o varios técnicos para
+                                solicitar presupuestos.
+                            </p>
+
+                        </div>
+
+                    </div>
 
 
-                <mat-select formControlName="idTarea">
+                    <mat-form-field
+                        appearance="outline"
+                        class="campo-completo">
+
+                        <mat-label>
+                            Técnicos asignados
+                        </mat-label>
+
+                        <mat-select
+                            formControlName="idsTecnicos"
+                            multiple
+                            [disabled]="
+                                form.controls.idCliente.value <= 0 ||
+                                cargandoTecnicos
+                            ">
+
+                            @for (
+                                tecnico of tecnicos;
+                                track tecnico.id
+                            ) {
+
+                                <mat-option
+                                    [value]="tecnico.id">
+
+                                    {{ tecnico.nombre }}
+
+                                </mat-option>
+
+                            }
+
+                        </mat-select>
+
+                        @if (cargandoTecnicos) {
+
+                            <mat-hint>
+                                Cargando técnicos...
+                            </mat-hint>
+
+                        } @else if (
+                            form.controls.idCliente.value > 0 &&
+                            tecnicos.length === 0
+                        ) {
+
+                            <mat-hint>
+                                No hay técnicos disponibles para
+                                el cliente seleccionado.
+                            </mat-hint>
+
+                        }
+
+                        @if (
+                            form.controls.idsTecnicos.touched &&
+                            form.controls.idsTecnicos.value.length === 0
+                        ) {
+
+                            <mat-error>
+                                Debe seleccionar al menos un técnico.
+                            </mat-error>
+
+                        }
+
+                    </mat-form-field>
+
+                </section>
+
+            }
 
 
-                    <mat-option *ngFor="let t of tareas" [value]="t.id">
-
-                        {{ t.nombre }}
-
-                    </mat-option>
-
-
-                </mat-select>
-
-            </mat-form-field>
-
-
-            <!-- ============================== -->
+            <!-- ========================================= -->
             <!-- COMENTARIOS -->
-            <!-- ============================== -->
+            <!-- ========================================= -->
 
-            <mat-form-field appearance="outline" class="comentarios">
+            <section class="seccion-formulario">
 
+                <div class="seccion-titulo">
 
-                <mat-label>
-                    Comentarios
-                </mat-label>
+                    <mat-icon>
+                        notes
+                    </mat-icon>
 
+                    <div>
 
-                <textarea matInput rows="5" formControlName="comentarios">
+                        <h3>
+                            Detalle de la solicitud
+                        </h3>
 
-                </textarea>
+                        <p>
+                            Agregue información adicional para el sector.
+                        </p>
 
+                    </div>
 
-            </mat-form-field>
-
-            <div class="seccion-imagenes">
-
-                <h3>
-                    Imágenes del trabajo
-                </h3>
-
-                <p>
-                    Podés seleccionar una o varias imágenes.
-                </p>
-
-                <input #imagenesInput type="file" accept="image/*" multiple hidden
-                    (change)="seleccionarArchivos($event)">
+                </div>
 
 
-                <button mat-stroked-button color="primary" type="button" (click)="imagenesInput.click()">
+                <mat-form-field
+                    appearance="outline"
+                    class="campo-completo">
+
+                    <mat-label>
+                        Comentarios
+                    </mat-label>
+
+                    <textarea
+                        matInput
+                        rows="6"
+                        formControlName="comentarios"
+                        placeholder="Describa el problema, ubicación, equipo afectado u otra información relevante...">
+
+                    </textarea>
+
+                    <mat-hint>
+                        Opcional
+                    </mat-hint>
+
+                </mat-form-field>
+
+            </section>
+
+
+            <!-- ========================================= -->
+            <!-- IMÁGENES -->
+            <!-- ========================================= -->
+
+            <section class="seccion-formulario">
+
+                <div class="seccion-titulo">
 
                     <mat-icon>
                         photo_library
+                    </mat-icon>
+
+                    <div>
+
+                        <h3>
+                            Imágenes de la solicitud
+                        </h3>
+
+                        <p>
+                            Puede adjuntar una o varias imágenes.
+                            Este campo es opcional.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <input
+                    #imagenesInput
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    hidden
+                    (change)="seleccionarArchivos($event)">
+
+
+                <button
+                    mat-stroked-button
+                    color="primary"
+                    type="button"
+                    (click)="imagenesInput.click()">
+
+                    <mat-icon>
+                        add_photo_alternate
                     </mat-icon>
 
                     Seleccionar imágenes
@@ -156,69 +449,123 @@
 
                 @if (archivos.length > 0) {
 
-                <div class="lista-imagenes">
+                    <div class="archivos-seleccionados">
 
-                    <p>
-                        {{ archivos.length }}
-                        imagen(es) seleccionada(s)
-                    </p>
+                        <div class="archivos-resumen">
 
-                    @for (archivo of archivos; track archivo.name) {
+                            <mat-icon>
+                                collections
+                            </mat-icon>
 
-                    <div class="archivo">
+                            <strong>
+                                {{ archivos.length }}
+                                imagen(es) seleccionada(s)
+                            </strong>
 
-                        <mat-icon>
-                            image
-                        </mat-icon>
+                        </div>
 
-                        <span>
-                            {{ archivo.name }}
-                        </span>
+
+                        <div class="lista-imagenes">
+
+                            @for (
+                                archivo of archivos;
+                                track archivo.name;
+                                let indice = $index
+                            ) {
+
+                                <div class="archivo">
+
+                                    <mat-icon class="archivo-icono">
+                                        image
+                                    </mat-icon>
+
+                                    <span
+                                        class="archivo-nombre"
+                                        [title]="archivo.name">
+
+                                        {{ archivo.name }}
+
+                                    </span>
+
+                                    <button
+                                        mat-icon-button
+                                        color="warn"
+                                        type="button"
+                                        aria-label="Quitar imagen"
+                                        (click)="quitarArchivo(indice)">
+
+                                        <mat-icon>
+                                            delete
+                                        </mat-icon>
+
+                                    </button>
+
+                                </div>
+
+                            }
+
+                        </div>
 
                     </div>
 
-                    }
-
-                </div>
-
                 }
 
-            </div>
+            </section>
 
 
-            <!-- ============================== -->
-            <!-- BOTONES -->
-            <!-- ============================== -->
+            <!-- ========================================= -->
+            <!-- ACCIONES -->
+            <!-- ========================================= -->
 
             <div class="botones">
 
+                <button
+                    mat-stroked-button
+                    color="warn"
+                    type="button"
+                    [disabled]="guardando"
+                    (click)="cancelar()">
 
-                <button mat-stroked-button color="warn" type="button" (click)="cancelar()">
+                    <mat-icon>
+                        close
+                    </mat-icon>
 
                     Cancelar
 
                 </button>
 
 
-                <button mat-raised-button color="primary" type="button" (click)="guardar()">
+                <button
+                    mat-raised-button
+                    color="primary"
+                    type="submit"
+                    [disabled]="guardando">
 
+                    @if (guardando) {
 
-                    @if (!esEdicion) {
+                        <mat-spinner
+                            diameter="22">
+                        </mat-spinner>
 
-                    Crear Trabajo
+                        Guardando...
 
                     } @else {
 
-                    Guardar Cambios
+                        <mat-icon>
+                            save
+                        </mat-icon>
+
+                        @if (!esEdicion) {
+                            Crear solicitud
+                        } @else {
+                            Guardar cambios
+                        }
 
                     }
 
-
                 </button>
 
-
             </div>
-
 
         </form>
 

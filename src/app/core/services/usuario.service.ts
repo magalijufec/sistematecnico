@@ -38,8 +38,8 @@ export class UsuarioService {
     return this.http.delete(`${this.api}/${id}`);
   }
 
-  obtenerTecnicos(): Observable<TecnicoCombo[]> {
-    return this.http.get<TecnicoCombo[]>(`${this.api}/tecnicos`);
+  obtenerTecnicos(idCliente: number): Observable<TecnicoCombo[]> {
+    return this.http.get<TecnicoCombo[]>(`${this.api}/${idCliente}/tecnicos`);
   }
 
 }

@@ -6,19 +6,13 @@ import { environment } from '../../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
-export class TareaService {
+export class SectorService {
 
   private http = inject(HttpClient);
-  private api = `${environment.apiUrl}/tarea`;
+  private api = `${environment.apiUrl}/sector`;
 
   obtenerTodas() {
     return this.http.get<Combo[]>(this.api);
-  }
-
-  obtenerPorSector(sectorId: number) {
-    return this.http.get<Combo[]>(
-      `${this.api}/sector/${sectorId}`
-    );
   }
 
 }

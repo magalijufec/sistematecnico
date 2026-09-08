@@ -7,13 +7,7 @@ export const MENU: MenuItem[] = [
     icon: 'dashboard', 
     route: '/dashboard', 
     roles: [ 'Administrador', 'Sistemas', 'Tecnico', 'Farmacia', 'Pagos' ] 
-  }, 
-  { 
-    text: 'Trabajos',     
-    icon: 'engineering', 
-    route: '/trabajos', 
-    roles: [ 'Administrador', 'Sistemas', 'Tecnico', 'Farmacia', 'Pagos' ] 
-  }, 
+  },   
   { 
     text: 'Usuarios', 
     icon: 'people', 
@@ -26,6 +20,18 @@ export const MENU: MenuItem[] = [
     route: '/clientes', 
     roles: [ 'Administrador' ] 
   },   
+  { 
+    text: 'Solicitudes de Trabajos',     
+    icon: 'engineering', 
+    route: '/trabajos-solicitud-list', 
+    roles: [ 'Administrador', 'Sistemas', 'Tecnico', 'Farmacia' ] 
+  }, 
+  { 
+    text: 'Trabajos en proceso',     
+    icon: 'engineering', 
+    route: '/trabajos', 
+    roles: [ 'Administrador', 'Sistemas', 'Tecnico', 'Farmacia', 'Pagos' ] 
+  }, 
   { 
     text: 'Pendientes de pago', 
     icon: 'payments', 

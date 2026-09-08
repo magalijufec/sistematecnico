@@ -1,25 +1,4 @@
-<div class="toolbar">
-
-    @if (esRol('Sistemas') || esRol('Administrador')) {
-
-    <button mat-raised-button color="primary" routerLink="/trabajos/nuevo">
-
-        <mat-icon>
-            add
-        </mat-icon>
-
-        Nuevo Trabajo
-
-    </button>
-
-    }
-
-</div>
-
-
-<!-- ========================= -->
 <!-- FILTROS -->
-<!-- ========================= -->
 
 <div class="filtros">
 
@@ -244,38 +223,17 @@
                         </th>
 
                         <td mat-cell *matCellDef="let t">
-
                             <button mat-icon-button color="primary" matTooltip="Ver trabajo" [routerLink]="[
-                                '/trabajos',
-                                t.id
-                            ]">
-
-                                <mat-icon>
-                                    visibility
-                                </mat-icon>
-
+                                '/trabajos', t.id]">
+                                <mat-icon>visibility</mat-icon>
                             </button>
 
-
-                            @if (
-                            esRol('Sistemas')
-                            || esRol('Administrador')
-                            ) {
-
-                            <button mat-icon-button color="accent" matTooltip="Editar trabajo" [routerLink]="[
-                                    '/trabajos',
-                                    t.id,
-                                    'editar'
-                                ]">
-
-                                <mat-icon>
-                                    edit
-                                </mat-icon>
-
-                            </button>
-
+                            @if (esRol('Sistemas') || esRol('Administrador')) {
+                            <!--button mat-icon-button color="accent" matTooltip="Editar trabajo" [routerLink]="[
+                                    '/trabajos', t.id, 'editar']">
+                                <mat-icon>edit</mat-icon>
+                            </button-->
                             }
-
                         </td>
 
                     </ng-container>
@@ -300,10 +258,7 @@
     </mat-card>
 </div> <!-- FIN tabla-desktop-->
 
-<!-- ========================= -->
 <!-- LISTA MOBILE -->
-<!-- ========================= -->
-
 <div class="lista-mobile">
 
     @for (t of trabajosFiltrados; track t.id) {
@@ -386,12 +341,9 @@
             </button>
 
 
-            @if (
-            esRol('Sistemas')
-            || esRol('Administrador')
-            ) {
+            @if (esRol('Sistemas') || esRol('Administrador')) {
 
-            <button mat-stroked-button color="accent" [routerLink]="[
+            <!--button mat-stroked-button color="accent" [routerLink]="[
                             '/trabajos',
                             t.id,
                             'editar'
@@ -403,7 +355,7 @@
 
                 Editar
 
-            </button>
+            </button-->
 
             }
 

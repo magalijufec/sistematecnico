@@ -63,7 +63,8 @@ import {
 import {
     roleGuard
 } from './core/guards/role.guard';
-
+import { TrabajoSolicitudComponent } from './features/trabajos/trabajo-solicitud/trabajo-solicitud';
+import { TrabajosSolicitudListComponent } from './features/trabajos/trabajos-solicitud-list/trabajos-solicitud-list';
 
 export const routes: Routes = [
 
@@ -238,7 +239,8 @@ export const routes: Routes = [
 
                             roleGuard([
                                 'Administrador',
-                                'Sistemas'
+                                'Sistemas',
+                                'Farmacia'
                             ])
 
                         ]
@@ -272,10 +274,49 @@ export const routes: Routes = [
 
                 ]
 
+            },    
+
+            // trabajo solicitud
+            {
+                path: 'trabajo-solicitud',
+                component: TrabajoSolicitudComponent,
+                canActivate: [
+                    roleGuard([
+                        'Administrador',
+                        'Sistemas',
+                        'Tecnico',
+                        'Farmacia'
+                    ])
+                ]
             },
 
-            
+            // trabajo solicitud
+            {
+                path: 'trabajo-solicitud/:id',
+                component: TrabajoSolicitudComponent,
+                canActivate: [
+                    roleGuard([
+                        'Administrador',
+                        'Sistemas',
+                        'Tecnico',
+                        'Farmacia'
+                    ])
+                ]
+            },            
 
+            // trabajos solicitud list
+            {
+                path: 'trabajos-solicitud-list',
+                component: TrabajosSolicitudListComponent,
+                canActivate: [
+                    roleGuard([
+                        'Administrador',
+                        'Sistemas',
+                        'Tecnico',
+                        'Farmacia'
+                    ])
+                ]
+            },
 
             // ============================
             // PENDIENTES DE PAGO

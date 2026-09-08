@@ -1,65 +1,360 @@
-mat-card {
+.trabajo-form-card {
+    width: min(1100px, calc(100% - 32px));
 
-    max-width: 1000px;
+    margin: 28px auto;
 
-    margin: 30px auto;
+    box-sizing: border-box;
 
+    overflow: hidden;
 }
 
-.formulario{
 
-    display:grid;
+mat-card-header {
+    padding: 24px 24px 16px;
 
-    grid-template-columns:repeat(2,1fr);
-
-    gap:20px;
-
+    border-bottom: 1px solid
+        rgba(0, 0, 0, 0.08);
 }
 
-.comentarios{
 
-    grid-column:1 / 3;
+mat-card-title {
+    font-size: 24px;
 
+    font-weight: 600;
 }
 
-.botones{
 
-    grid-column:1 / 3;
+mat-card-subtitle {
+    margin-top: 6px;
 
-    display:flex;
-
-    justify-content:flex-end;
-
-    gap:15px;
-
+    line-height: 1.5;
 }
 
-mat-form-field{
 
-    width:100%;
-
+mat-card-content {
+    padding: 24px;
 }
 
-@media(max-width:768px){
 
-    .formulario{
+.formulario {
+    display: flex;
 
-        grid-template-columns:1fr;
+    flex-direction: column;
 
+    gap: 22px;
+}
+
+
+/* =========================================
+   SECCIONES
+========================================= */
+
+.seccion-formulario {
+    padding: 20px;
+
+    border: 1px solid
+        rgba(0, 0, 0, 0.1);
+
+    border-radius: 12px;
+
+    background-color: #ffffff;
+}
+
+
+.seccion-titulo {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 12px;
+
+    margin-bottom: 18px;
+}
+
+
+.seccion-titulo > mat-icon {
+    width: 26px;
+
+    height: 26px;
+
+    font-size: 26px;
+
+    color: #3f51b5;
+}
+
+
+.seccion-titulo h3 {
+    margin: 0;
+
+    font-size: 17px;
+
+    font-weight: 600;
+}
+
+
+.seccion-titulo p {
+    margin: 4px 0 0;
+
+    color: #666;
+
+    font-size: 13px;
+
+    line-height: 1.45;
+}
+
+
+/* =========================================
+   GRID
+========================================= */
+
+.form-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+    gap: 16px;
+}
+
+
+mat-form-field {
+    width: 100%;
+}
+
+
+.campo-completo {
+    width: 100%;
+}
+
+
+/* =========================================
+   CAMPO INFORMATIVO
+========================================= */
+
+.campo-informativo {
+    min-height: 56px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 0 14px;
+
+    box-sizing: border-box;
+
+    border: 1px solid
+        rgba(0, 0, 0, 0.2);
+
+    border-radius: 4px;
+
+    background: #fafafa;
+}
+
+
+.campo-informativo mat-icon {
+    color: #666;
+}
+
+
+.campo-informativo div {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 2px;
+}
+
+
+.campo-informativo span {
+    color: #777;
+
+    font-size: 12px;
+}
+
+
+.campo-informativo strong {
+    font-size: 14px;
+}
+
+
+/* =========================================
+   IMÁGENES
+========================================= */
+
+.archivos-seleccionados {
+    margin-top: 18px;
+}
+
+
+.archivos-resumen {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin-bottom: 10px;
+
+    color: #444;
+}
+
+
+.lista-imagenes {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(250px, 1fr)
+        );
+
+    gap: 10px;
+}
+
+
+.archivo {
+    min-width: 0;
+
+    display: grid;
+
+    grid-template-columns:
+        auto minmax(0, 1fr) auto;
+
+    align-items: center;
+
+    gap: 9px;
+
+    padding: 7px 8px 7px 12px;
+
+    border: 1px solid #e0e0e0;
+
+    border-radius: 9px;
+
+    background-color: #fafafa;
+}
+
+
+.archivo-icono {
+    color: #3f51b5;
+}
+
+
+.archivo-nombre {
+    min-width: 0;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+
+    font-size: 13px;
+}
+
+
+/* =========================================
+   BOTONES
+========================================= */
+
+.botones {
+    display: flex;
+
+    justify-content: flex-end;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding-top: 4px;
+}
+
+
+.botones button {
+    min-width: 170px;
+}
+
+
+.botones button mat-spinner {
+    display: inline-block;
+
+    margin-right: 8px;
+}
+
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 850px) {
+
+    .form-grid {
+        grid-template-columns: 1fr;
     }
 
-    .comentarios{
+}
 
-        grid-column:auto;
 
+/* =========================================
+   MÓVIL
+========================================= */
+
+@media (max-width: 600px) {
+
+    .trabajo-form-card {
+        width: 100%;
+
+        margin: 0;
+
+        border-radius: 0;
     }
 
-    .botones{
 
-        grid-column:auto;
+    mat-card-header {
+        padding: 20px 16px 14px;
+    }
 
-        flex-direction:column;
 
+    mat-card-title {
+        font-size: 20px;
+    }
+
+
+    mat-card-content {
+        padding: 16px;
+    }
+
+
+    .formulario {
+        gap: 14px;
+    }
+
+
+    .seccion-formulario {
+        padding: 15px;
+
+        border-radius: 10px;
+    }
+
+
+    .lista-imagenes {
+        grid-template-columns: 1fr;
+    }
+
+
+    .botones {
+        flex-direction: column-reverse;
+    }
+
+
+    .botones button {
+        width: 100%;
+
+        min-height: 44px;
     }
 
 }

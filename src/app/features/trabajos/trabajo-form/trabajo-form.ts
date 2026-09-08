@@ -1,176 +1,476 @@
 import {
   Component,
+  OnDestroy,
   OnInit,
   inject
 } from '@angular/core';
+
 import {
   FormBuilder,
   FormControl,
   ReactiveFormsModule,
   Validators
 } from '@angular/forms';
-import {
-  CommonModule
-} from '@angular/common';
+
+import { CommonModule } from '@angular/common';
+
 import {
   ActivatedRoute,
   Router
 } from '@angular/router';
+
 import {
-  ClienteService
-} from '../../../core/services/cliente.service';
-import {
-  UsuarioService
-} from '../../../core/services/usuario.service';
-import {
-  TareaService
-} from '../../../core/services/tarea.service';
-import {
-  TrabajoService
-} from '../../../core/services/trabajo.service';
-import {
-  Combo
-} from '../../../core/models/combo';
-import {
-  TrabajoCreate
-} from '../../../core/models/trabajo-create';
+  Subject,
+  takeUntil
+} from 'rxjs';
+
 import {
   MatFormFieldModule
 } from '@angular/material/form-field';
+
 import {
   MatInputModule
 } from '@angular/material/input';
+
 import {
   MatSelectModule
 } from '@angular/material/select';
+
 import {
   MatButtonModule
 } from '@angular/material/button';
+
 import {
   MatCardModule
 } from '@angular/material/card';
+
+import {
+  MatIconModule
+} from '@angular/material/icon';
+
 import {
   NgxMatSelectSearchModule
 } from 'ngx-mat-select-search';
+
+import {
+  ClienteService
+} from '../../../core/services/cliente.service';
+
+import {
+  TareaService
+} from '../../../core/services/tarea.service';
+
+import {
+  TrabajoService
+} from '../../../core/services/trabajo.service';
+
+import {
+  SectorService
+} from '../../../core/services/sector.service';
+
+import {
+  UsuarioService
+} from '../../../core/services/usuario.service';
+
+import {
+  AuthService
+} from '../../../core/services/auth.service';
+
+import {
+  ToastService
+} from '../../../core/services/toast.service';
+
+import {
+  Combo
+} from '../../../core/models/combo';
+
+import {
+  ClienteCombo
+} from '../../../core/models/cliente-combo';
+
 import {
   TecnicoCombo
 } from '../../../core/models/tecnico-combo';
-import { ClienteCombo } from '../../../core/models/cliente-combo';
-import { ToastService } from '../../../core/services/toast.service';
-import { MatIconModule } from '@angular/material/icon';
+
+import {
+  TrabajoCreate
+} from '../../../core/models/trabajo-create';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
 
 @Component({
   selector: 'app-trabajo-form',
+
   standalone: true,
+
   imports: [
-    ReactiveFormsModule,
     CommonModule,
+    ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
     MatButtonModule,
     MatCardModule,
+    MatIconModule,
     NgxMatSelectSearchModule,
+    MatProgressSpinnerModule,
     MatIconModule
   ],
 
   templateUrl: './trabajo-form.html',
-
   styleUrl: './trabajo-form.scss'
-
 })
-export class TrabajoFormComponent implements OnInit {
+export class TrabajoFormComponent
+  implements OnInit, OnDestroy {
 
-  private fb = inject(FormBuilder);
-  private route = inject(ActivatedRoute);
-  private router = inject(Router);
-  private clienteService = inject(ClienteService);
-  private usuarioService = inject(UsuarioService);
-  private tareaService = inject(TareaService);
-  private trabajoService = inject(TrabajoService);
-  private toastService = inject(ToastService);
+  private readonly fb =
+    inject(FormBuilder);
 
-  clienteFiltro = new FormControl('');
-  archivos: File[] = [];
-  clientesFiltrados: ClienteCombo[] = [];
-  clientes: ClienteCombo[] = [];
-  tecnicos: TecnicoCombo[] = [];
-  tecnicosFiltrados: TecnicoCombo[] = [];
-  tareas: Combo[] = [];
+  private readonly route =
+    inject(ActivatedRoute);
 
-  // Guardamos los IDs para la edición
-  private clienteSeleccionadoId: number = 0;
-  private tecnicoSeleccionadoId: number = 0;
+  private readonly router =
+    inject(Router);
 
-  form = this.fb.nonNullable.group({
+  private readonly clienteService =
+    inject(ClienteService);
 
-    idCliente: [
+  private readonly tareaService =
+    inject(TareaService);
 
-      0,
+  private readonly trabajoService =
+    inject(TrabajoService);
 
-      Validators.required
+  private readonly sectorService =
+    inject(SectorService);
 
-    ],
+  private readonly usuarioService =
+    inject(UsuarioService);
 
+  private readonly authService =
+    inject(AuthService);
 
-    idTecnico: [
+  private readonly toastService =
+    inject(ToastService);
 
-      0,
-
-      Validators.required
-
-    ],
-
-
-    idTarea: [
-
-      0,
-
-      Validators.required
-
-    ],
-
-
-    comentarios: [
-
-      ''
-
-    ]
-
-  });
+  private readonly destroy$ =
+    new Subject<void>();
 
 
   idTrabajo = 0;
 
   esEdicion = false;
 
+  guardando = false;
+
+  cargandoTareas = false;
+
+  cargandoTecnicos = false;
+
+  rolUsuario = '';
+
+
+  clientes: ClienteCombo[] = [];
+
+  clientesFiltrados: ClienteCombo[] = [];
+
+  sectores: Combo[] = [];
+
+  tareas: Combo[] = [];
+
+  tecnicos: TecnicoCombo[] = [];
+
+  tecnicosFiltrados: TecnicoCombo[] = [];
+
+  archivos: File[] = [];
+
+
+  clienteFiltro =
+    new FormControl<string>(
+      '',
+      {
+        nonNullable: true
+      }
+    );
+
+  tecnicoFiltro =
+    new FormControl<string>(
+      '',
+      {
+        nonNullable: true
+      }
+    );
+
+
+  form = this.fb.nonNullable.group({
+
+    idCliente: [
+      0,
+      [
+        Validators.required,
+        Validators.min(1)
+      ]
+    ],
+
+    idSector: [
+      0,
+      [
+        Validators.required,
+        Validators.min(1)
+      ]
+    ],
+
+    idTarea: [
+      0,
+      [
+        Validators.required,
+        Validators.min(1)
+      ]
+    ],
+
+    idsTecnicos: [
+      [] as number[]
+    ],
+
+    comentarios: [
+      ''
+    ]
+
+  });
+
 
   ngOnInit(): void {
 
-    this.idTrabajo = Number(
-
-      this.route.snapshot
-        .paramMap
-        .get('id')
-
-    );
-
+    this.idTrabajo =
+      Number(
+        this.route.snapshot
+          .paramMap
+          .get('id')
+      );
 
     this.esEdicion =
       this.idTrabajo > 0;
 
+    this.cargarContextoUsuario();
 
-    // Cargar datos iniciales
+    this.configurarFiltros();
 
-    this.cargarClientes();
+    this.configurarCambiosFormulario();
 
-    this.cargarTecnicos();
+    this.cargarDatosIniciales();
+  }
 
-    this.cargarTareas();
+
+  ngOnDestroy(): void {
+
+    this.destroy$.next();
+
+    this.destroy$.complete();
+  }
 
 
-    // Si estamos editando
-    // cargamos el trabajo
+  // ==========================================
+  // CONTEXTO DEL USUARIO
+  // ==========================================
+
+  private cargarContextoUsuario(): void {
+
+    this.rolUsuario =
+      this.authService.obtenerRol() ?? '';
+
+  }
+
+
+  esRol(...roles: string[]): boolean {
+
+    const rolActual =
+      this.rolUsuario
+        .trim()
+        .toLowerCase();
+
+    return roles.some(
+      rol =>
+        rol.trim().toLowerCase() ===
+        rolActual
+    );
+  }
+
+
+  get esFarmacia(): boolean {
+
+    return this.esRol(
+      'Farmacia'
+    );
+  }
+
+
+  get puedeSeleccionarCliente(): boolean {
+
+    return this.esRol(
+      'Administrador',
+      'Sistemas',
+      'Mantenimiento',
+      'Monitoreo'
+    );
+  }
+
+
+  get puedeAsignarTecnicos(): boolean {
+
+    return this.esRol(
+      'Administrador',
+      'Sistemas',
+      'Mantenimiento',
+      'Monitoreo'
+    );
+  }
+
+
+  get sectorRestringido(): boolean {
+
+    return this.esRol(
+      'Mantenimiento',
+      'Monitoreo'
+    );
+  }
+
+
+  // ==========================================
+  // CONFIGURACIÓN INICIAL
+  // ==========================================
+
+  private configurarFiltros(): void {
+
+    this.clienteFiltro
+      .valueChanges
+      .pipe(
+        takeUntil(this.destroy$)
+      )
+      .subscribe(texto => {
+
+        const filtro =
+          this.normalizarTexto(
+            texto
+          );
+
+        this.clientesFiltrados =
+          this.clientes.filter(
+            cliente =>
+              this.normalizarTexto(
+                cliente.nombre
+              ).includes(filtro)
+          );
+
+      });
+
+
+    this.tecnicoFiltro
+      .valueChanges
+      .pipe(
+        takeUntil(this.destroy$)
+      )
+      .subscribe(texto => {
+
+        const filtro =
+          this.normalizarTexto(
+            texto
+          );
+
+        this.tecnicosFiltrados =
+          this.tecnicos.filter(
+            tecnico =>
+              this.normalizarTexto(
+                tecnico.nombre
+              ).includes(filtro)
+          );
+
+      });
+
+  }
+
+
+  private configurarCambiosFormulario(): void {
+
+    this.form.controls.idCliente
+      .valueChanges
+      .pipe(
+        takeUntil(this.destroy$)
+      )
+      .subscribe(clienteId => {
+
+        this.form.controls
+          .idsTecnicos
+          .setValue(
+            [],
+            {
+              emitEvent: false
+            }
+          );
+
+        this.tecnicos = [];
+
+        this.tecnicosFiltrados = [];
+
+        if (
+          clienteId > 0 &&
+          this.puedeAsignarTecnicos
+        ) {
+          this.cargarTecnicos(
+            clienteId
+          );
+        }
+
+      });
+
+
+    this.form.controls.idSector
+      .valueChanges
+      .pipe(
+        takeUntil(this.destroy$)
+      )
+      .subscribe(sectorId => {
+
+        this.form.controls
+          .idTarea
+          .setValue(
+            0,
+            {
+              emitEvent: false
+            }
+          );
+
+        this.tareas = [];
+
+        if (sectorId > 0) {
+
+          this.cargarTareasPorSector(
+            sectorId
+          );
+
+        }
+
+      });
+
+  }
+
+
+  private cargarDatosIniciales(): void {
+
+    this.cargarSectores();
+
+    if (this.puedeSeleccionarCliente) {
+
+      this.cargarClientes();
+
+    }
+
+    /*
+     * Para Farmacia, el cliente debería venir del usuario
+     * autenticado o desde el backend.
+     *
+     * Como tu AuthService por ahora solo expone obtenerRol(),
+     * todavía no fijamos automáticamente idCliente aquí.
+     */
 
     if (this.esEdicion) {
 
@@ -178,149 +478,38 @@ export class TrabajoFormComponent implements OnInit {
 
     }
 
-
-    // Filtro de clientes
-
-    this.clienteFiltro
-      .valueChanges
-      .subscribe(texto => {
-
-        const filtro =
-          (texto ?? '')
-            .toLowerCase();
-
-
-        this.clientesFiltrados =
-          this.clientes.filter(
-
-            cliente =>
-
-              cliente.nombre
-                .toLowerCase()
-                .includes(filtro)
-
-          );
-
-      });
-
   }
 
-  cargarTrabajo(): void {
 
-    this.trabajoService
-
-      .obtenerPorId(this.idTrabajo)
-
-      .subscribe({
-
-        next: trabajo => {
-
-          console.log(
-            'Trabajo a editar:',
-            trabajo
-          );
-
-
-          this.clienteSeleccionadoId =
-            trabajo.idCliente;
-
-
-          this.tecnicoSeleccionadoId =
-            trabajo.idTecnico;
-
-
-          this.form.patchValue({
-
-            idCliente:
-              trabajo.idCliente,
-
-            idTecnico:
-              trabajo.idTecnico,
-
-            idTarea:
-              trabajo.idTarea,
-
-            comentarios:
-              trabajo.comentarios + ''
-
-          });
-
-
-          // Intentamos filtrar técnicos
-          // por el cliente
-
-          this.filtrarTecnicosPorCliente(
-
-            trabajo.idCliente,
-
-            trabajo.idTecnico
-
-          );
-
-        },
-
-
-        error: error => {
-
-          console.error(
-
-            'Error al cargar el trabajo',
-
-            error
-
-          );
-
-        }
-
-      });
-
-  }
+  // ==========================================
+  // CLIENTES
+  // ==========================================
 
   cargarClientes(): void {
 
     this.clienteService
-
       .obtenerCombo()
-
       .subscribe({
 
         next: data => {
 
-          this.clientes = data;
+          this.clientes =
+            data ?? [];
 
           this.clientesFiltrados =
-            data;
-
-
-          // Si estamos editando
-          // y ya tenemos cliente seleccionado
-          // filtramos técnicos
-
-          if (
-            this.clienteSeleccionadoId
-          ) {
-
-            this.filtrarTecnicosPorCliente(
-
-              this.clienteSeleccionadoId,
-
-              this.tecnicoSeleccionadoId
-
-            );
-
-          }
+            [...this.clientes];
 
         },
-
 
         error: error => {
 
           console.error(
-
             'Error al cargar clientes',
-
             error
+          );
 
+          this.toastService.error(
+            'No se pudieron cargar los clientes.'
           );
 
         }
@@ -329,52 +518,94 @@ export class TrabajoFormComponent implements OnInit {
 
   }
 
-  cargarTecnicos(): void {
 
-    this.usuarioService
+  cambioCliente(): void {
 
-      .obtenerTecnicos()
+    const clienteId =
+      this.form.controls
+        .idCliente
+        .value;
 
+    if (clienteId <= 0) {
+
+      this.tecnicos = [];
+
+      this.tecnicosFiltrados = [];
+
+      this.form.controls
+        .idsTecnicos
+        .setValue([]);
+
+      return;
+
+    }
+
+    if (this.puedeAsignarTecnicos) {
+
+      this.cargarTecnicos(
+        clienteId
+      );
+
+    }
+
+  }
+
+
+  // ==========================================
+  // SECTORES
+  // ==========================================
+
+  cargarSectores(): void {
+
+    this.sectorService
+      .obtenerTodas()
       .subscribe({
 
         next: data => {
 
-          this.tecnicos = data;
-
-
-          // Inicialmente no mostramos técnicos
-
-          this.tecnicosFiltrados = [];
-
-
-          // Si estamos editando
-          // y ya conocemos el cliente
+          const sectoresRecibidos =
+            data ?? [];
 
           if (
-            this.clienteSeleccionadoId
+            this.esRol('Mantenimiento')
           ) {
 
-            this.filtrarTecnicosPorCliente(
-
-              this.clienteSeleccionadoId,
-
-              this.tecnicoSeleccionadoId
-
+            this.aplicarSectorDelRol(
+              sectoresRecibidos,
+              'Mantenimiento'
             );
+
+            return;
 
           }
 
-        },
+          if (
+            this.esRol('Monitoreo')
+          ) {
 
+            this.aplicarSectorDelRol(
+              sectoresRecibidos,
+              'Monitoreo'
+            );
+
+            return;
+
+          }
+
+          this.sectores =
+            sectoresRecibidos;
+
+        },
 
         error: error => {
 
           console.error(
-
-            'Error al cargar técnicos',
-
+            'Error al cargar sectores',
             error
+          );
 
+          this.toastService.error(
+            'No se pudieron cargar los sectores.'
           );
 
         }
@@ -383,47 +614,137 @@ export class TrabajoFormComponent implements OnInit {
 
   }
 
-  filtrarTecnicosPorCliente(
 
-    clienteId: number,
-
-    tecnicoId: number = 0
-
+  private aplicarSectorDelRol(
+    sectores: Combo[],
+    nombreSector: string
   ): void {
 
-
-    // Si todavía no cargaron los clientes
-
-    if (
-      this.clientes.length === 0
-    ) {
-
-      return;
-
-    }
-
-
-    // Si todavía no cargaron los técnicos
-
-    if (
-      this.tecnicos.length === 0
-    ) {
-
-      return;
-
-    }
-
-
-    const cliente =
-      this.clientes.find(
-
-        x =>
-          x.id === clienteId
-
+    const sector =
+      sectores.find(
+        item =>
+          this.normalizarTexto(
+            item.nombre
+          ) ===
+          this.normalizarTexto(
+            nombreSector
+          )
       );
 
+    if (!sector) {
 
-    if (!cliente) {
+      this.sectores = [];
+
+      this.toastService.error(
+        `No se encontró el sector ${nombreSector}.`
+      );
+
+      return;
+
+    }
+
+    this.sectores = [
+      sector
+    ];
+
+    this.form.controls
+      .idSector
+      .setValue(
+        sector.id,
+        {
+          emitEvent: false
+        }
+      );
+
+    this.form.controls
+      .idSector
+      .disable(
+        {
+          emitEvent: false
+        }
+      );
+
+    this.cargarTareasPorSector(
+      sector.id
+    );
+
+  }
+
+
+  // ==========================================
+  // TAREAS POR SECTOR
+  // ==========================================
+
+  cargarTareasPorSector(
+    sectorId: number
+  ): void {
+
+    if (sectorId <= 0) {
+
+      this.tareas = [];
+
+      return;
+
+    }
+
+    this.cargandoTareas = true;
+
+    this.tareaService
+      .obtenerPorSector(
+        sectorId
+      )
+      .subscribe({
+
+        next: data => {
+
+          this.tareas =
+            data ?? [];
+
+          this.cargandoTareas =
+            false;
+
+        },
+
+        error: error => {
+
+          this.cargandoTareas =
+            false;
+
+          this.tareas = [];
+
+          console.error(
+            'Error al cargar tareas por sector',
+            error
+          );
+
+          this.toastService.error(
+            'No se pudieron cargar las tareas del sector.'
+          );
+
+        }
+
+      });
+
+  }
+
+
+  // ==========================================
+  // TÉCNICOS
+  // ==========================================
+
+  cargarTecnicos(
+    clienteId?: number
+  ): void {
+
+    const idCliente =
+      clienteId ??
+      this.form.controls
+        .idCliente
+        .value;
+
+    if (idCliente <= 0) {
+
+      this.tecnicos = [];
 
       this.tecnicosFiltrados = [];
 
@@ -431,147 +752,43 @@ export class TrabajoFormComponent implements OnInit {
 
     }
 
-
-    const provinciaId =
-      cliente.provinciaId;
-
-
-    console.log(
-
-      'Provincia del cliente:',
-
-      provinciaId
-
-    );
-
-
-    // Filtramos técnicos
-
-    this.tecnicosFiltrados =
-
-      this.tecnicos.filter(
-
-        tecnico =>
-
-          tecnico.provinciaId ===
-          provinciaId
-
-      );
-
-
-    console.log(
-
-      'Técnicos filtrados:',
-
-      this.tecnicosFiltrados
-
-    );
-
-
-    // En edición mantenemos
-    // el técnico seleccionado
-
-    if (tecnicoId) {
-
-      const tecnicoExiste =
-
-        this.tecnicosFiltrados.some(
-
-          tecnico =>
-
-            tecnico.id === tecnicoId
-
-        );
-
-
-      if (tecnicoExiste) {
-
-        this.form.patchValue({
-
-          idTecnico: tecnicoId
-
-        });
-
-      }
-
-    }
-
-  }
-
-  cambioCliente(): void {
-
-
-    const clienteId =
-
-      this.form
-        .get('idCliente')
-        ?.value;
-
-
-    // Limpiamos técnico seleccionado
-
-    this.form.patchValue({
-
-      idTecnico: 0
-
-    });
-
-
-    this.tecnicosFiltrados = [];
-
-
-    if (
-
-      !clienteId ||
-
-      clienteId === 0
-
-    ) {
-
-      return;
-
-    }
-
-
-    this.clienteSeleccionadoId =
-      clienteId;
-
-
-    this.tecnicoSeleccionadoId =
-      0;
-
-
-    this.filtrarTecnicosPorCliente(
-
-      clienteId
-
-    );
-
-  }
-
-  cargarTareas(): void {
-
-    this.tareaService
-
-      .obtenerTodas()
-
+    this.cargandoTecnicos = true;
+
+    this.usuarioService
+      .obtenerTecnicos(
+        idCliente
+      )
       .subscribe({
 
         next: data => {
 
-          this.tareas = data;
+          this.tecnicos =
+            data ?? [];
+
+          this.tecnicosFiltrados =
+            [...this.tecnicos];
+
+          this.cargandoTecnicos =
+            false;
 
         },
 
-
         error: error => {
 
+          this.cargandoTecnicos =
+            false;
+
+          this.tecnicos = [];
+
+          this.tecnicosFiltrados = [];
+
           console.error(
-
-            'Error al cargar tareas',
-
+            'Error al cargar técnicos',
             error
+          );
 
+          this.toastService.error(
+            'No se pudieron cargar los técnicos.'
           );
 
         }
@@ -580,94 +797,305 @@ export class TrabajoFormComponent implements OnInit {
 
   }
 
-  seleccionarArchivos(event: Event): void {
 
-    const input = event.target as HTMLInputElement;
+  // ==========================================
+  // CARGAR TRABAJO EN EDICIÓN
+  // ==========================================
+
+  cargarTrabajo(): void {
+
+    this.trabajoService
+      .obtenerPorId(
+        this.idTrabajo
+      )
+      .subscribe({
+
+        next: trabajo => {
+
+          this.form.patchValue(
+            {
+              idCliente:
+                trabajo.idCliente,
+
+              idSector:
+                trabajo.idSector,
+
+              idTarea:
+                trabajo.idTarea,
+
+              idsTecnicos:
+                trabajo.idsTecnicos ?? [],
+
+              comentarios:
+                trabajo.comentarios ?? ''
+            },
+            {
+              emitEvent: false
+            }
+          );
+
+
+          if (
+            trabajo.idSector &&
+            trabajo.idSector > 0
+          ) {
+
+            this.cargarTareasPorSector(
+              trabajo.idSector
+            );
+
+          }
+
+
+          if (
+            trabajo.idCliente &&
+            trabajo.idCliente > 0 &&
+            this.puedeAsignarTecnicos
+          ) {
+
+            this.cargarTecnicos(
+              trabajo.idCliente
+            );
+
+          }
+
+        },
+
+        error: error => {
+
+          console.error(
+            'Error al cargar el trabajo',
+            error
+          );
+
+          this.toastService.error(
+            'No se pudo cargar el trabajo.'
+          );
+
+        }
+
+      });
+
+  }
+
+
+  // ==========================================
+  // IMÁGENES
+  // ==========================================
+
+  seleccionarArchivos(
+    event: Event
+  ): void {
+
+    const input =
+      event.target as HTMLInputElement;
 
     if (!input.files) {
       return;
     }
 
-    this.archivos = Array.from(input.files);
+    const nuevosArchivos =
+      Array.from(
+        input.files
+      );
 
-    console.log('Archivos seleccionados:', this.archivos);
+    const archivosValidos =
+      nuevosArchivos.filter(
+        archivo =>
+          archivo.type.startsWith(
+            'image/'
+          )
+      );
+
+
+    const archivosCombinados = [
+      ...this.archivos,
+      ...archivosValidos
+    ];
+
+
+    this.archivos =
+      archivosCombinados.filter(
+        (
+          archivo,
+          indice,
+          lista
+        ) =>
+          lista.findIndex(
+            item =>
+              item.name ===
+              archivo.name &&
+              item.size ===
+              archivo.size &&
+              item.lastModified ===
+              archivo.lastModified
+          ) === indice
+      );
+
+
+    input.value = '';
+
   }
+
+
+  quitarArchivo(
+    indice: number
+  ): void {
+
+    this.archivos =
+      this.archivos.filter(
+        (_, posicion) =>
+          posicion !== indice
+      );
+
+  }
+
+
+  // ==========================================
+  // GUARDAR
+  // ==========================================
 
   guardar(): void {
 
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
+    if (this.guardando) {
       return;
     }
 
     const valores = this.form.getRawValue();
 
-    const trabajo: TrabajoCreate = {
-      idCliente: valores.idCliente,
-      idTecnico: valores.idTecnico,
-      idTarea: valores.idTarea,
-      comentarios: valores.comentarios,
-      archivos: this.archivos
-    };
+    // valores.idCliente = this.authService.obtenerClienteId() ?? 0;
 
-    if (!this.esEdicion) {
+    // this.form.controls.idCliente.setValue(valores.idCliente);
 
-      this.trabajoService
-        .crear(trabajo)
-        .subscribe({
+    if (valores.idCliente <= 0) {
 
-          next: () => {
+      this.form.controls
+        .idCliente
+        .markAsTouched();
 
-            this.toastService.success(
-              'Trabajo creado correctamente'
-            );
-
-            this.router.navigate(
-              ['/trabajos']
-            );
-
-          },
-
-          error: error => {
-
-            console.error(
-              'Error al crear trabajo',
-              error
-            );
-
-            console.error(
-              'Respuesta backend:',
-              error.error
-            );
-
-            this.toastService.error(
-              error.error?.mensaje ??
-              'No se pudo crear el trabajo'
-            );
-
-          }
-
-        });
+      this.toastService.warning(
+        'Debe seleccionar un cliente.'
+      );
 
       return;
+
     }
 
 
-    // ==========================================
-    // EDITAR
-    // ==========================================
+    if (valores.idSector <= 0) {
+
+      this.form.controls
+        .idSector
+        .markAsTouched();
+
+      this.toastService.warning(
+        'Debe seleccionar un sector.'
+      );
+
+      return;
+
+    }
+
+
+    if (valores.idTarea <= 0) {
+
+      this.form.controls
+        .idTarea
+        .markAsTouched();
+
+      this.toastService.warning(
+        'Debe seleccionar una tarea.'
+      );
+
+      return;
+
+    }
+
+
+    if (this.puedeAsignarTecnicos && valores.idsTecnicos.length === 0) {
+
+      this.form.controls.idsTecnicos.markAsTouched();
+
+      this.toastService.warning(
+        'Debe asignar al menos un técnico.'
+      );
+
+      return;
+
+    }
+
+
+    if (this.form.invalid) {
+
+      this.form.markAllAsTouched();
+
+      return;
+
+    }
+
+
+    const trabajo: TrabajoCreate = {
+
+      idCliente: valores.idCliente,
+      idSector: valores.idSector,
+
+      idTarea:
+        valores.idTarea,
+
+      idsTecnicos:
+        valores.idsTecnicos,
+
+      comentarios:
+        valores.comentarios.trim() ||
+        null,
+
+      archivos:
+        this.archivos,
+      idUsuarioCreacion:
+        this.authService
+          .obtenerUsuarioId()
+        ?? 0
+
+    };
+
+
+    this.guardando = true;
+
+
+    if (!this.esEdicion) {
+
+      this.crearTrabajo(
+        trabajo
+      );
+
+      return;
+
+    }
+
+
+    this.actualizarTrabajo(
+      trabajo
+    );
+
+  }
+
+
+  private crearTrabajo(
+    trabajo: TrabajoCreate
+  ): void {
 
     this.trabajoService
-      .actualizar(
-        this.idTrabajo,
+      .crear(
         trabajo
       )
       .subscribe({
 
         next: () => {
 
+          this.guardando = false;
+
           this.toastService.success(
-            'Trabajo actualizado correctamente'
+            'Solicitud de trabajo creada correctamente.'
           );
 
           this.router.navigate(
@@ -678,19 +1106,21 @@ export class TrabajoFormComponent implements OnInit {
 
         error: error => {
 
+          this.guardando = false;
+
           console.error(
-            'Error al actualizar trabajo',
+            'Error al crear trabajo',
             error
           );
 
           console.error(
-            'Respuesta backend:',
+            'Respuesta del backend',
             error.error
           );
 
           this.toastService.error(
             error.error?.mensaje ??
-            'No se pudo actualizar el trabajo'
+            'No se pudo crear la solicitud.'
           );
 
         }
@@ -699,13 +1129,87 @@ export class TrabajoFormComponent implements OnInit {
 
   }
 
+
+  private actualizarTrabajo(
+    trabajo: TrabajoCreate
+  ): void {
+
+    this.trabajoService
+      .actualizar(
+        this.idTrabajo,
+        trabajo
+      )
+      .subscribe({
+
+        next: () => {
+
+          this.guardando = false;
+
+          this.toastService.success(
+            'Trabajo actualizado correctamente.'
+          );
+
+          this.router.navigate(
+            ['/trabajos']
+          );
+
+        },
+
+        error: error => {
+
+          this.guardando = false;
+
+          console.error(
+            'Error al actualizar trabajo',
+            error
+          );
+
+          console.error(
+            'Respuesta del backend',
+            error.error
+          );
+
+          this.toastService.error(
+            error.error?.mensaje ??
+            'No se pudo actualizar el trabajo.'
+          );
+
+        }
+
+      });
+
+  }
+
+
+  // ==========================================
+  // CANCELAR
+  // ==========================================
+
   cancelar(): void {
 
     this.router.navigate(
-
       ['/trabajos']
-
     );
+
+  }
+
+
+  // ==========================================
+  // UTILIDADES
+  // ==========================================
+
+  private normalizarTexto(
+    valor: string | null | undefined
+  ): string {
+
+    return (valor ?? '')
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(
+        /[\u0300-\u036f]/g,
+        ''
+      )
+      .trim();
 
   }
 

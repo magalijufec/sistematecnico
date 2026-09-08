@@ -62,6 +62,16 @@ export class AuthService {
         return JSON.parse(usuario);
     }
 
+    obtenerUsuarioId(): number | null {
+        const usuario = this.obtenerUsuario();
+        return usuario?.idUsuario ?? null;
+    }
+
+    obtenerClienteId(): number | null {
+        const usuario = this.obtenerUsuario();
+        return usuario?.clienteId ?? null;
+    }
+
     estaLogueado(): boolean {
         return !!this.obtenerToken();
     }

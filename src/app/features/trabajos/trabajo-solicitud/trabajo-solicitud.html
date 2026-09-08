@@ -1,0 +1,1203 @@
+<div class="pagina">
+
+    @if (cargando) {
+
+    <mat-card class="estado-carga">
+
+        <mat-spinner diameter="44">
+        </mat-spinner>
+
+        <p>
+            Cargando solicitud...
+        </p>
+
+    </mat-card>
+
+    } @else if (trabajo) {
+
+    <!-- ========================================= -->
+    <!-- ENCABEZADO -->
+    <!-- ========================================= -->
+
+    <div class="toolbar">
+
+        <div class="toolbar-titulo">
+
+            <h2>
+                Solicitud de trabajo #{{ trabajo.id }}
+            </h2>
+
+            <p>
+                Seguimiento de solicitud, presupuestos y materiales
+            </p>
+
+        </div>
+
+        <button mat-stroked-button type="button" [disabled]="procesando" (click)="volver()">
+
+            <mat-icon>
+                arrow_back
+            </mat-icon>
+
+            Volver
+
+        </button>
+
+    </div>
+
+
+    <!-- ========================================= -->
+    <!-- DATOS DEL TRABAJO -->
+    <!-- ========================================= -->
+
+    <mat-card class="detalle-card">
+
+        <mat-card-header>
+
+            <mat-card-title>
+                Datos de la solicitud
+            </mat-card-title>
+
+        </mat-card-header>
+
+        <mat-card-content>
+
+            <div class="datos-grid">
+
+                <div class="dato">
+
+                    <mat-icon>business</mat-icon>
+
+                    <div>
+
+                        <span class="dato-label">
+                            Cliente
+                        </span>
+
+                        <strong class="dato-valor">
+                            {{ trabajo.cliente }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="dato">
+
+                    <mat-icon>map</mat-icon>
+
+                    <div>
+
+                        <span class="dato-label">
+                            Provincia
+                        </span>
+
+                        <strong class="dato-valor">
+                            {{ trabajo.provincia || '-' }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="dato">
+
+                    <mat-icon>location_city</mat-icon>
+
+                    <div>
+
+                        <span class="dato-label">
+                            Ciudad
+                        </span>
+
+                        <strong class="dato-valor">
+                            {{ trabajo.ciudad || '-' }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="dato">
+
+                    <mat-icon>location_on</mat-icon>
+
+                    <div>
+
+                        <span class="dato-label">
+                            Dirección
+                        </span>
+
+                        <strong class="dato-valor">
+                            {{ trabajo.direccion || '-' }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="dato">
+
+                    <mat-icon>groups</mat-icon>
+
+                    <div>
+
+                        <span class="dato-label">
+                            Sector
+                        </span>
+
+                        <strong class="dato-valor">
+                            {{ trabajo.sector }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="dato">
+
+                    <mat-icon>build</mat-icon>
+
+                    <div>
+
+                        <span class="dato-label">
+                            Tarea
+                        </span>
+
+                        <strong class="dato-valor">
+                            {{ trabajo.tarea }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="dato">
+
+                    <mat-icon>event</mat-icon>
+
+                    <div>
+
+                        <span class="dato-label">
+                            Fecha de solicitud
+                        </span>
+
+                        <strong class="dato-valor">
+
+                            {{
+                            trabajo.fechaSolicitud
+                            | date:'dd/MM/yyyy HH:mm'
+                            }}
+
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="dato">
+
+                    <mat-icon>person</mat-icon>
+
+                    <div>
+
+                        <span class="dato-label">
+                            Solicitante
+                        </span>
+
+                        <strong class="dato-valor">
+                            {{ trabajo.solicitante || '-' }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="dato">
+
+                    <mat-icon>flag</mat-icon>
+
+                    <div>
+
+                        <span class="dato-label">
+                            Estado
+                        </span>
+
+                        <strong class="estado-trabajo" [style.background-color]="trabajo.estadoColor">
+
+                            {{ trabajo.estado }}
+
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </mat-card-content>
+
+    </mat-card>
+
+
+    <!-- ========================================= -->
+    <!-- COMENTARIO -->
+    <!-- ========================================= -->
+
+    <mat-card class="detalle-card">
+
+        <mat-card-header>
+
+            <mat-card-title>
+                Comentario de la solicitud
+            </mat-card-title>
+
+        </mat-card-header>
+
+        <mat-card-content>
+
+            @if (trabajo.comentarios) {
+
+            <div class="comentario-texto">
+                {{ trabajo.comentarios }}
+            </div>
+
+            } @else {
+
+            <p class="sin-informacion">
+                La solicitud no tiene comentarios.
+            </p>
+
+            }
+
+        </mat-card-content>
+
+    </mat-card>
+
+
+    <!-- ========================================= -->
+    <!-- IMÁGENES -->
+    <!-- ========================================= -->
+
+    <mat-card class="detalle-card">
+
+        <mat-card-header>
+
+            <mat-card-title>
+                Imágenes de la solicitud
+            </mat-card-title>
+
+        </mat-card-header>
+
+        <mat-card-content>
+
+            @if (
+            trabajo.imagenesSolicitud &&
+            trabajo.imagenesSolicitud.length > 0
+            ) {
+
+            <div class="imagenes-grid">
+
+                @for (
+                imagen of trabajo.imagenesSolicitud;
+                track imagen.id
+                ) {
+
+                <a class="imagen-enlace" [href]="obtenerUrlImagen(imagen.rutaArchivo)" target="_blank"
+                    rel="noopener noreferrer">
+
+                    <img [src]="obtenerUrlImagen(imagen.rutaArchivo)" alt="Imagen de la solicitud">
+
+                    <span class="imagen-accion">
+
+                        <mat-icon>
+                            open_in_new
+                        </mat-icon>
+
+                        Ver imagen
+
+                    </span>
+
+                </a>
+
+                }
+
+            </div>
+
+            } @else {
+
+            <p class="sin-informacion">
+                La solicitud no tiene imágenes.
+            </p>
+
+            }
+
+        </mat-card-content>
+
+    </mat-card>
+
+
+    <!-- ========================================= -->
+    <!-- REVISIÓN DE SOLICITUD -->
+    <!-- ========================================= -->
+
+    @if (mostrarAccionesRevision) {
+
+    <mat-card class="accion-card">
+
+        <mat-card-header>
+
+            <mat-card-title>
+                Revisión de la solicitud
+            </mat-card-title>
+
+            <mat-card-subtitle>
+                Apruebe la solicitud o indique el motivo del rechazo.
+            </mat-card-subtitle>
+
+        </mat-card-header>
+
+        <mat-card-content>
+
+            @if (!mostrarFormularioRechazo) {
+
+            <div class="acciones">
+
+                <button mat-raised-button color="primary" type="button" [disabled]="procesando"
+                    (click)="aprobarSolicitud()">
+
+                    <mat-icon>
+                        check_circle
+                    </mat-icon>
+
+                    Aprobar solicitud
+
+                </button>
+
+                <button mat-stroked-button color="warn" type="button" [disabled]="procesando"
+                    (click)="habilitarRechazo()">
+
+                    <mat-icon>
+                        cancel
+                    </mat-icon>
+
+                    Rechazar solicitud
+
+                </button>
+
+            </div>
+
+            } @else {
+
+            <form [formGroup]="rechazoForm" class="formulario-accion">
+
+                <mat-form-field appearance="outline" class="campo-completo">
+
+                    <mat-label>
+                        Motivo del rechazo
+                    </mat-label>
+
+                    <textarea matInput rows="6" maxlength="1000" formControlName="motivoRechazo">
+                                </textarea>
+
+                    <mat-hint align="end">
+
+                        {{
+                        rechazoForm.controls
+                        .motivoRechazo
+                        .value.length
+                        }}/1000
+
+                    </mat-hint>
+
+                    @if (
+                    rechazoForm.controls
+                    .motivoRechazo
+                    .touched &&
+                    rechazoForm.controls
+                    .motivoRechazo
+                    .invalid
+                    ) {
+
+                    <mat-error>
+                        El motivo es obligatorio y debe tener al menos 5 caracteres.
+                    </mat-error>
+
+                    }
+
+                </mat-form-field>
+
+                <div class="acciones">
+
+                    <button mat-stroked-button type="button" [disabled]="procesando" (click)="cancelarRechazo()">
+
+                        Cancelar
+
+                    </button>
+
+                    <button mat-raised-button color="warn" type="button" [disabled]="procesando || rechazoForm.invalid"
+                        (click)="rechazarSolicitud()">
+
+                        Confirmar rechazo
+
+                    </button>
+
+                </div>
+
+            </form>
+
+            }
+
+        </mat-card-content>
+
+    </mat-card>
+
+    }
+
+
+    <!-- ========================================= -->
+    <!-- SOLICITUD RECHAZADA -->
+    <!-- ========================================= -->
+
+    @if (estaRechazada) {
+
+    <mat-card class="resultado-card resultado-rechazado">
+
+        <mat-icon>cancel</mat-icon>
+
+        <div>
+
+            <h3>Solicitud rechazada</h3>
+
+            <p>
+                El flujo de esta solicitud ha finalizado.
+            </p>
+
+            @if (trabajo.motivoRechazoSolicitud) {
+
+            <div class="motivo-rechazo">
+
+                <strong>
+                    Motivo
+                </strong>
+
+                <p>
+                    {{ trabajo.motivoRechazoSolicitud }}
+                </p>
+
+            </div>
+
+            }
+
+        </div>
+
+    </mat-card>
+
+    }
+
+
+    <!-- ========================================= -->
+    <!-- ASIGNAR TÉCNICOS -->
+    <!-- ========================================= -->
+
+    @if (puedeAsignarTecnicos && trabajo.idsTecnicos.length === 0) {
+
+    <mat-card class="accion-card">
+
+        <mat-card-header>
+
+            <mat-card-title>
+                Asignar técnicos
+            </mat-card-title>
+
+            <mat-card-subtitle>
+                Los técnicos seleccionados podrán cargar presupuesto.
+            </mat-card-subtitle>
+
+        </mat-card-header>
+
+        <mat-card-content>
+
+            <form [formGroup]="tecnicosForm" class="formulario-accion">
+
+                <mat-form-field appearance="outline" class="campo-completo">
+
+                    <mat-label>
+                        Técnicos
+                    </mat-label>
+
+                    <mat-select multiple formControlName="idsTecnicos" [disabled]="cargandoTecnicos">
+
+                        @for (
+                        tecnico of tecnicos;
+                        track tecnico.id
+                        ) {
+
+                        <mat-option [value]="tecnico.id">
+                            {{ tecnico.nombre }}
+                        </mat-option>
+
+                        }
+
+                    </mat-select>
+
+                    @if (cargandoTecnicos) {
+
+                    <mat-hint>
+                        Cargando técnicos...
+                    </mat-hint>
+
+                    }
+
+                </mat-form-field>
+
+                <div class="acciones">
+
+                    <button mat-raised-button color="primary" type="button" [disabled]="
+                                    procesando ||
+                                    cargandoTecnicos ||
+                                    tecnicos.length === 0
+                                " (click)="asignarTecnicos()">
+
+                        <mat-icon>group_add</mat-icon>
+
+                        Asignar técnicos
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </mat-card-content>
+
+    </mat-card>
+
+    }
+
+
+    <!-- ========================================= -->
+    <!-- PRESUPUESTO DEL TÉCNICO -->
+    <!-- ========================================= -->
+
+    @if (
+    esTecnico &&
+    tecnicoAsignadoAlTrabajo &&
+    estaPendientePresupuestos
+    ) {
+
+    <mat-card class="accion-card">
+
+        <mat-card-header>
+
+            <mat-card-title>
+                Mi presupuesto
+            </mat-card-title>
+
+            <mat-card-subtitle>
+                Cargue el presupuesto de esta solicitud.
+            </mat-card-subtitle>
+
+        </mat-card-header>
+
+        <mat-card-content>
+
+            @if (cargandoPresupuestos) {
+
+            <div class="carga-inline">
+
+                <mat-spinner diameter="30">
+                </mat-spinner>
+
+                Cargando presupuesto...
+
+            </div>
+
+            } @else if (presupuestoUsuario) {
+
+            <div class="presupuesto-item">
+
+                <div class="presupuesto-header">
+
+                    <div>
+
+                        <h3>
+                            Presupuesto cargado
+                        </h3>
+
+                        <span>
+
+                            {{
+                            presupuestoUsuario.fechaCarga
+                            | date:'dd/MM/yyyy HH:mm'
+                            }}
+
+                        </span>
+
+                    </div>
+
+                    <span class="estado-presupuesto" [ngClass]="
+                                        obtenerClaseEstadoPresupuesto(
+                                            presupuestoUsuario.estadoId
+                                        )
+                                    ">
+
+                        {{ presupuestoUsuario.estado }}
+
+                    </span>
+
+                </div>
+
+                <div class="descripcion">
+
+                    <strong>
+                        Descripción
+                    </strong>
+
+                    <p>
+                        {{
+                        presupuestoUsuario.descripcion ||
+                        'Sin descripción'
+                        }}
+                    </p>
+
+                </div>
+
+                <div class="acciones">
+
+                    <button mat-stroked-button color="primary" type="button"
+                        (click)="verPresupuesto(presupuestoUsuario)">
+
+                        <mat-icon>picture_as_pdf</mat-icon>
+
+                        Ver presupuesto
+
+                    </button>
+
+                    @if (puedeEditarPresupuesto) {
+
+                    <button mat-raised-button color="primary" type="button" (click)="abrirEdicionPresupuesto()">
+
+                        <mat-icon>edit</mat-icon>
+
+                        Editar presupuesto
+
+                    </button>
+
+                    }
+
+                </div>
+
+            </div>
+
+            } @else if (puedeCargarPresupuesto) {
+
+            @if (!mostrarFormularioPresupuesto) {
+
+            <button mat-raised-button color="primary" type="button" (click)="abrirCargaPresupuesto()">
+
+                <mat-icon>upload_file</mat-icon>
+
+                Cargar presupuesto
+
+            </button>
+
+            }
+
+            }
+
+        </mat-card-content>
+
+    </mat-card>
+
+    }
+
+
+    <!-- ========================================= -->
+    <!-- FORMULARIO DE PRESUPUESTO -->
+    <!-- ========================================= -->
+
+    @if (
+    esTecnico &&
+    mostrarFormularioPresupuesto &&
+    !tienePresupuestoAprobado
+    ) {
+
+    <mat-card class="accion-card">
+
+        <mat-card-header>
+
+            <mat-card-title>
+
+                @if (editandoPresupuesto) {
+                Editar presupuesto
+                } @else {
+                Cargar presupuesto
+                }
+
+            </mat-card-title>
+
+        </mat-card-header>
+
+        <mat-card-content>
+
+            <form [formGroup]="presupuestoForm" class="formulario-accion">
+
+                <mat-form-field appearance="outline" class="campo-completo">
+
+                    <mat-label>
+                        Descripción
+                    </mat-label>
+
+                    <textarea matInput rows="6" maxlength="2000" formControlName="descripcion">
+                            </textarea>
+
+                    <mat-hint align="end">
+
+                        {{
+                        presupuestoForm.controls
+                        .descripcion
+                        .value.length
+                        }}/2000
+
+                    </mat-hint>
+
+                </mat-form-field>
+
+                <div class="selector-archivo">
+
+                    <input #archivoInput type="file" accept="application/pdf" hidden
+                        (change)="seleccionarArchivoPresupuesto($event)">
+
+                    <button mat-stroked-button color="primary" type="button" (click)="archivoInput.click()">
+
+                        <mat-icon>picture_as_pdf</mat-icon>
+
+                        Seleccionar PDF
+
+                    </button>
+
+                    @if (archivoPresupuesto) {
+
+                    <span class="archivo-seleccionado">
+
+                        <mat-icon>description</mat-icon>
+
+                        {{ archivoPresupuesto.name }}
+
+                    </span>
+
+                    } @else if (editandoPresupuesto) {
+
+                    <span class="texto-ayuda">
+                        Si no selecciona otro PDF, se conserva el actual.
+                    </span>
+
+                    }
+
+                </div>
+
+                <div class="acciones">
+
+                    <button mat-stroked-button type="button" [disabled]="guardandoPresupuesto"
+                        (click)="cancelarPresupuesto()">
+
+                        Cancelar
+
+                    </button>
+
+                    <button mat-raised-button color="primary" type="button" [disabled]="
+                                    guardandoPresupuesto ||
+                                    presupuestoForm.invalid
+                                " (click)="guardarPresupuesto()">
+
+                        <mat-icon>save</mat-icon>
+
+                        @if (guardandoPresupuesto) {
+                        Guardando...
+                        } @else if (editandoPresupuesto) {
+                        Guardar cambios
+                        } @else {
+                        Cargar presupuesto
+                        }
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </mat-card-content>
+
+    </mat-card>
+
+    }
+
+
+    <!-- ========================================= -->
+    <!-- PRESUPUESTOS PARA EL SECTOR -->
+    <!-- ========================================= -->
+
+    @if (
+    puedeGestionarSector &&
+    trabajo.idEstado >= PENDIENTE_PRESUPUESTOS
+    ) {
+
+    <mat-card class="detalle-card">
+
+        <mat-card-header>
+
+            <mat-card-title>
+                Presupuestos cargados
+            </mat-card-title>
+
+            <mat-card-subtitle>
+                Presupuestos presentados por los técnicos asignados.
+            </mat-card-subtitle>
+
+        </mat-card-header>
+
+        <mat-card-content>
+
+            @if (cargandoPresupuestos) {
+
+            <div class="carga-inline">
+
+                <mat-spinner diameter="30">
+                </mat-spinner>
+
+                Cargando presupuestos...
+
+            </div>
+
+            } @else if (presupuestos.length === 0) {
+
+            <div class="sin-presupuestos">
+
+                <mat-icon>request_quote</mat-icon>
+
+                <p>
+                    Todavía no se cargaron presupuestos.
+                </p>
+
+            </div>
+
+            } @else {
+
+            <div class="lista-presupuestos">
+
+                @for (
+                presupuesto of presupuestos;
+                track presupuesto.id
+                ) {
+
+                <div class="presupuesto-item" [class.item-aprobado]="
+                                        presupuesto.estadoId ===
+                                        PRESUPUESTO_ESTADO_APROBADO
+                                    " [class.item-rechazado]="
+                                        presupuesto.estadoId ===
+                                        PRESUPUESTO_RECHAZADO
+                                    ">
+
+                    <div class="presupuesto-header">
+
+                        <div>
+
+                            <h3>
+                                {{ presupuesto.tecnico }}
+                            </h3>
+
+                            <span>
+
+                                {{
+                                presupuesto.fechaCarga
+                                | date:'dd/MM/yyyy HH:mm'
+                                }}
+
+                            </span>
+
+                        </div>
+
+                        <span class="estado-presupuesto" [ngClass]="
+                                                obtenerClaseEstadoPresupuesto(
+                                                    presupuesto.estadoId
+                                                )
+                                            ">
+
+                            {{ presupuesto.estado }}
+
+                        </span>
+
+                    </div>
+
+                    <div class="descripcion">
+
+                        <strong>
+                            Descripción
+                        </strong>
+
+                        <p>
+                            {{
+                            presupuesto.descripcion ||
+                            'Sin descripción'
+                            }}
+                        </p>
+
+                    </div>
+
+                    <div class="acciones">
+
+                        <button mat-stroked-button color="primary" type="button" (click)="verPresupuesto(presupuesto)">
+
+                            <mat-icon>picture_as_pdf</mat-icon>
+
+                            Ver presupuesto
+
+                        </button>
+
+                        @if (
+                        puedeAprobarPresupuestos &&
+                        presupuesto.estadoId ===
+                        PRESUPUESTO_EN_REVISION
+                        ) {
+
+                        <button mat-raised-button color="primary" type="button" [disabled]="
+                                                    aprobandoPresupuestoId !== null
+                                                " (click)="aprobarPresupuesto(presupuesto)">
+
+                            <mat-icon>verified</mat-icon>
+
+                            @if (
+                            aprobandoPresupuestoId ===
+                            presupuesto.id
+                            ) {
+                            Aprobando...
+                            } @else {
+                            Aprobar presupuesto
+                            }
+
+                        </button>
+
+                        <button mat-stroked-button color="warn" type="button"
+                            [disabled]="aprobandoPresupuestoId !== null"
+                            (click)="mostrarRechazoPresupuesto(presupuesto)">
+
+                            <mat-icon>
+                                cancel
+                            </mat-icon>
+
+                            Rechazar presupuesto
+
+                        </button>
+
+                        }
+
+                    </div>
+
+                </div>
+
+                }
+
+            </div>
+
+            }
+
+        </mat-card-content>
+
+    </mat-card>
+
+    }
+
+    <!-- CARGAR MATERIALES -->
+    @if (puedeCargarMateriales) {
+
+    <mat-card class="accion-card materiales-card">
+
+        <mat-card-header>
+
+            <mat-card-title>
+                Materiales necesarios
+            </mat-card-title>
+
+            <mat-card-subtitle>
+                Registre los materiales requeridos para realizar el trabajo.
+            </mat-card-subtitle>
+
+        </mat-card-header>
+
+        <mat-card-content>
+
+            <form [formGroup]="materialesForm" class="formulario-accion">
+
+                <mat-form-field appearance="outline" class="campo-completo">
+
+                    <mat-label>
+                        Lista de materiales
+                    </mat-label>
+
+                    <textarea matInput rows="8" maxlength="5000" formControlName="materiales"
+                        placeholder="Ej.: 50 metros de cable UTP, 20 conectores RJ45...">
+                            </textarea>
+
+                    <mat-hint align="end">
+
+                        {{
+                        materialesForm.controls
+                        .materiales
+                        .value.length
+                        }}/5000
+
+                    </mat-hint>
+
+                    @if (
+                    materialesForm.controls
+                    .materiales
+                    .touched &&
+                    materialesForm.controls
+                    .materiales
+                    .invalid
+                    ) {
+
+                    <mat-error>
+                        Debe ingresar la lista de materiales.
+                    </mat-error>
+
+                    }
+
+                </mat-form-field>
+
+                <div class="acciones">
+
+                    <button mat-raised-button color="primary" type="button" [disabled]="
+                                    guardandoMateriales ||
+                                    materialesForm.invalid
+                                " (click)="guardarMateriales()">
+
+                        <mat-icon>inventory_2</mat-icon>
+
+                        @if (guardandoMateriales) {
+                        Guardando...
+                        } @else {
+                        Guardar materiales
+                        }
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </mat-card-content>
+
+    </mat-card>
+
+    }
+
+    <!-- ENVIAR MATERIALES -->
+    @if (
+    estaPendienteMateriales &&
+    puedeGestionarSector
+    ) {
+
+    <mat-card class="accion-card materiales-card">
+
+        <mat-card-header>
+
+            <mat-card-title>
+                Envío de materiales
+            </mat-card-title>
+
+            <mat-card-subtitle>
+                Confirme el envío para que el técnico pueda continuar.
+            </mat-card-subtitle>
+
+        </mat-card-header>
+
+        <mat-card-content>
+
+            <div class="materiales-lectura">
+
+                <strong>
+                    Materiales registrados
+                </strong>
+
+                <p>
+                    {{ trabajo.materiales || 'Sin materiales registrados' }}
+                </p>
+
+            </div>
+
+            <div class="acciones">
+
+                <button mat-raised-button color="primary" type="button" [disabled]="enviandoMateriales"
+                    (click)="enviarMateriales()">
+
+                    <mat-icon>local_shipping</mat-icon>
+
+                    @if (enviandoMateriales) {
+                    Registrando envío...
+                    } @else {
+                    Enviar materiales
+                    }
+
+                </button>
+
+            </div>
+
+        </mat-card-content>
+
+    </mat-card>
+
+    }
+
+
+    <!-- MATERIALES ENVIADOS -->
+    @if (estaMaterialesEnviados) {
+
+    <mat-card class="resultado-card resultado-aprobado">
+
+        <mat-icon>local_shipping</mat-icon>
+
+        <div>
+
+            <h3>
+                Materiales enviados
+            </h3>
+
+            <p>
+                Los materiales fueron enviados correctamente.
+            </p>
+
+            @if (trabajo.materiales) {
+
+            <div class="materiales-lectura">
+
+                <strong>
+                    Materiales
+                </strong>
+
+                <p>
+                    {{ trabajo.materiales }}
+                </p>
+
+            </div>
+
+            }
+
+        </div>
+
+    </mat-card>
+
+    }
+
+    }
+
+</div>
