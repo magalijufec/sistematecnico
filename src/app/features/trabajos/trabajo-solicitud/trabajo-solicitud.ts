@@ -170,28 +170,17 @@ export class TrabajoSolicitudComponent
   readonly PRESUPUESTO_RETIRADO = 5;
 
   // DATOS
-
   idTrabajo = 0;
-
   usuarioIdActual: number | null = null;
-
   trabajo?: TrabajoDetalle;
-
   tecnicos: TecnicoCombo[] = [];
-
   presupuestos: PresupuestoDetalle[] = [];
-
   presupuestoUsuario?: PresupuestoDetalle;
-
   archivoPresupuesto: File | null = null;
   presupuestoARechazar: any | null = null;
-
-  mostrarFormularioRechazoPresupuesto =
-    false;
-
+  mostrarFormularioRechazoPresupuesto = false;
   rechazoPresupuestoForm =
     this.fb.nonNullable.group({
-
       motivo: [
         '',
         [
@@ -199,7 +188,6 @@ export class TrabajoSolicitudComponent
           Validators.minLength(5)
         ]
       ]
-
     });
 
   // ESTADOS DE PANTALLA
@@ -255,7 +243,6 @@ export class TrabajoSolicitudComponent
 
     });
 
-
   materialesForm =
     this.fb.nonNullable.group({
 
@@ -270,9 +257,7 @@ export class TrabajoSolicitudComponent
 
     });
 
-
   ngOnInit(): void {
-
     this.idTrabajo =
       Number(
         this.route.snapshot
@@ -286,25 +271,17 @@ export class TrabajoSolicitudComponent
       !this.idTrabajo ||
       this.idTrabajo <= 0
     ) {
-
       this.toastService.error(
         'El identificador del trabajo no es válido.'
       );
-
       this.volver();
-
       return;
     }
-
     this.cargarTrabajo();
   }
 
-
   // ROLES
-  esRol(
-    ...roles: string[]
-  ): boolean {
-
+  esRol(...roles: string[]): boolean {
     return this.authService.tieneRol(
       ...roles
     );
@@ -322,12 +299,7 @@ export class TrabajoSolicitudComponent
       'Monitoreo'
     );
   }
-
-  /*
-   * Esta verificación controla el frontend.
-   * El backend también debe comprobar que el usuario
-   * pertenece al mismo sector del trabajo.
-   */
+  
   get puedeGestionarSector(): boolean {
     return this.esResponsableSector;
   }
@@ -465,7 +437,6 @@ export class TrabajoSolicitudComponent
     );
   }
 
-
   // CARGAR TRABAJO
   cargarTrabajo(): void {
     this.cargando = true;
@@ -515,7 +486,6 @@ export class TrabajoSolicitudComponent
       });
   }
 
-
   private cargarInformacionSegunEstado(): void {
     if (!this.trabajo) {
       return;
@@ -540,7 +510,6 @@ export class TrabajoSolicitudComponent
 
   // APROBAR SOLICITUD
   aprobarSolicitud(): void {
-
     if (
       !this.trabajo ||
       this.procesando ||
@@ -598,13 +567,8 @@ export class TrabajoSolicitudComponent
       });
   }
 
-
-  // ==========================================
   // RECHAZAR SOLICITUD
-  // ==========================================
-
   habilitarRechazo(): void {
-
     if (!this.mostrarAccionesRevision) {
       return;
     }
@@ -617,9 +581,7 @@ export class TrabajoSolicitudComponent
     });
   }
 
-
   cancelarRechazo(): void {
-
     this.mostrarFormularioRechazo =
       false;
 
@@ -628,9 +590,7 @@ export class TrabajoSolicitudComponent
     });
   }
 
-
   rechazarSolicitud(): void {
-
     if (
       !this.trabajo ||
       this.procesando ||
@@ -1051,10 +1011,7 @@ export class TrabajoSolicitudComponent
     );
   }
 
-  private crearPresupuesto(
-    descripcion: string
-  ): void {
-
+  private crearPresupuesto(descripcion: string): void {
     if (
       !this.trabajo ||
       !this.archivoPresupuesto ||
@@ -1154,7 +1111,6 @@ export class TrabajoSolicitudComponent
 
   // APROBAR PRESUPUESTO
   aprobarPresupuesto(presupuesto: PresupuestoDetalle): void {
-
     if (
       !this.puedeAprobarPresupuestos ||
       this.aprobandoPresupuestoId != null
@@ -1201,7 +1157,6 @@ export class TrabajoSolicitudComponent
 
   // MATERIALES
   guardarMateriales(): void {
-
     if (
       !this.trabajo ||
       !this.puedeCargarMateriales ||
@@ -1278,7 +1233,6 @@ export class TrabajoSolicitudComponent
   }
 
   enviarMateriales(): void {
-
     if (
       !this.trabajo ||
       !this.puedeEnviarMateriales ||
@@ -1413,7 +1367,6 @@ export class TrabajoSolicitudComponent
 
     }
   }
-
 
   // NAVEGACIÓN
   volver(): void {

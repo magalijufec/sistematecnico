@@ -27,6 +27,7 @@ export interface TrabajoDetalle {
   solicitante: string | null;
   motivoRechazoSolicitud: string | null;
   idsTecnicos: number[];
+  tecnicosAsignados: string[];
   materiales: string | null;
   motivoMejora: string | null;
 }

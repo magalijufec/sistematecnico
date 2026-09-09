@@ -1099,7 +1099,7 @@ export class TrabajoFormComponent
           );
 
           this.router.navigate(
-            ['/trabajos']
+            ['/trabajos-solicitud-list']
           );
 
         },

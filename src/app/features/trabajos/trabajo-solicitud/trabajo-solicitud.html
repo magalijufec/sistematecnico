@@ -220,6 +220,38 @@
 
                 </div>
 
+                <div class="dato">
+    <mat-icon>engineering</mat-icon>
+
+    <div>
+        <span class="dato-label">
+            Técnicos asignados
+        </span>
+
+        @if (
+            trabajo.tecnicosAsignados &&
+            trabajo.tecnicosAsignados.length > 0
+        ) {
+
+            @for (
+                tecnico of trabajo.tecnicosAsignados;
+                track tecnico
+            ) {
+                <strong class="dato-valor">
+                    {{ tecnico }}
+                </strong>
+            }
+
+        } @else {
+
+            <strong class="dato-valor">
+                -
+            </strong>
+
+        }
+    </div>
+</div>
+
 
                 <div class="dato">
 
@@ -536,8 +568,7 @@
 
                     <mat-select multiple formControlName="idsTecnicos" [disabled]="cargandoTecnicos">
 
-                        @for (
-                        tecnico of tecnicos;
+                        @for (tecnico of tecnicos;
                         track tecnico.id
                         ) {
 

@@ -187,53 +187,29 @@ export class TrabajosSolicitudListComponent
 
   }
 
-
-  // ==========================================
   // NAVEGACIÓN
-  // ==========================================
-
   nuevoTrabajo(): void {
-
     if (!this.puedeCrearTrabajo) {
       return;
     }
-
     this.router.navigate([
       '/trabajos',
       'nuevo'
     ]);
-
   }
 
   verTrabajo(idTrabajo: number): void {
     this.router.navigate(['/trabajo-solicitud', idTrabajo]);
   }
 
-  // ==========================================
   // CARGA
-  // ==========================================
-
   cargarTrabajos(): void {
-
     this.cargando = true;
-
     this.errorCarga = false;
-
     this.trabajoService
       .obtenerSolicitudesDeTrabajo()
       .subscribe({
-
         next: data => {
-
-          /*
-           * El backend debería devolver solamente
-           * trabajos hasta MaterialesEnviados.
-           *
-           * Este filtro adicional evita mostrar
-           * estados posteriores si el backend
-           * todavía no fue actualizado.
-           */
-
           this.trabajos =
             (data ?? [])
               .filter(
@@ -241,34 +217,19 @@ export class TrabajosSolicitudListComponent
                   trabajo.idEstado >= 1 &&
                   trabajo.idEstado <= 8
               );
-
           this.cargarOpcionesFiltros();
-
           this.filtrar();
-
           this.cargando = false;
-
         },
 
         error: error => {
-
           this.cargando = false;
-
           this.errorCarga = true;
-
           this.trabajos = [];
-
           this.trabajosFiltrados = [];
-
-          console.error(
-            'Error al cargar solicitudes de trabajo',
-            error
-          );
-
+          console.error('Error al cargar solicitudes de trabajo', error);
         }
-
       });
-
   }
 
   // OPCIONES DE FILTROS

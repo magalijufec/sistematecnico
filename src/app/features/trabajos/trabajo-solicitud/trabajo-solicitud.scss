@@ -4,7 +4,21 @@
     box-sizing: border-box;
 }
 
+.tecnicos-lista {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 4px;
+}
 
+.tecnico-chip {
+    padding: 4px 10px;
+    border-radius: 14px;
+    background: #e8eaf6;
+    color: #303f9f;
+    font-size: 12px;
+    font-weight: 500;
+}
 /* =========================================
    ENCABEZADO
 ========================================= */
