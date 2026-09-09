@@ -212,6 +212,8 @@ export const routes: Routes = [
                     roleGuard([
                         'Administrador',
                         'Sistemas',
+                        'Mantenimiento',
+                        'Monitoreo',
                         'Tecnico',
                         'Farmacia',
                         'Pagos'
@@ -225,7 +227,16 @@ export const routes: Routes = [
                         path: '',
 
                         component:
-                            TrabajosListComponent
+                            TrabajosListComponent,
+                        canActivate: [
+                            roleGuard([
+                                'Administrador',
+                                'Sistemas',
+                                'Mantenimiento',
+                                'Monitoreo',
+                                'Farmacia'
+                            ])
+                        ]
 
                     },
 
@@ -240,6 +251,8 @@ export const routes: Routes = [
                             roleGuard([
                                 'Administrador',
                                 'Sistemas',
+                                'Mantenimiento',
+                                'Monitoreo',
                                 'Farmacia'
                             ])
 
@@ -284,6 +297,8 @@ export const routes: Routes = [
                     roleGuard([
                         'Administrador',
                         'Sistemas',
+                        'Mantenimiento',
+                        'Monitoreo',
                         'Tecnico',
                         'Farmacia'
                     ])
@@ -298,6 +313,8 @@ export const routes: Routes = [
                     roleGuard([
                         'Administrador',
                         'Sistemas',
+                        'Mantenimiento',
+                        'Monitoreo',
                         'Tecnico',
                         'Farmacia'
                     ])
@@ -312,6 +329,8 @@ export const routes: Routes = [
                     roleGuard([
                         'Administrador',
                         'Sistemas',
+                        'Mantenimiento',
+                        'Monitoreo',
                         'Tecnico',
                         'Farmacia'
                     ])
@@ -358,6 +377,8 @@ export const routes: Routes = [
                     roleGuard([
                         'Administrador',
                         'Sistemas',
+                        'Mantenimiento',
+                        'Monitoreo',
                         'Pagos',
                         'Tecnico',
                         'Farmacia'

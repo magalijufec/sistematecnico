@@ -1,5 +1,5 @@
 import { ImagenSolicitud } from "./imagen";
-import { PresupuestoDetalle } from "./presupuesto-detalle";
+import { PresupuestoAprobado } from "./presupuesto-detalle";
 import { TrabajoFactura } from "./trabajo-factura";
 
 export interface TrabajoDetalle {
@@ -30,4 +30,5 @@ export interface TrabajoDetalle {
   tecnicosAsignados: string[];
   materiales: string | null;
   motivoMejora: string | null;
+  presupuestoAprobado: PresupuestoAprobado | null;
 }

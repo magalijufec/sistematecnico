@@ -513,7 +513,6 @@ export class TrabajoDetalleComponent
 
   }
 
-
   private cargarFechasEnFormulario(): void {
 
     if (!this.trabajo) {

@@ -13,3 +13,8 @@ export interface PresupuestoDetalle {
   rutaArchivo: string | null;
   trabajoId: number;
 }
+
+export interface PresupuestoAprobado {
+  tecnico: string;
+  archivo: string;
+}

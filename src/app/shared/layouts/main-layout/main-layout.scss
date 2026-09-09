@@ -4,8 +4,8 @@
 
 mat-sidenav {
   width: 260px;
-  background: #263238;
-  color: white;
+  background: #68a6c5;
+  color: rgb(0, 0, 0);
 }
 
 .logo {
@@ -21,19 +21,19 @@ mat-sidenav {
 }
 
 .logo mat-icon {
-  color: white;
+  color: rgb(0, 0, 0);
 }
 
 mat-nav-list a {
-  color: white !important;
+  color: rgb(0, 0, 0) !important;
 }
 
 mat-nav-list mat-icon {
-  color: white !important;
+  color: rgb(0, 0, 0) !important;
 }
 
 mat-sidenav .mdc-list-item__primary-text {
-  color: white;
+  color: rgb(0, 0, 0);
 }
 
 mat-sidenav a:hover {

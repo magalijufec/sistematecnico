@@ -6,7 +6,7 @@ export const MENU: MenuItem[] = [
     text: 'Dashboard', 
     icon: 'dashboard', 
     route: '/dashboard', 
-    roles: [ 'Administrador', 'Sistemas', 'Tecnico', 'Farmacia', 'Pagos' ] 
+    roles: [ 'Administrador', 'Sistemas', 'Mantenimiento', 'Monitoreo', 'Tecnico', 'Farmacia', 'Pagos' ] 
   },   
   { 
     text: 'Usuarios', 
@@ -21,16 +21,16 @@ export const MENU: MenuItem[] = [
     roles: [ 'Administrador' ] 
   },   
   { 
-    text: 'Solicitudes de Trabajos',     
-    icon: 'engineering', 
+    text: 'Solicitudes de trabajos',     
+    icon: 'assignment_add', 
     route: '/trabajos-solicitud-list', 
-    roles: [ 'Administrador', 'Sistemas', 'Tecnico', 'Farmacia' ] 
+    roles: [ 'Administrador', 'Sistemas', 'Mantenimiento', 'Monitoreo', 'Tecnico', 'Farmacia' ] 
   }, 
   { 
     text: 'Trabajos en proceso',     
     icon: 'engineering', 
     route: '/trabajos', 
-    roles: [ 'Administrador', 'Sistemas', 'Tecnico', 'Farmacia', 'Pagos' ] 
+    roles: [ 'Administrador', 'Sistemas', 'Mantenimiento', 'Monitoreo', 'Tecnico', 'Farmacia' ] 
   }, 
   { 
     text: 'Pendientes de pago', 
@@ -41,7 +41,7 @@ export const MENU: MenuItem[] = [
   { 
     text: 'Trabajos pagados', 
     icon: 'task_alt', route: '/trabajos-pagados', 
-    roles: [ 'Administrador', 'Sistemas', 'Pagos', 'Tecnico', 'Farmacia' ] 
+    roles: [ 'Administrador', 'Sistemas', 'Mantenimiento', 'Monitoreo', 'Pagos', 'Tecnico', 'Farmacia' ] 
   }
 
 ];

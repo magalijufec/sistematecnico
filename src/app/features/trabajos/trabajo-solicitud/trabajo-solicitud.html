@@ -220,37 +220,29 @@
 
                 </div>
 
+                @if (esResponsableSector) {
+
                 <div class="dato">
-    <mat-icon>engineering</mat-icon>
 
-    <div>
-        <span class="dato-label">
-            Técnicos asignados
-        </span>
+                    <mat-icon>
+                        engineering
+                    </mat-icon>
 
-        @if (
-            trabajo.tecnicosAsignados &&
-            trabajo.tecnicosAsignados.length > 0
-        ) {
+                    <div>
 
-            @for (
-                tecnico of trabajo.tecnicosAsignados;
-                track tecnico
-            ) {
-                <strong class="dato-valor">
-                    {{ tecnico }}
-                </strong>
-            }
+                        <span class="dato-label">
+                            Técnicos asignados
+                        </span>
 
-        } @else {
+                        <strong class="dato-valor">
+                            {{ trabajo.tecnicosAsignados?.join(', ') || '-' }}
+                        </strong>
 
-            <strong class="dato-valor">
-                -
-            </strong>
+                    </div>
 
-        }
-    </div>
-</div>
+                </div>
+
+                }
 
 
                 <div class="dato">

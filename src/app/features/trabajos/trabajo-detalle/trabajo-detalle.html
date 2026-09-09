@@ -2,521 +2,496 @@
 
     @if (cargando) {
 
-        <mat-card class="estado-carga">
+    <mat-card class="estado-carga">
 
-            <mat-spinner diameter="44">
-            </mat-spinner>
+        <mat-spinner diameter="44">
+        </mat-spinner>
 
-            <p>
-                Cargando trabajo...
-            </p>
+        <p>
+            Cargando trabajo...
+        </p>
 
-        </mat-card>
+    </mat-card>
 
     } @else if (trabajo) {
 
-        <mat-card class="trabajo-card">
+    <mat-card class="trabajo-card">
+
+        <!-- ========================================= -->
+        <!-- ENCABEZADO -->
+        <!-- ========================================= -->
+
+        <mat-card-header>
+
+            <mat-card-title>
+                Trabajo #{{ trabajo.id }}
+            </mat-card-title>
+
+            <mat-card-subtitle>
+
+                <span class="estado" [style.background-color]="trabajo.estadoColor">
+
+                    {{ trabajo.estado }}
+
+                </span>
+
+            </mat-card-subtitle>
+
+        </mat-card-header>
+
+
+        <mat-card-content>
 
             <!-- ========================================= -->
-            <!-- ENCABEZADO -->
+            <!-- INFORMACIÓN GENERAL -->
             <!-- ========================================= -->
 
-            <mat-card-header>
+            <section class="seccion">
 
-                <mat-card-title>
-                    Trabajo #{{ trabajo.id }}
-                </mat-card-title>
+                <h3>
+                    Información del trabajo
+                </h3>
 
-                <mat-card-subtitle>
 
-                    <span
-                        class="estado"
-                        [style.background-color]="trabajo.estadoColor">
+                <div class="info">
 
-                        {{ trabajo.estado }}
+                    <div class="dato">
 
-                    </span>
+                        <span class="dato-label">
+                            Cliente
+                        </span>
 
-                </mat-card-subtitle>
-
-            </mat-card-header>
-
-
-            <mat-card-content>
-
-                <!-- ========================================= -->
-                <!-- INFORMACIÓN GENERAL -->
-                <!-- ========================================= -->
-
-                <section class="seccion">
-
-                    <h3>
-                        Información del trabajo
-                    </h3>
-
-
-                    <div class="info">
-
-                        <div class="dato">
-
-                            <span class="dato-label">
-                                Cliente
-                            </span>
-
-                            <strong>
-                                {{ trabajo.cliente }}
-                            </strong>
-
-                        </div>
-
-
-                        <div class="dato">
-
-                            <span class="dato-label">
-                                Técnico
-                            </span>
-
-                            <strong>
-                                {{
-                                    trabajo.tecnico ||
-                                    'Sin técnico asignado'
-                                }}
-                            </strong>
-
-                        </div>
-
-
-                        <div class="dato">
-
-                            <span class="dato-label">
-                                Sector
-                            </span>
-
-                            <strong>
-                                {{ trabajo.sector || '-' }}
-                            </strong>
-
-                        </div>
-
-
-                        <div class="dato">
-
-                            <span class="dato-label">
-                                Tarea
-                            </span>
-
-                            <strong>
-                                {{ trabajo.tarea }}
-                            </strong>
-
-                        </div>
-
-
-                        <div class="dato">
-
-                            <span class="dato-label">
-                                Dirección
-                            </span>
-
-                            <strong>
-                                {{ trabajo.direccion || '-' }}
-                            </strong>
-
-                        </div>
-
-
-                        <div class="dato">
-
-                            <span class="dato-label">
-                                Ubicación
-                            </span>
-
-                            <strong>
-
-                                {{ trabajo.ciudad || '-' }},
-                                {{ trabajo.provincia || '-' }}
-
-                            </strong>
-
-                        </div>
-
-
-                        <div class="dato">
-
-                            <span class="dato-label">
-                                Fecha de solicitud
-                            </span>
-
-                            <strong>
-
-                                {{
-                                    trabajo.fechaSolicitud
-                                        | date:'dd/MM/yyyy HH:mm'
-                                }}
-
-                            </strong>
-
-                        </div>
-
-
-                        @if (trabajo.fechaInicio) {
-
-                            <div class="dato fecha-inicio">
-
-                                <span class="dato-label">
-                                    Fecha y hora de inicio
-                                </span>
-
-                                <strong>
-
-                                    {{
-                                        trabajo.fechaInicio
-                                            | date:'dd/MM/yyyy HH:mm'
-                                    }}
-
-                                </strong>
-
-                            </div>
-
-                        }
-
-
-                        @if (trabajo.fechaFinalizado) {
-
-                            <div class="dato fecha-fin">
-
-                                <span class="dato-label">
-                                    Fecha y hora de finalización
-                                </span>
-
-                                <strong>
-
-                                    {{
-                                        trabajo.fechaFinalizado
-                                            | date:'dd/MM/yyyy HH:mm'
-                                    }}
-
-                                </strong>
-
-                            </div>
-
-                        }
-
-
-                        @if (trabajo.fechaPagado) {
-
-                            <div class="dato">
-
-                                <span class="dato-label">
-                                    Fecha de pago
-                                </span>
-
-                                <strong>
-
-                                    {{
-                                        trabajo.fechaPagado
-                                            | date:'dd/MM/yyyy HH:mm'
-                                    }}
-
-                                </strong>
-
-                            </div>
-
-                        }
+                        <strong>
+                            {{ trabajo.cliente }}
+                        </strong>
 
                     </div>
 
-                </section>
 
+                    <div class="dato">
 
-                <mat-divider>
-                </mat-divider>
+                        <span class="dato-label">
+                            Técnico
+                        </span>
 
-
-                <!-- ========================================= -->
-                <!-- COMENTARIOS -->
-                <!-- ========================================= -->
-
-                <section class="seccion">
-
-                    <h3>
-                        Comentarios
-                    </h3>
-
-                    <div class="texto-lectura">
-
-                        {{
-                            trabajo.comentarios ||
-                            'Sin comentarios'
-                        }}
+                        <strong>
+                            {{
+                            trabajo.tecnico ||
+                            'Sin técnico asignado'
+                            }}
+                        </strong>
 
                     </div>
 
-                </section>
+
+                    <div class="dato">
+
+                        <span class="dato-label">
+                            Sector
+                        </span>
+
+                        <strong>
+                            {{ trabajo.sector || '-' }}
+                        </strong>
+
+                    </div>
 
 
-                <!-- ========================================= -->
-                <!-- IMÁGENES DE SOLICITUD -->
-                <!-- ========================================= -->
+                    <div class="dato">
 
-                @if (
-                    trabajo.imagenesSolicitud &&
-                    trabajo.imagenesSolicitud.length > 0
-                ) {
+                        <span class="dato-label">
+                            Tarea
+                        </span>
 
-                    <mat-divider>
-                    </mat-divider>
+                        <strong>
+                            {{ trabajo.tarea }}
+                        </strong>
 
-
-                    <section class="seccion">
-
-                        <h3>
-                            Imágenes de la solicitud
-                        </h3>
+                    </div>
 
 
-                        <div class="imagenes-solicitud">
+                    <div class="dato">
 
-                            @for (
-                                imagen of trabajo.imagenesSolicitud;
-                                track imagen.id
-                            ) {
+                        <span class="dato-label">
+                            Dirección
+                        </span>
 
-                                <a
-                                    [href]="
+                        <strong>
+                            {{ trabajo.direccion || '-' }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="dato">
+
+                        <span class="dato-label">
+                            Ubicación
+                        </span>
+
+                        <strong>
+
+                            {{ trabajo.ciudad || '-' }},
+                            {{ trabajo.provincia || '-' }}
+
+                        </strong>
+
+                    </div>
+
+
+                    <div class="dato">
+
+                        <span class="dato-label">
+                            Fecha de solicitud
+                        </span>
+
+                        <strong>
+
+                            {{
+                            trabajo.fechaSolicitud
+                            | date:'dd/MM/yyyy HH:mm'
+                            }}
+
+                        </strong>
+
+                    </div>
+
+
+                    @if (trabajo.fechaInicio) {
+
+                    <div class="dato fecha-inicio">
+
+                        <span class="dato-label">
+                            Fecha y hora de inicio
+                        </span>
+
+                        <strong>
+
+                            {{
+                            trabajo.fechaInicio
+                            | date:'dd/MM/yyyy HH:mm'
+                            }}
+
+                        </strong>
+
+                    </div>
+
+                    }
+
+
+                    @if (trabajo.fechaFinalizado) {
+
+                    <div class="dato fecha-fin">
+
+                        <span class="dato-label">
+                            Fecha y hora de finalización
+                        </span>
+
+                        <strong>
+
+                            {{
+                            trabajo.fechaFinalizado
+                            | date:'dd/MM/yyyy HH:mm'
+                            }}
+
+                        </strong>
+
+                    </div>
+
+                    }
+
+
+                    @if (trabajo.fechaPagado) {
+
+                    <div class="dato">
+
+                        <span class="dato-label">
+                            Fecha de pago
+                        </span>
+
+                        <strong>
+
+                            {{
+                            trabajo.fechaPagado
+                            | date:'dd/MM/yyyy HH:mm'
+                            }}
+
+                        </strong>
+
+                    </div>
+
+                    }
+
+                </div>
+
+            </section>
+
+
+            <mat-divider>
+            </mat-divider>
+
+
+            <!-- ========================================= -->
+            <!-- COMENTARIOS -->
+            <!-- ========================================= -->
+
+            <section class="seccion">
+
+                <h3>
+                    Comentarios
+                </h3>
+
+                <div class="texto-lectura">
+
+                    {{
+                    trabajo.comentarios ||
+                    'Sin comentarios'
+                    }}
+
+                </div>
+
+            </section>
+
+
+            <!-- ========================================= -->
+            <!-- IMÁGENES DE SOLICITUD -->
+            <!-- ========================================= -->
+
+            @if (
+            trabajo.imagenesSolicitud &&
+            trabajo.imagenesSolicitud.length > 0
+            ) {
+
+            <mat-divider>
+            </mat-divider>
+
+
+            <section class="seccion">
+
+                <h3>
+                    Imágenes de la solicitud
+                </h3>
+
+
+                <div class="imagenes-solicitud">
+
+                    @for (
+                    imagen of trabajo.imagenesSolicitud;
+                    track imagen.id
+                    ) {
+
+                    <a [href]="
                                         obtenerUrlImagen(
                                             imagen.rutaArchivo
                                         )
-                                    "
-                                    target="_blank"
-                                    rel="noopener noreferrer">
+                                    " target="_blank" rel="noopener noreferrer">
 
-                                    <img
-                                        class="imagen-solicitud"
-                                        [src]="
+                        <img class="imagen-solicitud" [src]="
                                             obtenerUrlImagen(
                                                 imagen.rutaArchivo
                                             )
-                                        "
-                                        alt="Imagen de la solicitud">
+                                        " alt="Imagen de la solicitud">
 
-                                </a>
+                    </a>
 
-                            }
+                    }
+
+                </div>
+
+            </section>
+
+            }
+
+
+            <!-- ========================================= -->
+            <!-- EDICIÓN POR TÉCNICO -->
+            <!-- ========================================= -->
+
+            @if (tecnicoPuedeEditarTrabajo) {
+
+            <mat-divider>
+            </mat-divider>
+
+
+            <mat-card class="seccion-accion trabajo-edicion-card">
+
+                <mat-card-header>
+
+                    <mat-card-title>
+
+                        @if (tieneMejoraSolicitada) {
+
+                        Corrección solicitada
+
+                        } @else {
+
+                        Trabajo en proceso
+
+                        }
+
+                    </mat-card-title>
+
+
+                    <mat-card-subtitle>
+
+                        Complete las fechas, el detalle
+                        del trabajo y las imágenes.
+
+                    </mat-card-subtitle>
+
+                </mat-card-header>
+
+
+                <mat-card-content>
+
+                    @if (
+                    tieneMejoraSolicitada &&
+                    trabajo.motivoMejora
+                    ) {
+
+                    <div class="aviso-mejora">
+
+                        <mat-icon>
+                            warning
+                        </mat-icon>
+
+                        <div>
+
+                            <strong>
+                                Observaciones del sector
+                            </strong>
+
+                            <p>
+                                {{ trabajo.motivoMejora }}
+                            </p>
 
                         </div>
 
-                    </section>
+                    </div>
 
-                }
+                    }
 
 
-                <!-- ========================================= -->
-                <!-- EDICIÓN POR TÉCNICO -->
-                <!-- ========================================= -->
+                    <!-- ================================= -->
+                    <!-- FECHAS DEL TRABAJO -->
+                    <!-- ================================= -->
 
-                @if (tecnicoPuedeEditarTrabajo) {
+                    <div class="fechas-formulario">
+
+                        <mat-form-field appearance="outline">
+
+                            <mat-label>
+                                Fecha y hora de inicio
+                            </mat-label>
+
+                            <input matInput type="datetime-local" name="fechaInicio" required
+                                [(ngModel)]="fechaInicioInput">
+
+                            <mat-icon matSuffix>
+                                play_arrow
+                            </mat-icon>
+
+                            <mat-hint>
+                                Momento en que comenzó el trabajo
+                            </mat-hint>
+
+                        </mat-form-field>
+
+
+                        <mat-form-field appearance="outline">
+
+                            <mat-label>
+                                Fecha y hora de finalización
+                            </mat-label>
+
+                            <input matInput type="datetime-local" name="fechaFin" required [(ngModel)]="fechaFinInput">
+
+                            <mat-icon matSuffix>
+                                stop
+                            </mat-icon>
+
+                            <mat-hint>
+                                Momento en que terminó el trabajo
+                            </mat-hint>
+
+                        </mat-form-field>
+
+                    </div>
+
 
                     <mat-divider>
                     </mat-divider>
 
 
-                    <mat-card class="seccion-accion trabajo-edicion-card">
+                    <!-- ================================= -->
+                    <!-- IMÁGENES -->
+                    <!-- ================================= -->
 
-                        <mat-card-header>
-
-                            <mat-card-title>
-
-                                @if (tieneMejoraSolicitada) {
-
-                                    Corrección solicitada
-
-                                } @else {
-
-                                    Trabajo en proceso
-
-                                }
-
-                            </mat-card-title>
+                    <h3>
+                        Imágenes del trabajo
+                    </h3>
 
 
-                            <mat-card-subtitle>
+                    @if (cargandoComparaciones) {
 
-                                Complete las fechas, el detalle
-                                del trabajo y las imágenes.
+                    <div class="carga-inline">
 
-                            </mat-card-subtitle>
+                        <mat-spinner diameter="30">
+                        </mat-spinner>
 
-                        </mat-card-header>
+                        Cargando imágenes...
 
+                    </div>
 
-                        <mat-card-content>
+                    } @else {
 
-                            @if (
-                                tieneMejoraSolicitada &&
-                                trabajo.motivoMejora
-                            ) {
+                    <div class="comparaciones">
 
-                                <div class="aviso-mejora">
+                        @for (
+                        comparacion of comparaciones;
+                        track comparacion.id
+                        ) {
 
-                                    <mat-icon>
-                                        warning
-                                    </mat-icon>
+                        <div class="comparacion-row">
 
-                                    <div>
+                            <!-- ANTES -->
 
-                                        <strong>
-                                            Observaciones del sector
-                                        </strong>
+                            <div class="imagen-columna">
 
-                                        <p>
-                                            {{ trabajo.motivoMejora }}
-                                        </p>
+                                <h4>
+                                    Antes
+                                </h4>
 
-                                    </div>
+                                @if (
+                                comparacion.imagenAntes
+                                ) {
 
-                                </div>
-
-                            }
-
-
-                            <!-- ================================= -->
-                            <!-- FECHAS DEL TRABAJO -->
-                            <!-- ================================= -->
-
-                            <div class="fechas-formulario">
-
-                                <mat-form-field appearance="outline">
-
-                                    <mat-label>
-                                        Fecha y hora de inicio
-                                    </mat-label>
-
-                                    <input
-                                        matInput
-                                        type="datetime-local"
-                                        name="fechaInicio"
-                                        required
-                                        [(ngModel)]="fechaInicioInput">
-
-                                    <mat-icon matSuffix>
-                                        play_arrow
-                                    </mat-icon>
-
-                                    <mat-hint>
-                                        Momento en que comenzó el trabajo
-                                    </mat-hint>
-
-                                </mat-form-field>
-
-
-                                <mat-form-field appearance="outline">
-
-                                    <mat-label>
-                                        Fecha y hora de finalización
-                                    </mat-label>
-
-                                    <input
-                                        matInput
-                                        type="datetime-local"
-                                        name="fechaFin"
-                                        required
-                                        [(ngModel)]="fechaFinInput">
-
-                                    <mat-icon matSuffix>
-                                        stop
-                                    </mat-icon>
-
-                                    <mat-hint>
-                                        Momento en que terminó el trabajo
-                                    </mat-hint>
-
-                                </mat-form-field>
-
-                            </div>
-
-
-                            <mat-divider>
-                            </mat-divider>
-
-
-                            <!-- ================================= -->
-                            <!-- IMÁGENES -->
-                            <!-- ================================= -->
-
-                            <h3>
-                                Imágenes del trabajo
-                            </h3>
-
-
-                            @if (cargandoComparaciones) {
-
-                                <div class="carga-inline">
-
-                                    <mat-spinner diameter="30">
-                                    </mat-spinner>
-
-                                    Cargando imágenes...
-
-                                </div>
-
-                            } @else {
-
-                                <div class="comparaciones">
-
-                                    @for (
-                                        comparacion of comparaciones;
-                                        track comparacion.id
-                                    ) {
-
-                                        <div class="comparacion-row">
-
-                                            <!-- ANTES -->
-
-                                            <div class="imagen-columna">
-
-                                                <h4>
-                                                    Antes
-                                                </h4>
-
-                                                @if (
-                                                    comparacion.imagenAntes
-                                                ) {
-
-                                                    <img
-                                                        class="imagen-trabajo"
-                                                        [src]="
+                                <img class="imagen-trabajo" [src]="
                                                             obtenerUrlImagen(
                                                                 comparacion
                                                                     .imagenAntes
                                                                     .rutaArchivo
                                                             )
-                                                        "
-                                                        alt="Imagen anterior">
+                                                        " alt="Imagen anterior">
 
-                                                } @else {
+                                } @else {
 
-                                                    <div class="sin-imagen">
+                                <div class="sin-imagen">
 
-                                                        <mat-icon>
-                                                            image
-                                                        </mat-icon>
+                                    <mat-icon>
+                                        image
+                                    </mat-icon>
 
-                                                        <span>
-                                                            No hay imagen
-                                                        </span>
+                                    <span>
+                                        No hay imagen
+                                    </span>
 
-                                                    </div>
+                                </div>
 
-                                                }
+                                }
 
 
-                                                <input
-                                                    #inputAntes
-                                                    type="file"
-                                                    accept="image/*"
-                                                    hidden
-                                                    (change)="
+                                <input #inputAntes type="file" accept="image/*" hidden (change)="
                                                         subirAntes(
                                                             $event,
                                                             comparacion
@@ -524,79 +499,67 @@
                                                     ">
 
 
-                                                <button
-                                                    mat-stroked-button
-                                                    color="primary"
-                                                    type="button"
-                                                    (click)="inputAntes.click()">
+                                <button mat-stroked-button color="primary" type="button" (click)="inputAntes.click()">
 
-                                                    <mat-icon>
-                                                        upload
-                                                    </mat-icon>
+                                    <mat-icon>
+                                        upload
+                                    </mat-icon>
 
-                                                    @if (
-                                                        comparacion.imagenAntes
-                                                    ) {
+                                    @if (
+                                    comparacion.imagenAntes
+                                    ) {
 
-                                                        Cambiar imagen
+                                    Cambiar imagen
 
-                                                    } @else {
+                                    } @else {
 
-                                                        Cargar imagen
+                                    Cargar imagen
 
-                                                    }
+                                    }
 
-                                                </button>
+                                </button>
 
-                                            </div>
+                            </div>
 
 
-                                            <!-- DESPUÉS -->
+                            <!-- DESPUÉS -->
 
-                                            <div class="imagen-columna">
+                            <div class="imagen-columna">
 
-                                                <h4>
-                                                    Después
-                                                </h4>
+                                <h4>
+                                    Después
+                                </h4>
 
-                                                @if (
-                                                    comparacion.imagenDespues
-                                                ) {
+                                @if (
+                                comparacion.imagenDespues
+                                ) {
 
-                                                    <img
-                                                        class="imagen-trabajo"
-                                                        [src]="
+                                <img class="imagen-trabajo" [src]="
                                                             obtenerUrlImagen(
                                                                 comparacion
                                                                     .imagenDespues
                                                                     .rutaArchivo
                                                             )
-                                                        "
-                                                        alt="Imagen posterior">
+                                                        " alt="Imagen posterior">
 
-                                                } @else {
+                                } @else {
 
-                                                    <div class="sin-imagen">
+                                <div class="sin-imagen">
 
-                                                        <mat-icon>
-                                                            image
-                                                        </mat-icon>
+                                    <mat-icon>
+                                        image
+                                    </mat-icon>
 
-                                                        <span>
-                                                            No hay imagen
-                                                        </span>
+                                    <span>
+                                        No hay imagen
+                                    </span>
 
-                                                    </div>
+                                </div>
 
-                                                }
+                                }
 
 
-                                                <input
-                                                    #inputDespues
-                                                    type="file"
-                                                    accept="image/*"
-                                                    hidden
-                                                    (change)="
+                                <input #inputDespues type="file" accept="image/*" hidden (change)="
                                                         subirDespues(
                                                             $event,
                                                             comparacion
@@ -604,621 +567,138 @@
                                                     ">
 
 
-                                                <button
-                                                    mat-stroked-button
-                                                    color="primary"
-                                                    type="button"
-                                                    (click)="inputDespues.click()">
+                                <button mat-stroked-button color="primary" type="button" (click)="inputDespues.click()">
 
-                                                    <mat-icon>
-                                                        upload
-                                                    </mat-icon>
+                                    <mat-icon>
+                                        upload
+                                    </mat-icon>
 
-                                                    @if (
-                                                        comparacion.imagenDespues
-                                                    ) {
+                                    @if (
+                                    comparacion.imagenDespues
+                                    ) {
 
-                                                        Cambiar imagen
+                                    Cambiar imagen
 
-                                                    } @else {
+                                    } @else {
 
-                                                        Cargar imagen
+                                    Cargar imagen
 
-                                                    }
+                                    }
 
-                                                </button>
+                                </button>
 
-                                            </div>
+                            </div>
 
 
-                                            <div class="acciones-comparacion">
+                            <div class="acciones-comparacion">
 
-                                                <button
-                                                    mat-icon-button
-                                                    color="warn"
-                                                    type="button"
-                                                    matTooltip="Eliminar comparación"
-                                                    (click)="
+                                <button mat-icon-button color="warn" type="button" matTooltip="Eliminar comparación"
+                                    (click)="
                                                         eliminarComparacion(
                                                             comparacion
                                                         )
                                                     ">
 
-                                                    <mat-icon>
-                                                        delete
-                                                    </mat-icon>
-
-                                                </button>
-
-                                            </div>
-
-                                        </div>
-
-                                    }
-
-                                </div>
-
-                            }
-
-
-                            <div class="agregar-comparacion">
-
-                                <button
-                                    mat-stroked-button
-                                    color="primary"
-                                    type="button"
-                                    (click)="agregarComparacion()">
-
                                     <mat-icon>
-                                        add
+                                        delete
                                     </mat-icon>
-
-                                    Agregar comparación
 
                                 </button>
 
                             </div>
-
-
-                            <mat-divider>
-                            </mat-divider>
-
-
-                            <!-- ================================= -->
-                            <!-- TRABAJO REALIZADO -->
-                            <!-- ================================= -->
-
-                            <h3>
-                                Trabajo realizado
-                            </h3>
-
-
-                            <quill-editor
-                                [(ngModel)]="trabajo.trabajoRealizado"
-                                [modules]="quillConfig"
-                                class="editor-trabajo">
-
-                            </quill-editor>
-
-
-                            <div class="acciones">
-
-                                <button
-                                    mat-raised-button
-                                    color="accent"
-                                    type="button"
-                                    [disabled]="guardandoTrabajo"
-                                    (click)="finalizarTrabajo()">
-
-                                    <mat-icon>
-                                        send
-                                    </mat-icon>
-
-                                    @if (guardandoTrabajo) {
-
-                                        Enviando...
-
-                                    } @else if (
-                                        tieneMejoraSolicitada
-                                    ) {
-
-                                        Volver a enviar para aprobación
-
-                                    } @else {
-
-                                        Finalizar y enviar para aprobación
-
-                                    }
-
-                                </button>
-
-                            </div>
-
-                        </mat-card-content>
-
-                    </mat-card>
-
-                }
-
-
-                <!-- ========================================= -->
-                <!-- TRABAJO REALIZADO EN LECTURA -->
-                <!-- ========================================= -->
-
-                @if (mostrarTrabajoRealizadoLectura) {
-
-                    <mat-divider>
-                    </mat-divider>
-
-
-                    <mat-card class="seccion-accion">
-
-                        <mat-card-header>
-
-                            <mat-card-title>
-                                Trabajo realizado
-                            </mat-card-title>
-
-                        </mat-card-header>
-
-
-                        <mat-card-content>
-
-                            <!-- FECHAS -->
-
-                            <div class="fechas-lectura">
-
-                                <div>
-
-                                    <mat-icon>
-                                        play_arrow
-                                    </mat-icon>
-
-                                    <div>
-
-                                        <span>
-                                            Inicio
-                                        </span>
-
-                                        <strong>
-
-                                            @if (trabajo.fechaInicio) {
-
-                                                {{
-                                                    trabajo.fechaInicio
-                                                        | date:'dd/MM/yyyy HH:mm'
-                                                }}
-
-                                            } @else {
-
-                                                Sin registrar
-
-                                            }
-
-                                        </strong>
-
-                                    </div>
-
-                                </div>
-
-
-                                <div>
-
-                                    <mat-icon>
-                                        stop
-                                    </mat-icon>
-
-                                    <div>
-
-                                        <span>
-                                            Finalización
-                                        </span>
-
-                                        <strong>
-
-                                            @if (
-                                                trabajo.fechaFinalizado
-                                            ) {
-
-                                                {{
-                                                    trabajo.fechaFinalizado
-                                                        | date:'dd/MM/yyyy HH:mm'
-                                                }}
-
-                                            } @else {
-
-                                                Sin registrar
-
-                                            }
-
-                                        </strong>
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-
-                            @if (trabajo.trabajoRealizado) {
-
-                                <h3>
-                                    Detalle
-                                </h3>
-
-                                <div
-                                    class="trabajo-realizado-texto"
-                                    [innerHTML]="trabajo.trabajoRealizado">
-
-                                </div>
-
-                            }
-
-
-                            @if (comparaciones.length > 0) {
-
-                                <mat-divider>
-                                </mat-divider>
-
-                                <h3>
-                                    Imágenes del trabajo
-                                </h3>
-
-
-                                <div class="comparaciones">
-
-                                    @for (
-                                        comparacion of comparaciones;
-                                        track comparacion.id
-                                    ) {
-
-                                        <div class="comparacion-row">
-
-                                            <div class="imagen-columna">
-
-                                                <h4>
-                                                    Antes
-                                                </h4>
-
-                                                @if (
-                                                    comparacion.imagenAntes
-                                                ) {
-
-                                                    <a
-                                                        [href]="
-                                                            obtenerUrlImagen(
-                                                                comparacion
-                                                                    .imagenAntes
-                                                                    .rutaArchivo
-                                                            )
-                                                        "
-                                                        target="_blank"
-                                                        rel="noopener noreferrer">
-
-                                                        <img
-                                                            class="imagen-trabajo"
-                                                            [src]="
-                                                                obtenerUrlImagen(
-                                                                    comparacion
-                                                                        .imagenAntes
-                                                                        .rutaArchivo
-                                                                )
-                                                            "
-                                                            alt="Imagen anterior">
-
-                                                    </a>
-
-                                                } @else {
-
-                                                    <div class="sin-imagen">
-
-                                                        <mat-icon>
-                                                            image
-                                                        </mat-icon>
-
-                                                        <span>
-                                                            No hay imagen
-                                                        </span>
-
-                                                    </div>
-
-                                                }
-
-                                            </div>
-
-
-                                            <div class="imagen-columna">
-
-                                                <h4>
-                                                    Después
-                                                </h4>
-
-                                                @if (
-                                                    comparacion.imagenDespues
-                                                ) {
-
-                                                    <a
-                                                        [href]="
-                                                            obtenerUrlImagen(
-                                                                comparacion
-                                                                    .imagenDespues
-                                                                    .rutaArchivo
-                                                            )
-                                                        "
-                                                        target="_blank"
-                                                        rel="noopener noreferrer">
-
-                                                        <img
-                                                            class="imagen-trabajo"
-                                                            [src]="
-                                                                obtenerUrlImagen(
-                                                                    comparacion
-                                                                        .imagenDespues
-                                                                        .rutaArchivo
-                                                                )
-                                                            "
-                                                            alt="Imagen posterior">
-
-                                                    </a>
-
-                                                } @else {
-
-                                                    <div class="sin-imagen">
-
-                                                        <mat-icon>
-                                                            image
-                                                        </mat-icon>
-
-                                                        <span>
-                                                            No hay imagen
-                                                        </span>
-
-                                                    </div>
-
-                                                }
-
-                                            </div>
-
-                                        </div>
-
-                                    }
-
-                                </div>
-
-                            }
-
-                        </mat-card-content>
-
-                    </mat-card>
-
-                }
-
-
-                <!-- ========================================= -->
-                <!-- MEJORA PENDIENTE -->
-                <!-- ========================================= -->
-
-                @if (
-                    tieneMejoraSolicitada &&
-                    !esTecnico
-                ) {
-
-                    <mat-divider>
-                    </mat-divider>
-
-
-                    <mat-card class="resultado-card resultado-mejora">
-
-                        <mat-icon>
-                            replay
-                        </mat-icon>
-
-                        <div>
-
-                            <h3>
-                                Mejora solicitada
-                            </h3>
-
-                            <p>
-                                El trabajo fue enviado nuevamente
-                                al técnico para realizar correcciones.
-                            </p>
-
-                            @if (trabajo.motivoMejora) {
-
-                                <div class="texto-lectura">
-
-                                    <strong>
-                                        Observaciones
-                                    </strong>
-
-                                    <p>
-                                        {{ trabajo.motivoMejora }}
-                                    </p>
-
-                                </div>
-
-                            }
 
                         </div>
 
-                    </mat-card>
+                        }
 
-                }
+                    </div>
+
+                    }
 
 
-                <!-- ========================================= -->
-                <!-- REVISIÓN DEL SECTOR -->
-                <!-- ========================================= -->
+                    <div class="agregar-comparacion">
 
-                @if (responsablePuedeRevisarTrabajo) {
+                        <button mat-stroked-button color="primary" type="button" (click)="agregarComparacion()">
+
+                            <mat-icon>
+                                add
+                            </mat-icon>
+
+                            Agregar comparación
+
+                        </button>
+
+                    </div>
+
 
                     <mat-divider>
                     </mat-divider>
 
 
-                    <mat-card class="seccion-accion">
+                    <!-- ================================= -->
+                    <!-- TRABAJO REALIZADO -->
+                    <!-- ================================= -->
 
-                        <mat-card-header>
-
-                            <mat-card-title>
-                                Trabajo pendiente de aprobación
-                            </mat-card-title>
-
-                            <mat-card-subtitle>
-
-                                Revise el detalle, las fechas
-                                y las imágenes del trabajo.
-
-                            </mat-card-subtitle>
-
-                        </mat-card-header>
+                    <h3>
+                        Trabajo realizado
+                    </h3>
 
 
-                        <mat-card-content>
+                    <quill-editor [(ngModel)]="trabajo.trabajoRealizado" [modules]="quillConfig" class="editor-trabajo">
 
-                            @if (!mostrarSolicitudMejora) {
-
-                                <div class="acciones">
-
-                                    <button
-                                        mat-raised-button
-                                        color="primary"
-                                        type="button"
-                                        [disabled]="procesandoRevision"
-                                        (click)="aprobarTrabajo()">
-
-                                        <mat-icon>
-                                            verified
-                                        </mat-icon>
-
-                                        Aprobar trabajo
-
-                                    </button>
+                    </quill-editor>
 
 
-                                    <button
-                                        mat-stroked-button
-                                        color="warn"
-                                        type="button"
-                                        [disabled]="procesandoRevision"
-                                        (click)="mostrarFormularioMejora()">
+                    <div class="acciones">
 
-                                        <mat-icon>
-                                            replay
-                                        </mat-icon>
+                        <button mat-raised-button color="accent" type="button" [disabled]="guardandoTrabajo"
+                            (click)="finalizarTrabajo()">
 
-                                        Solicitar mejora
+                            <mat-icon>
+                                send
+                            </mat-icon>
 
-                                    </button>
+                            @if (guardandoTrabajo) {
 
-                                </div>
+                            Enviando...
+
+                            } @else if (
+                            tieneMejoraSolicitada
+                            ) {
+
+                            Volver a enviar para aprobación
 
                             } @else {
 
-                                <div class="solicitud-mejora">
-
-                                    <h3>
-                                        Solicitar mejora
-                                    </h3>
-
-                                    <p>
-                                        Indique qué debe corregir
-                                        o completar el técnico.
-                                    </p>
-
-
-                                    <mat-form-field
-                                        appearance="outline"
-                                        class="campo-completo">
-
-                                        <mat-label>
-                                            Motivo de la mejora
-                                        </mat-label>
-
-                                        <textarea
-                                            matInput
-                                            rows="5"
-                                            maxlength="2000"
-                                            [(ngModel)]="comentariosMejora"
-                                            placeholder="Describa qué debe revisar o corregir el técnico...">
-
-                                        </textarea>
-
-                                        <mat-hint align="end">
-
-                                            {{
-                                                comentariosMejora.length
-                                            }}/2000
-
-                                        </mat-hint>
-
-                                    </mat-form-field>
-
-
-                                    <div class="acciones">
-
-                                        <button
-                                            mat-stroked-button
-                                            type="button"
-                                            [disabled]="procesandoRevision"
-                                            (click)="cancelarSolicitudMejora()">
-
-                                            Cancelar
-
-                                        </button>
-
-
-                                        <button
-                                            mat-raised-button
-                                            color="warn"
-                                            type="button"
-                                            [disabled]="
-                                                procesandoRevision ||
-                                                !comentariosMejora.trim()
-                                            "
-                                            (click)="solicitarMejora()">
-
-                                            <mat-icon>
-                                                replay
-                                            </mat-icon>
-
-                                            @if (procesandoRevision) {
-
-                                                Procesando...
-
-                                            } @else {
-
-                                                Confirmar mejora
-
-                                            }
-
-                                        </button>
-
-                                    </div>
-
-                                </div>
+                            Finalizar y enviar para aprobación
 
                             }
 
-                        </mat-card-content>
+                        </button>
 
-                    </mat-card>
+                    </div>
 
-                }
+                </mat-card-content>
 
+            </mat-card>
 
-                <!-- ========================================= -->
-                <!-- TRABAJO APROBADO -->
-                <!-- ========================================= -->
+            }
 
-                @if (estaAprobado) {
+            @if (trabajo.presupuestoAprobado) {
 
-                    <mat-divider>
-                    </mat-divider>
+            <mat-card class="detalle-card">
 
+                <mat-card-header>
 
-                    <mat-card class="resultado-card resultado-aprobado">
+                    <mat-card-title>
+                        Presupuesto aprobado
+                    </mat-card-title>
+
+                </mat-card-header>
+
+                <mat-card-content>
+
+                    <div class="dato">
 
                         <mat-icon>
                             verified
@@ -1226,331 +706,793 @@
 
                         <div>
 
-                            <h3>
-                                Trabajo aprobado
-                            </h3>
+                            <span class="dato-label">
+                                Técnico seleccionado
+                            </span>
 
-                            <p>
-                                El responsable del sector aprobó
-                                el trabajo realizado.
-                            </p>
+                            <strong class="dato-valor">
+                                {{ trabajo.presupuestoAprobado.tecnico }}
+                            </strong>
 
                         </div>
 
-                    </mat-card>
+                    </div>
 
-                }
+                    <div class="acciones">
 
+                        <a mat-raised-button color="primary"
+                            [href]="obtenerUrlArchivo(trabajo.presupuestoAprobado.archivo)" target="_blank"
+                            rel="noopener noreferrer">
 
-                <!-- ========================================= -->
-                <!-- FACTURAS -->
-                <!-- ========================================= -->
+                            <mat-icon>
+                                picture_as_pdf
+                            </mat-icon>
 
-                @if (mostrarFacturas) {
+                            Ver presupuesto aprobado
 
-                    <mat-divider>
-                    </mat-divider>
+                        </a>
 
+                    </div>
 
-                    <mat-card class="seccion-accion">
+                </mat-card-content>
 
-                        <mat-card-header>
+            </mat-card>
 
-                            <mat-card-title>
-                                Facturas
-                            </mat-card-title>
-
-                            <mat-card-subtitle>
-                                Facturación asociada al trabajo.
-                            </mat-card-subtitle>
-
-                        </mat-card-header>
+            }
 
 
-                        <mat-card-content>
+            <!-- ========================================= -->
+            <!-- TRABAJO REALIZADO EN LECTURA -->
+            <!-- ========================================= -->
 
-                            @if (
-                                trabajo.facturas &&
-                                trabajo.facturas.length > 0
-                            ) {
+            @if (mostrarTrabajoRealizadoLectura) {
 
-                                <div class="lista-facturas">
-
-                                    @for (
-                                        factura of trabajo.facturas;
-                                        track factura.id
-                                    ) {
-
-                                        <a
-                                            mat-stroked-button
-                                            color="primary"
-                                            [href]="
-                                                obtenerUrlFactura(
-                                                    factura.rutaArchivo
-                                                )
-                                            "
-                                            target="_blank"
-                                            rel="noopener noreferrer">
-
-                                            <mat-icon>
-                                                picture_as_pdf
-                                            </mat-icon>
-
-                                            Factura {{ factura.id }}
-
-                                        </a>
-
-                                    }
-
-                                </div>
-
-                            } @else {
-
-                                <p class="sin-informacion">
-                                    Todavía no se cargaron facturas.
-                                </p>
-
-                            }
+            <mat-divider>
+            </mat-divider>
 
 
-                            @if (tecnicoPuedeCargarFacturas) {
+            <mat-card class="seccion-accion">
 
-                                <input
-                                    #facturaInput
-                                    type="file"
-                                    multiple
-                                    accept="application/pdf"
-                                    hidden
-                                    (change)="subirFactura($event)">
+                <mat-card-header>
+
+                    <mat-card-title>
+                        Trabajo realizado
+                    </mat-card-title>
+
+                </mat-card-header>
 
 
-                                <button
-                                    mat-raised-button
-                                    color="primary"
-                                    type="button"
-                                    [disabled]="subiendoFactura"
-                                    (click)="facturaInput.click()">
+                <mat-card-content>
 
-                                    <mat-icon>
-                                        upload_file
-                                    </mat-icon>
+                    <!-- FECHAS -->
 
-                                    @if (subiendoFactura) {
+                    <div class="fechas-lectura">
 
-                                        Cargando...
+                        <div>
+
+                            <mat-icon>
+                                play_arrow
+                            </mat-icon>
+
+                            <div>
+
+                                <span>
+                                    Inicio
+                                </span>
+
+                                <strong>
+
+                                    @if (trabajo.fechaInicio) {
+
+                                    {{
+                                    trabajo.fechaInicio
+                                    | date:'dd/MM/yyyy HH:mm'
+                                    }}
 
                                     } @else {
 
-                                        Cargar facturas
+                                    Sin registrar
 
                                     }
 
-                                </button>
+                                </strong>
 
-                            }
+                            </div>
 
-                        </mat-card-content>
-
-                    </mat-card>
-
-                }
+                        </div>
 
 
-                <!-- ========================================= -->
-                <!-- PAGO -->
-                <!-- ========================================= -->
+                        <div>
 
-                @if (estaPendientePago) {
+                            <mat-icon>
+                                stop
+                            </mat-icon>
 
-                    <mat-divider>
-                    </mat-divider>
+                            <div>
 
+                                <span>
+                                    Finalización
+                                </span>
 
-                    <mat-card class="seccion-accion">
+                                <strong>
 
-                        <mat-card-header>
+                                    @if (
+                                    trabajo.fechaFinalizado
+                                    ) {
 
-                            <mat-card-title>
-                                Pendiente de pago
-                            </mat-card-title>
+                                    {{
+                                    trabajo.fechaFinalizado
+                                    | date:'dd/MM/yyyy HH:mm'
+                                    }}
 
-                        </mat-card-header>
+                                    } @else {
 
+                                    Sin registrar
 
-                        <mat-card-content>
+                                    }
 
-                            <p>
-                                Las facturas se encuentran
-                                pendientes de pago.
-                            </p>
+                                </strong>
 
+                            </div>
 
-                            @if (puedeRegistrarPago) {
+                        </div>
 
-                                <div class="acciones">
-
-                                    <button
-                                        mat-raised-button
-                                        color="primary"
-                                        type="button"
-                                        [disabled]="registrandoPago"
-                                        (click)="registrarPago()">
-
-                                        <mat-icon>
-                                            payments
-                                        </mat-icon>
-
-                                        @if (registrandoPago) {
-
-                                            Registrando...
-
-                                        } @else {
-
-                                            Registrar pago
-
-                                        }
-
-                                    </button>
-
-                                </div>
-
-                            }
-
-                        </mat-card-content>
-
-                    </mat-card>
-
-                }
+                    </div>
 
 
-                <!-- ========================================= -->
-                <!-- INFORME -->
-                <!-- ========================================= -->
+                    @if (trabajo.trabajoRealizado) {
 
-                @if (mostrarInforme) {
+                    <h3>
+                        Detalle
+                    </h3>
+
+                    <div class="trabajo-realizado-texto" [innerHTML]="trabajo.trabajoRealizado">
+
+                    </div>
+
+                    }
+
+
+                    @if (comparaciones.length > 0) {
 
                     <mat-divider>
                     </mat-divider>
 
-
-                    <mat-card class="seccion-accion">
-
-                        <mat-card-header>
-
-                            <mat-card-title>
-                                Informe del trabajo
-                            </mat-card-title>
-
-                        </mat-card-header>
+                    <h3>
+                        Imágenes del trabajo
+                    </h3>
 
 
-                        <mat-card-content>
+                    <div class="comparaciones">
 
-                            <p>
-                                Descargue el informe PDF completo
-                                del trabajo.
-                            </p>
+                        @for (
+                        comparacion of comparaciones;
+                        track comparacion.id
+                        ) {
 
-                            <button
-                                mat-raised-button
-                                color="warn"
-                                type="button"
-                                [disabled]="descargandoInforme"
-                                (click)="descargarInforme(trabajo.id)">
+                        <div class="comparacion-row">
 
-                                <mat-icon>
-                                    picture_as_pdf
-                                </mat-icon>
+                            <div class="imagen-columna">
 
-                                @if (descargandoInforme) {
+                                <h4>
+                                    Antes
+                                </h4>
 
-                                    Descargando...
+                                @if (
+                                comparacion.imagenAntes
+                                ) {
+
+                                <a [href]="
+                                                            obtenerUrlImagen(
+                                                                comparacion
+                                                                    .imagenAntes
+                                                                    .rutaArchivo
+                                                            )
+                                                        " target="_blank" rel="noopener noreferrer">
+
+                                    <img class="imagen-trabajo" [src]="
+                                                                obtenerUrlImagen(
+                                                                    comparacion
+                                                                        .imagenAntes
+                                                                        .rutaArchivo
+                                                                )
+                                                            " alt="Imagen anterior">
+
+                                </a>
 
                                 } @else {
 
-                                    Descargar informe PDF
+                                <div class="sin-imagen">
+
+                                    <mat-icon>
+                                        image
+                                    </mat-icon>
+
+                                    <span>
+                                        No hay imagen
+                                    </span>
+
+                                </div>
+
+                                }
+
+                            </div>
+
+
+                            <div class="imagen-columna">
+
+                                <h4>
+                                    Después
+                                </h4>
+
+                                @if (
+                                comparacion.imagenDespues
+                                ) {
+
+                                <a [href]="
+                                                            obtenerUrlImagen(
+                                                                comparacion
+                                                                    .imagenDespues
+                                                                    .rutaArchivo
+                                                            )
+                                                        " target="_blank" rel="noopener noreferrer">
+
+                                    <img class="imagen-trabajo" [src]="
+                                                                obtenerUrlImagen(
+                                                                    comparacion
+                                                                        .imagenDespues
+                                                                        .rutaArchivo
+                                                                )
+                                                            " alt="Imagen posterior">
+
+                                </a>
+
+                                } @else {
+
+                                <div class="sin-imagen">
+
+                                    <mat-icon>
+                                        image
+                                    </mat-icon>
+
+                                    <span>
+                                        No hay imagen
+                                    </span>
+
+                                </div>
+
+                                }
+
+                            </div>
+
+                        </div>
+
+                        }
+
+                    </div>
+
+                    }
+
+                </mat-card-content>
+
+            </mat-card>
+
+            }
+
+
+            <!-- ========================================= -->
+            <!-- MEJORA PENDIENTE -->
+            <!-- ========================================= -->
+
+            @if (
+            tieneMejoraSolicitada &&
+            !esTecnico
+            ) {
+
+            <mat-divider>
+            </mat-divider>
+
+
+            <mat-card class="resultado-card resultado-mejora">
+
+                <mat-icon>
+                    replay
+                </mat-icon>
+
+                <div>
+
+                    <h3>
+                        Mejora solicitada
+                    </h3>
+
+                    <p>
+                        El trabajo fue enviado nuevamente
+                        al técnico para realizar correcciones.
+                    </p>
+
+                    @if (trabajo.motivoMejora) {
+
+                    <div class="texto-lectura">
+
+                        <strong>
+                            Observaciones
+                        </strong>
+
+                        <p>
+                            {{ trabajo.motivoMejora }}
+                        </p>
+
+                    </div>
+
+                    }
+
+                </div>
+
+            </mat-card>
+
+            }
+
+
+            <!-- ========================================= -->
+            <!-- REVISIÓN DEL SECTOR -->
+            <!-- ========================================= -->
+
+            @if (responsablePuedeRevisarTrabajo) {
+
+            <mat-divider>
+            </mat-divider>
+
+
+            <mat-card class="seccion-accion">
+
+                <mat-card-header>
+
+                    <mat-card-title>
+                        Trabajo pendiente de aprobación
+                    </mat-card-title>
+
+                    <mat-card-subtitle>
+
+                        Revise el detalle, las fechas
+                        y las imágenes del trabajo.
+
+                    </mat-card-subtitle>
+
+                </mat-card-header>
+
+
+                <mat-card-content>
+
+                    @if (!mostrarSolicitudMejora) {
+
+                    <div class="acciones">
+
+                        <button mat-raised-button color="primary" type="button" [disabled]="procesandoRevision"
+                            (click)="aprobarTrabajo()">
+
+                            <mat-icon>
+                                verified
+                            </mat-icon>
+
+                            Aprobar trabajo
+
+                        </button>
+
+
+                        <button mat-stroked-button color="warn" type="button" [disabled]="procesandoRevision"
+                            (click)="mostrarFormularioMejora()">
+
+                            <mat-icon>
+                                replay
+                            </mat-icon>
+
+                            Solicitar mejora
+
+                        </button>
+
+                    </div>
+
+                    } @else {
+
+                    <div class="solicitud-mejora">
+
+                        <h3>
+                            Solicitar mejora
+                        </h3>
+
+                        <p>
+                            Indique qué debe corregir
+                            o completar el técnico.
+                        </p>
+
+
+                        <mat-form-field appearance="outline" class="campo-completo">
+
+                            <mat-label>
+                                Motivo de la mejora
+                            </mat-label>
+
+                            <textarea matInput rows="5" maxlength="2000" [(ngModel)]="comentariosMejora"
+                                placeholder="Describa qué debe revisar o corregir el técnico...">
+
+                                        </textarea>
+
+                            <mat-hint align="end">
+
+                                {{
+                                comentariosMejora.length
+                                }}/2000
+
+                            </mat-hint>
+
+                        </mat-form-field>
+
+
+                        <div class="acciones">
+
+                            <button mat-stroked-button type="button" [disabled]="procesandoRevision"
+                                (click)="cancelarSolicitudMejora()">
+
+                                Cancelar
+
+                            </button>
+
+
+                            <button mat-raised-button color="warn" type="button" [disabled]="
+                                                procesandoRevision ||
+                                                !comentariosMejora.trim()
+                                            " (click)="solicitarMejora()">
+
+                                <mat-icon>
+                                    replay
+                                </mat-icon>
+
+                                @if (procesandoRevision) {
+
+                                Procesando...
+
+                                } @else {
+
+                                Confirmar mejora
 
                                 }
 
                             </button>
 
-                        </mat-card-content>
-
-                    </mat-card>
-
-                }
-
-
-                <!-- ========================================= -->
-                <!-- FINALIZADO -->
-                <!-- ========================================= -->
-
-                @if (estaFinalizado) {
-
-                    <mat-divider>
-                    </mat-divider>
-
-
-                    <mat-card class="resultado-card resultado-finalizado">
-
-                        <mat-icon>
-                            task_alt
-                        </mat-icon>
-
-                        <div>
-
-                            <h3>
-                                Trabajo finalizado
-                            </h3>
-
-                            <p>
-                                El trabajo fue realizado, aprobado,
-                                facturado y pagado correctamente.
-                            </p>
-
                         </div>
 
-                    </mat-card>
+                    </div>
 
-                }
+                    }
 
+                </mat-card-content>
 
-                <!-- ========================================= -->
-                <!-- CANCELADO -->
-                <!-- ========================================= -->
+            </mat-card>
 
-                @if (estaCancelado) {
-
-                    <mat-divider>
-                    </mat-divider>
+            }
 
 
-                    <mat-card class="resultado-card resultado-cancelado">
+            <!-- ========================================= -->
+            <!-- TRABAJO APROBADO -->
+            <!-- ========================================= -->
+
+            @if (estaAprobado) {
+
+            <mat-divider>
+            </mat-divider>
+
+
+            <mat-card class="resultado-card resultado-aprobado">
+
+                <mat-icon>
+                    verified
+                </mat-icon>
+
+                <div>
+
+                    <h3>
+                        Trabajo aprobado
+                    </h3>
+
+                    <p>
+                        El responsable del sector aprobó
+                        el trabajo realizado.
+                    </p>
+
+                </div>
+
+            </mat-card>
+
+            }
+
+
+            <!-- ========================================= -->
+            <!-- FACTURAS -->
+            <!-- ========================================= -->
+
+            @if (mostrarFacturas) {
+
+            <mat-divider>
+            </mat-divider>
+
+
+            <mat-card class="seccion-accion">
+
+                <mat-card-header>
+
+                    <mat-card-title>
+                        Facturas
+                    </mat-card-title>
+
+                    <mat-card-subtitle>
+                        Facturación asociada al trabajo.
+                    </mat-card-subtitle>
+
+                </mat-card-header>
+
+
+                <mat-card-content>
+
+                    @if (
+                    trabajo.facturas &&
+                    trabajo.facturas.length > 0
+                    ) {
+
+                    <div class="lista-facturas">
+
+                        @for (
+                        factura of trabajo.facturas;
+                        track factura.id
+                        ) {
+
+                        <a mat-stroked-button color="primary" [href]="
+                                                obtenerUrlFactura(
+                                                    factura.rutaArchivo
+                                                )
+                                            " target="_blank" rel="noopener noreferrer">
+
+                            <mat-icon>
+                                picture_as_pdf
+                            </mat-icon>
+
+                            Factura {{ factura.id }}
+
+                        </a>
+
+                        }
+
+                    </div>
+
+                    } @else {
+
+                    <p class="sin-informacion">
+                        Todavía no se cargaron facturas.
+                    </p>
+
+                    }
+
+
+                    @if (tecnicoPuedeCargarFacturas) {
+
+                    <input #facturaInput type="file" multiple accept="application/pdf" hidden
+                        (change)="subirFactura($event)">
+
+
+                    <button mat-raised-button color="primary" type="button" [disabled]="subiendoFactura"
+                        (click)="facturaInput.click()">
 
                         <mat-icon>
-                            cancel
+                            upload_file
                         </mat-icon>
 
-                        <div>
+                        @if (subiendoFactura) {
 
-                            <h3>
-                                Trabajo cancelado
-                            </h3>
+                        Cargando...
 
-                            <p>
-                                Este trabajo fue cancelado
-                                y no permite nuevas acciones.
-                            </p>
+                        } @else {
 
-                        </div>
+                        Cargar facturas
 
-                    </mat-card>
+                        }
 
-                }
+                    </button>
 
-            </mat-card-content>
+                    }
 
-        </mat-card>
+                </mat-card-content>
+
+            </mat-card>
+
+            }
+
+
+            <!-- ========================================= -->
+            <!-- PAGO -->
+            <!-- ========================================= -->
+
+            @if (estaPendientePago) {
+
+            <mat-divider>
+            </mat-divider>
+
+
+            <mat-card class="seccion-accion">
+
+                <mat-card-header>
+
+                    <mat-card-title>
+                        Pendiente de pago
+                    </mat-card-title>
+
+                </mat-card-header>
+
+
+                <mat-card-content>
+
+                    <p>
+                        Las facturas se encuentran
+                        pendientes de pago.
+                    </p>
+
+
+                    @if (puedeRegistrarPago) {
+
+                    <div class="acciones">
+
+                        <button mat-raised-button color="primary" type="button" [disabled]="registrandoPago"
+                            (click)="registrarPago()">
+
+                            <mat-icon>
+                                payments
+                            </mat-icon>
+
+                            @if (registrandoPago) {
+
+                            Registrando...
+
+                            } @else {
+
+                            Registrar pago
+
+                            }
+
+                        </button>
+
+                    </div>
+
+                    }
+
+                </mat-card-content>
+
+            </mat-card>
+
+            }
+
+
+            <!-- ========================================= -->
+            <!-- INFORME -->
+            <!-- ========================================= -->
+
+            @if (mostrarInforme) {
+
+            <mat-divider>
+            </mat-divider>
+
+
+            <mat-card class="seccion-accion">
+
+                <mat-card-header>
+
+                    <mat-card-title>
+                        Informe del trabajo
+                    </mat-card-title>
+
+                </mat-card-header>
+
+
+                <mat-card-content>
+
+                    <p>
+                        Descargue el informe PDF completo
+                        del trabajo.
+                    </p>
+
+                    <button mat-raised-button color="warn" type="button" [disabled]="descargandoInforme"
+                        (click)="descargarInforme(trabajo.id)">
+
+                        <mat-icon>
+                            picture_as_pdf
+                        </mat-icon>
+
+                        @if (descargandoInforme) {
+
+                        Descargando...
+
+                        } @else {
+
+                        Descargar informe PDF
+
+                        }
+
+                    </button>
+
+                </mat-card-content>
+
+            </mat-card>
+
+            }
+
+
+            <!-- ========================================= -->
+            <!-- FINALIZADO -->
+            <!-- ========================================= -->
+
+            @if (estaFinalizado) {
+
+            <mat-divider>
+            </mat-divider>
+
+
+            <mat-card class="resultado-card resultado-finalizado">
+
+                <mat-icon>
+                    task_alt
+                </mat-icon>
+
+                <div>
+
+                    <h3>
+                        Trabajo finalizado
+                    </h3>
+
+                    <p>
+                        El trabajo fue realizado, aprobado,
+                        facturado y pagado correctamente.
+                    </p>
+
+                </div>
+
+            </mat-card>
+
+            }
+
+
+            <!-- ========================================= -->
+            <!-- CANCELADO -->
+            <!-- ========================================= -->
+
+            @if (estaCancelado) {
+
+            <mat-divider>
+            </mat-divider>
+
+
+            <mat-card class="resultado-card resultado-cancelado">
+
+                <mat-icon>
+                    cancel
+                </mat-icon>
+
+                <div>
+
+                    <h3>
+                        Trabajo cancelado
+                    </h3>
+
+                    <p>
+                        Este trabajo fue cancelado
+                        y no permite nuevas acciones.
+                    </p>
+
+                </div>
+
+            </mat-card>
+
+            }
+
+        </mat-card-content>
+
+    </mat-card>
 
     }
 
