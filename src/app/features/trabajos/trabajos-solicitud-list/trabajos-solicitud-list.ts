@@ -156,16 +156,10 @@ export class TrabajosSolicitudListComponent
 
 
   ngOnInit(): void {
-
     this.cargarTrabajos();
-
   }
 
-
-  // ==========================================
   // ROLES
-  // ==========================================
-
   esRol(...roles: string[]): boolean {
 
     return this.authService.tieneRol(
@@ -173,7 +167,6 @@ export class TrabajosSolicitudListComponent
     );
 
   }
-
 
   get puedeCrearTrabajo(): boolean {
 
