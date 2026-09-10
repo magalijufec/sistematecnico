@@ -606,18 +606,11 @@
 
     }
 
+<!-- PRESUPUESTO DEL TÉCNICO -->
 
-    <!-- ========================================= -->
-    <!-- PRESUPUESTO DEL TÉCNICO -->
-    <!-- ========================================= -->
+@if (mostrarSeccionPresupuestoTecnico) {
 
-    @if (
-    esTecnico &&
-    tecnicoAsignadoAlTrabajo &&
-    estaPendientePresupuestos
-    ) {
-
-    <mat-card class="accion-card">
+    <mat-card class="accion-card presupuesto-tecnico-card">
 
         <mat-card-header>
 
@@ -626,7 +619,13 @@
             </mat-card-title>
 
             <mat-card-subtitle>
-                Cargue el presupuesto de esta solicitud.
+
+                @if (presupuestoUsuario) {
+                    Presupuesto presentado para esta solicitud.
+                } @else {
+                    Cargue su presupuesto para esta solicitud.
+                }
+
             </mat-card-subtitle>
 
         </mat-card-header>
@@ -635,105 +634,189 @@
 
             @if (cargandoPresupuestos) {
 
-            <div class="carga-inline">
+                <div class="carga-inline">
 
-                <mat-spinner diameter="30">
-                </mat-spinner>
+                    <mat-spinner diameter="30">
+                    </mat-spinner>
 
-                Cargando presupuesto...
+                    <span>
+                        Cargando presupuesto...
+                    </span>
 
-            </div>
+                </div>
 
             } @else if (presupuestoUsuario) {
 
-            <div class="presupuesto-item">
+                <div
+                    class="presupuesto-item"
+                    [class.item-aprobado]="
+                        presupuestoUsuario.estadoId ===
+                        PRESUPUESTO_ESTADO_APROBADO
+                    "
+                    [class.item-rechazado]="
+                        presupuestoUsuario.estadoId ===
+                        PRESUPUESTO_RECHAZADO
+                    ">
 
-                <div class="presupuesto-header">
+                    <div class="presupuesto-header">
 
-                    <div>
+                        <div>
 
-                        <h3>
-                            Presupuesto cargado
-                        </h3>
+                            <h3>
+                                Presupuesto presentado
+                            </h3>
 
-                        <span>
+                            <span>
+                                {{
+                                    presupuestoUsuario.fechaCarga
+                                        | date:'dd/MM/yyyy HH:mm'
+                                }}
+                            </span>
 
-                            {{
-                            presupuestoUsuario.fechaCarga
-                            | date:'dd/MM/yyyy HH:mm'
-                            }}
+                        </div>
+
+                        <span
+                            class="estado-presupuesto"
+                            [ngClass]="
+                                obtenerClaseEstadoPresupuesto(
+                                    presupuestoUsuario.estadoId
+                                )
+                            ">
+
+                            {{ presupuestoUsuario.estado }}
 
                         </span>
 
                     </div>
 
-                    <span class="estado-presupuesto" [ngClass]="
-                                        obtenerClaseEstadoPresupuesto(
-                                            presupuestoUsuario.estadoId
-                                        )
-                                    ">
+                    <div class="descripcion">
 
-                        {{ presupuestoUsuario.estado }}
+                        <strong>
+                            Descripción
+                        </strong>
 
-                    </span>
+                        <p>
+                            {{
+                                presupuestoUsuario.descripcion ||
+                                'Sin descripción'
+                            }}
+                        </p>
 
-                </div>
+                    </div>
 
-                <div class="descripcion">
+                    @if (
+                        presupuestoUsuario.estadoId ===
+                            PRESUPUESTO_RECHAZADO &&
+                        presupuestoUsuario.motivoRechazo
+                    ) {
 
-                    <strong>
-                        Descripción
-                    </strong>
+                        <div class="motivo-rechazo-presupuesto">
 
-                    <p>
-                        {{
-                        presupuestoUsuario.descripcion ||
-                        'Sin descripción'
-                        }}
-                    </p>
+                            <strong>
+                                Motivo del rechazo
+                            </strong>
 
-                </div>
+                            <p>
+                                {{ presupuestoUsuario.motivoRechazo }}
+                            </p>
 
-                <div class="acciones">
-
-                    <button mat-stroked-button color="primary" type="button"
-                        (click)="verPresupuesto(presupuestoUsuario)">
-
-                        <mat-icon>picture_as_pdf</mat-icon>
-
-                        Ver presupuesto
-
-                    </button>
-
-                    @if (puedeEditarPresupuesto) {
-
-                    <button mat-raised-button color="primary" type="button" (click)="abrirEdicionPresupuesto()">
-
-                        <mat-icon>edit</mat-icon>
-
-                        Editar presupuesto
-
-                    </button>
+                        </div>
 
                     }
 
-                </div>
+                    <div class="acciones">
 
-            </div>
+                        <button
+                            mat-raised-button
+                            color="primary"
+                            type="button"
+                            (click)="
+                                verPresupuesto(
+                                    presupuestoUsuario
+                                )
+                            ">
+
+                            <mat-icon>
+                                picture_as_pdf
+                            </mat-icon>
+
+                            Ver mi presupuesto
+
+                        </button>
+
+                    </div>
+
+                    <div class="presupuesto-informacion">
+
+                        <mat-icon>
+                            info
+                        </mat-icon>
+
+                        <span>
+                            El presupuesto ya fue presentado y no puede modificarse.
+                        </span>
+
+                    </div>
+
+                </div>
 
             } @else if (puedeCargarPresupuesto) {
 
-            @if (!mostrarFormularioPresupuesto) {
+                @if (!mostrarFormularioPresupuesto) {
 
-            <button mat-raised-button color="primary" type="button" (click)="abrirCargaPresupuesto()">
+                    <div class="presupuesto-pendiente">
 
-                <mat-icon>upload_file</mat-icon>
+                        <mat-icon>
+                            request_quote
+                        </mat-icon>
 
-                Cargar presupuesto
+                        <div>
 
-            </button>
+                            <strong>
+                                Presupuesto pendiente
+                            </strong>
 
-            }
+                            <p>
+                                Todavía no presentó un presupuesto para este trabajo.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="acciones">
+
+                        <button
+                            mat-raised-button
+                            color="primary"
+                            type="button"
+                            (click)="abrirCargaPresupuesto()">
+
+                            <mat-icon>
+                                upload_file
+                            </mat-icon>
+
+                            Cargar presupuesto
+
+                        </button>
+
+                    </div>
+
+                }
+
+            } @else {
+
+                <div class="presupuesto-no-disponible">
+
+                    <mat-icon>
+                        block
+                    </mat-icon>
+
+                    <span>
+                        La carga de presupuestos ya no está disponible.
+                    </span>
+
+                </div>
 
             }
 
@@ -741,68 +824,117 @@
 
     </mat-card>
 
-    }
+}
 
+<!-- ========================================= -->
+<!-- FORMULARIO PARA CARGAR PRESUPUESTO -->
+<!-- ========================================= -->
 
-    <!-- ========================================= -->
-    <!-- FORMULARIO DE PRESUPUESTO -->
-    <!-- ========================================= -->
-
-    @if (
+@if (
     esTecnico &&
     mostrarFormularioPresupuesto &&
-    !tienePresupuestoAprobado
-    ) {
+    puedeCargarPresupuesto
+) {
 
     <mat-card class="accion-card">
 
         <mat-card-header>
 
             <mat-card-title>
-
-                @if (editandoPresupuesto) {
-                Editar presupuesto
-                } @else {
                 Cargar presupuesto
-                }
-
             </mat-card-title>
+
+            <mat-card-subtitle>
+                Seleccione un archivo PDF e ingrese una descripción.
+            </mat-card-subtitle>
 
         </mat-card-header>
 
         <mat-card-content>
 
-            <form [formGroup]="presupuestoForm" class="formulario-accion">
+            <form
+                [formGroup]="presupuestoForm"
+                class="formulario-accion">
 
-                <mat-form-field appearance="outline" class="campo-completo">
+                <mat-form-field
+                    appearance="outline"
+                    class="campo-completo">
 
                     <mat-label>
                         Descripción
                     </mat-label>
 
-                    <textarea matInput rows="6" maxlength="2000" formControlName="descripcion">
-                            </textarea>
+                    <textarea
+                        matInput
+                        rows="6"
+                        maxlength="2000"
+                        formControlName="descripcion"
+                        placeholder="Ingrese una descripción del presupuesto...">
+                    </textarea>
 
                     <mat-hint align="end">
-
                         {{
-                        presupuestoForm.controls
-                        .descripcion
-                        .value.length
+                            presupuestoForm.controls
+                                .descripcion
+                                .value.length
                         }}/2000
-
                     </mat-hint>
+
+                    @if (
+                        presupuestoForm.controls
+                            .descripcion
+                            .touched &&
+                        presupuestoForm.controls
+                            .descripcion
+                            .hasError('required')
+                    ) {
+
+                        <mat-error>
+                            La descripción es obligatoria.
+                        </mat-error>
+
+                    }
+
+                    @if (
+                        presupuestoForm.controls
+                            .descripcion
+                            .touched &&
+                        presupuestoForm.controls
+                            .descripcion
+                            .hasError('minlength')
+                    ) {
+
+                        <mat-error>
+                            Debe escribir al menos cinco caracteres.
+                        </mat-error>
+
+                    }
 
                 </mat-form-field>
 
                 <div class="selector-archivo">
 
-                    <input #archivoInput type="file" accept="application/pdf" hidden
-                        (change)="seleccionarArchivoPresupuesto($event)">
+                    <input
+                        #archivoInput
+                        type="file"
+                        accept="application/pdf,.pdf"
+                        hidden
+                        (change)="
+                            seleccionarArchivoPresupuesto(
+                                $event
+                            )
+                        ">
 
-                    <button mat-stroked-button color="primary" type="button" (click)="archivoInput.click()">
+                    <button
+                        mat-stroked-button
+                        color="primary"
+                        type="button"
+                        [disabled]="guardandoPresupuesto"
+                        (click)="archivoInput.click()">
 
-                        <mat-icon>picture_as_pdf</mat-icon>
+                        <mat-icon>
+                            picture_as_pdf
+                        </mat-icon>
 
                         Seleccionar PDF
 
@@ -810,46 +942,69 @@
 
                     @if (archivoPresupuesto) {
 
-                    <span class="archivo-seleccionado">
+                        <span class="archivo-seleccionado">
 
-                        <mat-icon>description</mat-icon>
+                            <mat-icon>
+                                description
+                            </mat-icon>
 
-                        {{ archivoPresupuesto.name }}
+                            {{ archivoPresupuesto.name }}
 
-                    </span>
+                        </span>
 
-                    } @else if (editandoPresupuesto) {
+                    } @else {
 
-                    <span class="texto-ayuda">
-                        Si no selecciona otro PDF, se conserva el actual.
-                    </span>
+                        <span class="texto-ayuda">
+                            Debe seleccionar un archivo PDF.
+                        </span>
 
                     }
 
                 </div>
 
+                <div class="presupuesto-advertencia">
+
+                    <mat-icon>
+                        warning
+                    </mat-icon>
+
+                    <span>
+                        Una vez cargado, el presupuesto no podrá modificarse.
+                    </span>
+
+                </div>
+
                 <div class="acciones">
 
-                    <button mat-stroked-button type="button" [disabled]="guardandoPresupuesto"
+                    <button
+                        mat-stroked-button
+                        type="button"
+                        [disabled]="guardandoPresupuesto"
                         (click)="cancelarPresupuesto()">
 
                         Cancelar
 
                     </button>
 
-                    <button mat-raised-button color="primary" type="button" [disabled]="
-                                    guardandoPresupuesto ||
-                                    presupuestoForm.invalid
-                                " (click)="guardarPresupuesto()">
+                    <button
+                        mat-raised-button
+                        color="primary"
+                        type="button"
+                        [disabled]="
+                            guardandoPresupuesto ||
+                            presupuestoForm.invalid ||
+                            !archivoPresupuesto
+                        "
+                        (click)="guardarPresupuesto()">
 
-                        <mat-icon>save</mat-icon>
+                        <mat-icon>
+                            upload_file
+                        </mat-icon>
 
                         @if (guardandoPresupuesto) {
-                        Guardando...
-                        } @else if (editandoPresupuesto) {
-                        Guardar cambios
+                            Cargando...
                         } @else {
-                        Cargar presupuesto
+                            Confirmar presupuesto
                         }
 
                     </button>
@@ -862,17 +1017,14 @@
 
     </mat-card>
 
-    }
+}
 
 
     <!-- ========================================= -->
     <!-- PRESUPUESTOS PARA EL SECTOR -->
     <!-- ========================================= -->
 
-    @if (
-    puedeGestionarSector &&
-    trabajo.idEstado >= PENDIENTE_PRESUPUESTOS
-    ) {
+    @if (mostrarListadoPresupuestosSector) {
 
     <mat-card class="detalle-card">
 
@@ -1038,6 +1190,110 @@
     </mat-card>
 
     }
+
+    <!-- ========================================= -->
+<!-- PRESUPUESTO APROBADO -->
+<!-- ========================================= -->
+
+@if (mostrarPresupuestoAprobado) {
+
+    <mat-card class="detalle-card presupuesto-aprobado-card">
+
+        <mat-card-header>
+
+            <mat-icon mat-card-avatar>
+                verified
+            </mat-icon>
+
+            <mat-card-title>
+                Presupuesto aprobado
+            </mat-card-title>
+
+            <mat-card-subtitle>
+                Presupuesto seleccionado para continuar el trabajo.
+            </mat-card-subtitle>
+
+        </mat-card-header>
+
+        <mat-card-content>
+
+            @if (presupuestoAprobado; as aprobado) {
+
+                <div class="presupuesto-aprobado-contenido">
+
+                    <div class="presupuesto-aprobado-datos">
+
+                        <div>
+
+                            <span class="dato-label">
+                                Técnico
+                            </span>
+
+                            <strong>
+                                {{ aprobado.tecnico }}
+                            </strong>
+
+                        </div>
+
+                        <div>
+
+                            <span class="dato-label">
+                                Fecha de presentación
+                            </span>
+
+                            <strong>
+                                {{
+                                    aprobado.fechaCarga
+                                        | date:'dd/MM/yyyy HH:mm'
+                                }}
+                            </strong>
+
+                        </div>
+
+                        <div class="descripcion-aprobada">
+
+                            <span class="dato-label">
+                                Descripción
+                            </span>
+
+                            <strong>
+                                {{
+                                    aprobado.descripcion ||
+                                    'Sin descripción'
+                                }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                    <div class="acciones">
+
+                        <button
+                            mat-raised-button
+                            color="primary"
+                            type="button"
+                            (click)="verPresupuesto(aprobado)">
+
+                            <mat-icon>
+                                picture_as_pdf
+                            </mat-icon>
+
+                            Ver presupuesto aprobado
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            }
+
+        </mat-card-content>
+
+    </mat-card>
+
+}
 
     <!-- CARGAR MATERIALES -->
     @if (puedeCargarMateriales) {

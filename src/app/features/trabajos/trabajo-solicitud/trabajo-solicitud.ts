@@ -299,7 +299,7 @@ export class TrabajoSolicitudComponent
       'Monitoreo'
     );
   }
-  
+
   get puedeGestionarSector(): boolean {
     return this.esResponsableSector;
   }
@@ -365,6 +365,62 @@ export class TrabajoSolicitudComponent
     );
   }
 
+  get mostrarSeccionPresupuestoTecnico(): boolean {
+    if (
+      !this.trabajo ||
+      !this.esTecnico ||
+      !this.tecnicoAsignadoAlTrabajo
+    ) {
+      return false;
+    }
+
+    return (
+      this.trabajo.idEstado >=
+      this.PENDIENTE_PRESUPUESTOS &&
+      this.trabajo.idEstado <=
+      this.MATERIALES_ENVIADOS
+    );
+  }
+
+  get presupuestoAprobado():
+    PresupuestoDetalle | undefined {
+
+    return this.presupuestos.find(
+      presupuesto =>
+        presupuesto.estadoId ===
+        this.PRESUPUESTO_ESTADO_APROBADO
+    );
+  }
+
+
+  get mostrarPresupuestoAprobado(): boolean {
+
+    return (
+      this.presupuestoAprobado != null &&
+      (
+        this.estaPresupuestoAprobado ||
+        this.estaPendienteMateriales ||
+        this.estaMaterialesEnviados
+      )
+    );
+  }
+
+  get mostrarListadoPresupuestosSector(): boolean {
+    if (
+      !this.trabajo ||
+      !this.puedeGestionarSector
+    ) {
+      return false;
+    }
+
+    return (
+      this.trabajo.idEstado >=
+      this.PENDIENTE_PRESUPUESTOS &&
+      this.trabajo.idEstado <=
+      this.MATERIALES_ENVIADOS
+    );
+  }
+
   get estaPendienteMateriales(): boolean {
     return (
       this.trabajo?.idEstado ===
@@ -397,20 +453,10 @@ export class TrabajoSolicitudComponent
 
   get puedeCargarPresupuesto(): boolean {
     return (
+      this.esTecnico &&
       this.tecnicoAsignadoAlTrabajo &&
       this.estaPendientePresupuestos &&
       !this.presupuestoUsuario &&
-      !this.tienePresupuestoAprobado
-    );
-  }
-
-  get puedeEditarPresupuesto(): boolean {
-    return (
-      this.tecnicoAsignadoAlTrabajo &&
-      this.estaPendientePresupuestos &&
-      this.presupuestoUsuario != null &&
-      this.presupuestoUsuario.estadoId ===
-      this.PRESUPUESTO_EN_REVISION &&
       !this.tienePresupuestoAprobado
     );
   }
@@ -841,7 +887,9 @@ export class TrabajoSolicitudComponent
 
     this.presupuestoUsuario =
       this.presupuestos.find(
-        presupuesto => presupuesto.tecnicoId === this.usuarioIdActual
+        presupuesto =>
+          Number(presupuesto.tecnicoId) ===
+          Number(this.usuarioIdActual)
       );
   }
 
@@ -852,40 +900,14 @@ export class TrabajoSolicitudComponent
       return;
     }
 
-    this.editandoPresupuesto = false;
-
     this.mostrarFormularioPresupuesto =
       true;
 
-    this.archivoPresupuesto = null;
+    this.archivoPresupuesto =
+      null;
 
     this.presupuestoForm.reset({
       descripcion: ''
-    });
-  }
-
-  abrirEdicionPresupuesto(): void {
-
-    if (
-      !this.puedeEditarPresupuesto ||
-      !this.presupuestoUsuario
-    ) {
-      return;
-    }
-
-    this.editandoPresupuesto = true;
-
-    this.mostrarFormularioPresupuesto =
-      true;
-
-    this.archivoPresupuesto = null;
-
-    this.presupuestoForm.reset({
-
-      descripcion:
-        this.presupuestoUsuario
-          .descripcion ?? ''
-
     });
   }
 
@@ -896,9 +918,6 @@ export class TrabajoSolicitudComponent
     }
 
     this.mostrarFormularioPresupuesto =
-      false;
-
-    this.editandoPresupuesto =
       false;
 
     this.archivoPresupuesto =
@@ -960,9 +979,18 @@ export class TrabajoSolicitudComponent
     if (
       !this.trabajo ||
       this.usuarioIdActual == null ||
-      this.guardandoPresupuesto ||
-      this.tienePresupuestoAprobado
+      this.guardandoPresupuesto
     ) {
+      return;
+    }
+    if (!this.puedeCargarPresupuesto) {
+
+      this.toastService.warning(
+        this.presupuestoUsuario
+          ? 'Ya tiene un presupuesto cargado para este trabajo.'
+          : 'La carga de presupuestos ya no está disponible.'
+      );
+
       return;
     }
 
@@ -974,15 +1002,11 @@ export class TrabajoSolicitudComponent
       return;
     }
 
-    if (
-      !this.editandoPresupuesto &&
-      !this.archivoPresupuesto
-    ) {
+    if (!this.archivoPresupuesto) {
 
       this.toastService.warning(
-        'Debe seleccionar el archivo PDF.'
+        'Debe seleccionar el archivo PDF del presupuesto.'
       );
-
       return;
     }
 
@@ -992,43 +1016,53 @@ export class TrabajoSolicitudComponent
         .value
         .trim();
 
-    this.guardandoPresupuesto = true;
+    if (!descripcion) {
 
-    if (
-      this.editandoPresupuesto &&
-      this.presupuestoUsuario
-    ) {
-
-      this.actualizarPresupuesto(
-        descripcion
+      this.toastService.warning(
+        'Debe ingresar una descripción.'
       );
 
       return;
     }
 
+    this.guardandoPresupuesto =
+      true;
     this.crearPresupuesto(
       descripcion
     );
   }
 
-  private crearPresupuesto(descripcion: string): void {
+  private crearPresupuesto(
+    descripcion: string
+  ): void {
+
     if (
       !this.trabajo ||
       !this.archivoPresupuesto ||
       this.usuarioIdActual == null
     ) {
 
-      this.guardandoPresupuesto = false;
+      this.guardandoPresupuesto =
+        false;
 
       return;
     }
 
+    const idTrabajo =
+      this.trabajo.id;
+
+    const idTecnico =
+      this.usuarioIdActual;
+
+    const archivo =
+      this.archivoPresupuesto
+
     this.presupuestoService
       .crear(
-        this.trabajo.id,
-        this.usuarioIdActual,
+        idTrabajo,
+        idTecnico,
         descripcion,
-        this.archivoPresupuesto
+        archivo
       )
       .subscribe({
 
@@ -1037,13 +1071,26 @@ export class TrabajoSolicitudComponent
           this.guardandoPresupuesto =
             false;
 
+          this.mostrarFormularioPresupuesto =
+            false;
+
+          this.archivoPresupuesto =
+            null;
+
+          this.presupuestoForm.reset({
+            descripcion: ''
+          });
+
           this.toastService.success(
+            response.mensaje ??
             'Presupuesto cargado correctamente.'
           );
-
-          this.cancelarPresupuesto();
-
-          this.cargarPresupuestos();
+          /*
+           * Recarga el *rabajo porque el backend puede
+     *     * haber cambiado el estado a
+  *        * PendienteAprobacionPresu*uesto.
+           */
+          this.cargarTrabajo();
         },
 
         error: error => {
@@ -1060,53 +1107,14 @@ export class TrabajoSolicitudComponent
             error.error?.mensaje ??
             'No se pudo cargar el presupuesto.'
           );
-
         }
 
       });
   }
-
   mostrarRechazoPresupuesto(presupuesto: any): void {
     this.presupuestoARechazar = presupuesto;
     this.mostrarFormularioRechazoPresupuesto = true;
     this.rechazoPresupuestoForm.reset({ motivo: '' });
-  }
-
-  private actualizarPresupuesto(descripcion: string): void {
-    if (!this.presupuestoUsuario) {
-      this.guardandoPresupuesto = false;
-      return;
-    }
-
-    this.presupuestoService
-      .actualizar(
-        this.presupuestoUsuario.id,
-        descripcion,
-        this.archivoPresupuesto
-      )
-      .subscribe({
-        next: response => {
-          this.guardandoPresupuesto = false;
-          this.toastService.success(
-            'Presupuesto actualizado correctamente.'
-          );
-          this.cancelarPresupuesto();
-          this.cargarPresupuestos();
-        },
-
-        error: error => {
-          this.guardandoPresupuesto = false;
-          console.error(
-            'Error al actualizar presupuesto',
-            error
-          );
-
-          this.toastService.error(
-            error.error?.mensaje ??
-            'No se pudo actualizar el presupuesto.'
-          );
-        }
-      });
   }
 
   // APROBAR PRESUPUESTO
@@ -1304,9 +1312,19 @@ export class TrabajoSolicitudComponent
       return rutaArchivo;
     }
 
+    const apiSinBarra =
+      this.api.endsWith('/')
+        ? this.api.slice(0, -1)
+        : this.api;
+
+    const rutaConBarra =
+      rutaArchivo.startsWith('/')
+        ? rutaArchivo
+        : `/${rutaArchivo}`;
+
     return (
-      this.api +
-      rutaArchivo
+      apiSinBarra +
+      rutaConBarra
     );
   }
 
