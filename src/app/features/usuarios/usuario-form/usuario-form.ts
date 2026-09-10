@@ -127,7 +127,6 @@ export class UsuarioFormComponent implements OnInit {
       .obtenerPorIdInactivoYActivo(this.idUsuario)
       .subscribe({
         next: usuario => {
-          console.log('Usuario a editar:', usuario);
           this.form.patchValue({
             userName: usuario.userName,
             nombreApellido: usuario.nombreApellido,
@@ -196,8 +195,6 @@ export class UsuarioFormComponent implements OnInit {
         .get('idProvincia')
         ?.value;
 
-    console.log('Provincia seleccionada:', provinciaId);
-
     this.ciudades = [];
     this.clientes = [];
     this.clientesFiltrados = [];
@@ -214,7 +211,6 @@ export class UsuarioFormComponent implements OnInit {
     this.ciudadService.obtenerPorProvincia(provinciaId)
       .subscribe({
         next: data => {
-          console.log('Ciudades recibidas:', data);
           this.ciudades = data;
         },
         error: error => {
@@ -231,9 +227,6 @@ export class UsuarioFormComponent implements OnInit {
     const ciudadId = this.form
       .get('idCiudad')
       ?.value;
-
-    console.log('Provincia:', provinciaId);
-    console.log('Ciudad:', ciudadId);
     this.clientes = [];
     this.clientesFiltrados = [];
 

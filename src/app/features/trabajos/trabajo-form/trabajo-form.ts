@@ -158,32 +158,20 @@ export class TrabajoFormComponent
 
 
   idTrabajo = 0;
-
   esEdicion = false;
-
   guardando = false;
-
   cargandoTareas = false;
-
   cargandoTecnicos = false;
-
   rolUsuario = '';
-
+  cargandoClienteUsuario = false;
 
   clientes: ClienteCombo[] = [];
-
   clientesFiltrados: ClienteCombo[] = [];
-
   sectores: Combo[] = [];
-
   tareas: Combo[] = [];
-
   tecnicos: TecnicoCombo[] = [];
-
   tecnicosFiltrados: TecnicoCombo[] = [];
-
   archivos: File[] = [];
-
 
   clienteFiltro =
     new FormControl<string>(
@@ -203,7 +191,6 @@ export class TrabajoFormComponent
 
 
   form = this.fb.nonNullable.group({
-
     idCliente: [
       0,
       [
@@ -211,7 +198,6 @@ export class TrabajoFormComponent
         Validators.min(1)
       ]
     ],
-
     idSector: [
       0,
       [
@@ -219,7 +205,6 @@ export class TrabajoFormComponent
         Validators.min(1)
       ]
     ],
-
     idTarea: [
       0,
       [
@@ -227,38 +212,47 @@ export class TrabajoFormComponent
         Validators.min(1)
       ]
     ],
-
     idsTecnicos: [
       [] as number[]
     ],
-
     comentarios: [
       ''
     ]
-
   });
 
 
   ngOnInit(): void {
 
-    this.idTrabajo =
-      Number(
-        this.route.snapshot
-          .paramMap
-          .get('id')
-      );
+  this.idTrabajo =
+    Number(
+      this.route.snapshot
+        .paramMap
+        .get('id')
+    );
 
-    this.esEdicion =
-      this.idTrabajo > 0;
+  this.esEdicion =
+    this.idTrabajo > 0;
 
-    this.cargarContextoUsuario();
+  this.rolUsuario =
+    this.authService.obtenerRol() ?? '';
 
-    this.configurarFiltros();
+  this.configurarFiltros();
 
-    this.configurarCambiosFormulario();
+  this.configurarCambiosFormulario();
 
-    this.cargarDatosIniciales();
+  /*
+   * Para Farmacia se obtiene primero el cliente
+   * asociado al usuario autenticado.
+   */
+  if (this.esFarmacia) {
+
+    this.cargarClienteUsuarioFarmacia();
+
+    return;
   }
+
+  this.cargarDatosIniciales();
+}
 
 
   ngOnDestroy(): void {
@@ -279,6 +273,104 @@ export class TrabajoFormComponent
       this.authService.obtenerRol() ?? '';
 
   }
+
+  private cargarClienteUsuarioFarmacia(): void {
+
+  const usuarioId =
+    this.authService.obtenerUsuarioId();
+
+  if (
+    usuarioId == null ||
+    usuarioId <= 0
+  ) {
+
+    this.toastService.error(
+      'No se pudo identificar al usuario autenticado.'
+    );
+
+    return;
+  }
+
+  this.cargandoClienteUsuario =
+    true;
+
+  this.usuarioService
+    .obtenerPorId(usuarioId)
+    .subscribe({
+
+      next: usuario => {
+
+        const clienteId =
+  usuario?.clienteId ?? 0;
+
+        if (clienteId <= 0) {
+
+          this.cargandoClienteUsuario =
+            false;
+
+          this.toastService.error(
+            'El usuario de Farmacia no tiene un cliente asociado.'
+          );
+
+          return;
+        }
+
+        /*
+         * Esto sí cambia el FormControl.
+         *
+         * No alcanza con modificar una copia obtenida
+         * mediante getRawValue().
+         */
+        this.form.controls
+          .idCliente
+          .setValue(
+            clienteId,
+            {
+              emitEvent: false
+            }
+          );
+
+        /*
+         * Farmacia no debe elegir otro cliente.
+         */
+        this.form.controls
+          .idCliente
+          .disable(
+            {
+              emitEvent: false
+            }
+          );
+
+        this.cargandoClienteUsuario =
+          false;
+
+        /*
+         * Una vez cargado el cliente, continúa
+         * la carga habitual del formulario.
+         */
+        this.cargarDatosIniciales();
+
+      },
+
+      error: error => {
+
+        this.cargandoClienteUsuario =
+          false;
+
+        console.error(
+          'Error al obtener el cliente del usuario',
+          error
+        );
+
+        this.toastService.error(
+          error.error?.mensaje ??
+          'No se pudo obtener el cliente asociado al usuario.'
+        );
+
+      }
+
+    });
+}
 
 
   esRol(...roles: string[]): boolean {
@@ -957,127 +1049,122 @@ export class TrabajoFormComponent
 
   guardar(): void {
 
-    if (this.guardando) {
-      return;
-    }
+  if (
+    this.guardando ||
+    this.cargandoClienteUsuario
+  ) {
+    return;
+  }
 
-    const valores = this.form.getRawValue();
+  const valores =
+    this.form.getRawValue();
 
-    // valores.idCliente = this.authService.obtenerClienteId() ?? 0;
+  if (valores.idCliente <= 0) {
 
-    // this.form.controls.idCliente.setValue(valores.idCliente);
+    this.form.controls
+      .idCliente
+      .markAsTouched();
 
-    if (valores.idCliente <= 0) {
+    this.toastService.warning(
+      this.esFarmacia
+        ? 'El usuario no tiene un cliente asociado.'
+        : 'Debe seleccionar un cliente.'
+    );
 
-      this.form.controls
-        .idCliente
-        .markAsTouched();
+    return;
+  }
 
-      this.toastService.warning(
-        'Debe seleccionar un cliente.'
-      );
+  if (valores.idSector <= 0) {
 
-      return;
+    this.form.controls
+      .idSector
+      .markAsTouched();
 
-    }
+    this.toastService.warning(
+      'Debe seleccionar un sector.'
+    );
 
+    return;
+  }
 
-    if (valores.idSector <= 0) {
+  if (valores.idTarea <= 0) {
 
-      this.form.controls
-        .idSector
-        .markAsTouched();
+    this.form.controls
+      .idTarea
+      .markAsTouched();
 
-      this.toastService.warning(
-        'Debe seleccionar un sector.'
-      );
+    this.toastService.warning(
+      'Debe seleccionar una tarea.'
+    );
 
-      return;
+    return;
+  }
 
-    }
+  if (
+    this.puedeAsignarTecnicos &&
+    valores.idsTecnicos.length === 0
+  ) {
 
+    this.form.controls
+      .idsTecnicos
+      .markAsTouched();
 
-    if (valores.idTarea <= 0) {
+    this.toastService.warning(
+      'Debe asignar al menos un técnico.'
+    );
 
-      this.form.controls
-        .idTarea
-        .markAsTouched();
+    return;
+  }
 
-      this.toastService.warning(
-        'Debe seleccionar una tarea.'
-      );
+  if (this.form.invalid) {
 
-      return;
+    this.form.markAllAsTouched();
 
-    }
+    return;
+  }
 
+  const trabajo: TrabajoCreate = {
 
-    if (this.puedeAsignarTecnicos && valores.idsTecnicos.length === 0) {
+    idCliente:
+      valores.idCliente,
 
-      this.form.controls.idsTecnicos.markAsTouched();
+    idSector:
+      valores.idSector,
 
-      this.toastService.warning(
-        'Debe asignar al menos un técnico.'
-      );
+    idTarea:
+      valores.idTarea,
 
-      return;
+    idsTecnicos:
+      valores.idsTecnicos,
 
-    }
+    comentarios:
+      valores.comentarios.trim() ||
+      null,
 
+    archivos:
+      this.archivos,
 
-    if (this.form.invalid) {
+    idUsuarioCreacion:
+      this.authService
+        .obtenerUsuarioId() ?? 0
+  };
 
-      this.form.markAllAsTouched();
+  this.guardando =
+    true;
 
-      return;
+  if (!this.esEdicion) {
 
-    }
-
-
-    const trabajo: TrabajoCreate = {
-
-      idCliente: valores.idCliente,
-      idSector: valores.idSector,
-
-      idTarea:
-        valores.idTarea,
-
-      idsTecnicos:
-        valores.idsTecnicos,
-
-      comentarios:
-        valores.comentarios.trim() ||
-        null,
-
-      archivos:
-        this.archivos,
-      idUsuarioCreacion:
-        this.authService
-          .obtenerUsuarioId()
-        ?? 0
-
-    };
-
-
-    this.guardando = true;
-
-
-    if (!this.esEdicion) {
-
-      this.crearTrabajo(
-        trabajo
-      );
-
-      return;
-
-    }
-
-
-    this.actualizarTrabajo(
+    this.crearTrabajo(
       trabajo
     );
 
+    return;
   }
+
+  this.actualizarTrabajo(
+    trabajo
+  );
+}
 
 
   private crearTrabajo(

@@ -25,5 +25,6 @@ export interface UsuarioDetalle {
   provinciaId: number | null;
   ciudadId: number | null;
   clienteId: number | null;
+  cliente: string | null;
   activo: boolean;
 }

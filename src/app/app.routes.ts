@@ -70,73 +70,54 @@ export const routes: Routes = [
 
     {
         path: 'login',
-
         component: LoginComponent,
-
         canActivate: [
             guestGuard
         ]
-
     },
 
     {
         path: '',
-
         component: MainLayoutComponent,
-
         canActivate: [
             authGuard
         ],
 
-
         children: [
             {
                 path: '',
-
                 redirectTo: 'dashboard',
-
                 pathMatch: 'full'
             },
 
             {
                 path: 'dashboard',
-
                 component: DashboardComponent
-
             },
 
             {
                 path: 'cambiar-password',
-
                 component:
                     CambiarPasswordComponent
-
             },
 
             {
                 path: 'clientes',
-
                 canActivate: [
-
                     roleGuard([
                         'Administrador'
                     ])
-
                 ],
 
                 children: [
-
                     {
                         path: '',
-
                         component:
                             ClientesListComponent
-
                     },
 
                     {
                         path: 'nuevo',
-
                         component:
                             ClienteFormComponent
 
@@ -144,10 +125,8 @@ export const routes: Routes = [
 
                     {
                         path: ':id',
-
                         component:
                             ClienteFormComponent
-
                     }
 
                 ]
@@ -156,59 +135,38 @@ export const routes: Routes = [
 
             {
                 path: 'usuarios',
-
                 canActivate: [
-
                     roleGuard([
                         'Administrador'
                     ])
-
                 ],
 
                 children: [
-
                     {
                         path: '',
-
                         component:
                             UsuariosListComponent
-
                     },
 
                     {
                         path: 'nuevo',
-
                         component:
                             UsuarioFormComponent
-
                     },
 
                     {
                         path: ':id',
-
                         component:
                             UsuarioFormComponent
-
                     }
 
                 ]
 
             },
 
-
-            // ============================
-            // TRABAJOS
-            // ADMINISTRADOR
-            // SISTEMAS
-            // TECNICO
-            // FARMACIA
-            // ============================
-
             {
                 path: 'trabajos',
-
                 canActivate: [
-
                     roleGuard([
                         'Administrador',
                         'Sistemas',
@@ -218,14 +176,11 @@ export const routes: Routes = [
                         'Farmacia',
                         'Pagos'
                     ])
-
                 ],
 
                 children: [
-
                     {
                         path: '',
-
                         component:
                             TrabajosListComponent,
                         canActivate: [
@@ -234,6 +189,7 @@ export const routes: Routes = [
                                 'Sistemas',
                                 'Mantenimiento',
                                 'Monitoreo',
+                                'Tecnico',
                                 'Farmacia'
                             ])
                         ]

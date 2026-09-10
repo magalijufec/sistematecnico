@@ -5,9 +5,9 @@
         <mat-card-title>
 
             @if (!esEdicion) {
-                Nueva solicitud de trabajo
+            Nueva solicitud de trabajo
             } @else {
-                Editar trabajo #{{ idTrabajo }}
+            Editar trabajo #{{ idTrabajo }}
             }
 
         </mat-card-title>
@@ -24,10 +24,7 @@
 
     <mat-card-content>
 
-        <form
-            [formGroup]="form"
-            class="formulario"
-            (ngSubmit)="guardar()">
+        <form [formGroup]="form" class="formulario" (ngSubmit)="guardar()">
 
 
             <!-- ========================================= -->
@@ -62,81 +59,57 @@
 
                     <!-- CLIENTE -->
 
+                    <!-- CLIENTE -->
+
                     @if (puedeSeleccionarCliente) {
 
-                        <mat-form-field appearance="outline">
+                    <mat-form-field appearance="outline">
 
-                            <mat-label>
-                                Cliente
-                            </mat-label>
+                        <mat-label>
+                            Cliente
+                        </mat-label>
 
-                            <mat-select
-                                formControlName="idCliente">
+                        <mat-select formControlName="idCliente">
 
-                                <mat-option>
+                            <mat-option>
 
-                                    <ngx-mat-select-search
-                                        [formControl]="clienteFiltro"
-                                        placeholderLabel="Buscar cliente..."
-                                        noEntriesFoundLabel="No se encontraron clientes">
+                                <ngx-mat-select-search [formControl]="clienteFiltro"
+                                    placeholderLabel="Buscar cliente..."
+                                    noEntriesFoundLabel="No se encontraron clientes">
 
-                                    </ngx-mat-select-search>
+                                </ngx-mat-select-search>
 
-                                </mat-option>
+                            </mat-option>
 
-                                @for (
-                                    cliente of clientesFiltrados;
-                                    track cliente.id
-                                ) {
-
-                                    <mat-option
-                                        [value]="cliente.id">
-
-                                        {{ cliente.nombre }}
-
-                                    </mat-option>
-
-                                }
-
-                            </mat-select>
-
-                            @if (
-                                form.controls.idCliente.touched &&
-                                form.controls.idCliente.invalid
+                            @for (
+                            cliente of clientesFiltrados;
+                            track cliente.id
                             ) {
 
-                                <mat-error>
-                                    Debe seleccionar un cliente.
-                                </mat-error>
+                            <mat-option [value]="cliente.id">
+
+                                {{ cliente.nombre }}
+
+                            </mat-option>
 
                             }
 
-                        </mat-form-field>
+                        </mat-select>
 
-                    } @else {
+                        @if (
+                        form.controls.idCliente.touched &&
+                        form.controls.idCliente.invalid
+                        ) {
 
-                        <div class="campo-informativo">
+                        <mat-error>
+                            Debe seleccionar un cliente.
+                        </mat-error>
 
-                            <mat-icon>
-                                business
-                            </mat-icon>
+                        }
 
-                            <div>
-
-                                <span>
-                                    Cliente
-                                </span>
-
-                                <strong>
-                                    Cliente asociado al usuario
-                                </strong>
-
-                            </div>
-
-                        </div>
+                    </mat-form-field>
 
                     }
-
 
                     <!-- SECTOR -->
 
@@ -146,33 +119,31 @@
                             Sector
                         </mat-label>
 
-                        <mat-select
-                            formControlName="idSector">
+                        <mat-select formControlName="idSector">
 
                             @for (
-                                sector of sectores;
-                                track sector.id
+                            sector of sectores;
+                            track sector.id
                             ) {
 
-                                <mat-option
-                                    [value]="sector.id">
+                            <mat-option [value]="sector.id">
 
-                                    {{ sector.nombre }}
+                                {{ sector.nombre }}
 
-                                </mat-option>
+                            </mat-option>
 
                             }
 
                         </mat-select>
 
                         @if (
-                            form.controls.idSector.touched &&
-                            form.controls.idSector.invalid
+                        form.controls.idSector.touched &&
+                        form.controls.idSector.invalid
                         ) {
 
-                            <mat-error>
-                                Debe seleccionar un sector.
-                            </mat-error>
+                        <mat-error>
+                            Debe seleccionar un sector.
+                        </mat-error>
 
                         }
 
@@ -187,24 +158,21 @@
                             Tarea
                         </mat-label>
 
-                        <mat-select
-                            formControlName="idTarea"
-                            [disabled]="
+                        <mat-select formControlName="idTarea" [disabled]="
                                 form.controls.idSector.value <= 0 ||
                                 cargandoTareas
                             ">
 
                             @for (
-                                tarea of tareas;
-                                track tarea.id
+                            tarea of tareas;
+                            track tarea.id
                             ) {
 
-                                <mat-option
-                                    [value]="tarea.id">
+                            <mat-option [value]="tarea.id">
 
-                                    {{ tarea.nombre }}
+                                {{ tarea.nombre }}
 
-                                </mat-option>
+                            </mat-option>
 
                             }
 
@@ -212,29 +180,29 @@
 
                         @if (cargandoTareas) {
 
-                            <mat-hint>
-                                Cargando tareas del sector...
-                            </mat-hint>
+                        <mat-hint>
+                            Cargando tareas del sector...
+                        </mat-hint>
 
                         } @else if (
-                            form.controls.idSector.value > 0 &&
-                            tareas.length === 0
+                        form.controls.idSector.value > 0 &&
+                        tareas.length === 0
                         ) {
 
-                            <mat-hint>
-                                El sector no tiene tareas disponibles.
-                            </mat-hint>
+                        <mat-hint>
+                            El sector no tiene tareas disponibles.
+                        </mat-hint>
 
                         }
 
                         @if (
-                            form.controls.idTarea.touched &&
-                            form.controls.idTarea.invalid
+                        form.controls.idTarea.touched &&
+                        form.controls.idTarea.invalid
                         ) {
 
-                            <mat-error>
-                                Debe seleccionar una tarea.
-                            </mat-error>
+                        <mat-error>
+                            Debe seleccionar una tarea.
+                        </mat-error>
 
                         }
 
@@ -251,94 +219,88 @@
 
             @if (puedeAsignarTecnicos) {
 
-                <section class="seccion-formulario">
+            <section class="seccion-formulario">
 
-                    <div class="seccion-titulo">
+                <div class="seccion-titulo">
 
-                        <mat-icon>
-                            engineering
-                        </mat-icon>
+                    <mat-icon>
+                        engineering
+                    </mat-icon>
 
-                        <div>
+                    <div>
 
-                            <h3>
-                                Técnicos
-                            </h3>
+                        <h3>
+                            Técnicos
+                        </h3>
 
-                            <p>
-                                Seleccione uno o varios técnicos para
-                                solicitar presupuestos.
-                            </p>
-
-                        </div>
+                        <p>
+                            Seleccione uno o varios técnicos para
+                            solicitar presupuestos.
+                        </p>
 
                     </div>
 
+                </div>
 
-                    <mat-form-field
-                        appearance="outline"
-                        class="campo-completo">
 
-                        <mat-label>
-                            Técnicos asignados
-                        </mat-label>
+                <mat-form-field appearance="outline" class="campo-completo">
 
-                        <mat-select
-                            formControlName="idsTecnicos"
-                            multiple
-                            [disabled]="
+                    <mat-label>
+                        Técnicos asignados
+                    </mat-label>
+
+                    <mat-select formControlName="idsTecnicos" multiple [disabled]="
                                 form.controls.idCliente.value <= 0 ||
                                 cargandoTecnicos
                             ">
 
-                            @for (
-                                tecnico of tecnicos;
-                                track tecnico.id
-                            ) {
-
-                                <mat-option
-                                    [value]="tecnico.id">
-
-                                    {{ tecnico.nombre }}
-
-                                </mat-option>
-
-                            }
-
-                        </mat-select>
-
-                        @if (cargandoTecnicos) {
-
-                            <mat-hint>
-                                Cargando técnicos...
-                            </mat-hint>
-
-                        } @else if (
-                            form.controls.idCliente.value > 0 &&
-                            tecnicos.length === 0
+                        @for (
+                        tecnico of tecnicos;
+                        track tecnico.id
                         ) {
 
-                            <mat-hint>
-                                No hay técnicos disponibles para
-                                el cliente seleccionado.
-                            </mat-hint>
+                        <mat-option [value]="tecnico.id">
+
+                            {{ tecnico.nombre }}
+
+                        </mat-option>
 
                         }
 
-                        @if (
-                            form.controls.idsTecnicos.touched &&
-                            form.controls.idsTecnicos.value.length === 0
-                        ) {
+                    </mat-select>
 
-                            <mat-error>
-                                Debe seleccionar al menos un técnico.
-                            </mat-error>
+                    @if (cargandoTecnicos) {
 
-                        }
+                    <mat-hint>
+                        Cargando técnicos...
+                    </mat-hint>
 
-                    </mat-form-field>
+                    } @else if (
+                    form.controls.idCliente.value > 0 &&
+                    tecnicos.length === 0
+                    ) {
 
-                </section>
+                    <mat-hint>
+                        No hay técnicos disponibles para
+                        el cliente seleccionado.
+                    </mat-hint>
+
+                    }
+
+                    @if (
+                    form.controls.idsTecnicos.touched &&
+                    form.controls.idsTecnicos.value.length === 0
+                    ) {
+
+                    <mat-error>
+                        Debe seleccionar al menos un técnico.
+                    </mat-error>
+
+                    }
+
+                </mat-form-field>
+
+            </section>
 
             }
 
@@ -370,18 +332,13 @@
                 </div>
 
 
-                <mat-form-field
-                    appearance="outline"
-                    class="campo-completo">
+                <mat-form-field appearance="outline" class="campo-completo">
 
                     <mat-label>
                         Comentarios
                     </mat-label>
 
-                    <textarea
-                        matInput
-                        rows="6"
-                        formControlName="comentarios"
+                    <textarea matInput rows="6" formControlName="comentarios"
                         placeholder="Describa el problema, ubicación, equipo afectado u otra información relevante...">
 
                     </textarea>
@@ -423,20 +380,11 @@
                 </div>
 
 
-                <input
-                    #imagenesInput
-                    type="file"
-                    accept="image/*"
-                    multiple
-                    hidden
+                <input #imagenesInput type="file" accept="image/*" multiple hidden
                     (change)="seleccionarArchivos($event)">
 
 
-                <button
-                    mat-stroked-button
-                    color="primary"
-                    type="button"
-                    (click)="imagenesInput.click()">
+                <button mat-stroked-button color="primary" type="button" (click)="imagenesInput.click()">
 
                     <mat-icon>
                         add_photo_alternate
@@ -449,64 +397,58 @@
 
                 @if (archivos.length > 0) {
 
-                    <div class="archivos-seleccionados">
+                <div class="archivos-seleccionados">
 
-                        <div class="archivos-resumen">
+                    <div class="archivos-resumen">
 
-                            <mat-icon>
-                                collections
-                            </mat-icon>
+                        <mat-icon>
+                            collections
+                        </mat-icon>
 
-                            <strong>
-                                {{ archivos.length }}
-                                imagen(es) seleccionada(s)
-                            </strong>
-
-                        </div>
-
-
-                        <div class="lista-imagenes">
-
-                            @for (
-                                archivo of archivos;
-                                track archivo.name;
-                                let indice = $index
-                            ) {
-
-                                <div class="archivo">
-
-                                    <mat-icon class="archivo-icono">
-                                        image
-                                    </mat-icon>
-
-                                    <span
-                                        class="archivo-nombre"
-                                        [title]="archivo.name">
-
-                                        {{ archivo.name }}
-
-                                    </span>
-
-                                    <button
-                                        mat-icon-button
-                                        color="warn"
-                                        type="button"
-                                        aria-label="Quitar imagen"
-                                        (click)="quitarArchivo(indice)">
-
-                                        <mat-icon>
-                                            delete
-                                        </mat-icon>
-
-                                    </button>
-
-                                </div>
-
-                            }
-
-                        </div>
+                        <strong>
+                            {{ archivos.length }}
+                            imagen(es) seleccionada(s)
+                        </strong>
 
                     </div>
+
+
+                    <div class="lista-imagenes">
+
+                        @for (
+                        archivo of archivos;
+                        track archivo.name;
+                        let indice = $index
+                        ) {
+
+                        <div class="archivo">
+
+                            <mat-icon class="archivo-icono">
+                                image
+                            </mat-icon>
+
+                            <span class="archivo-nombre" [title]="archivo.name">
+
+                                {{ archivo.name }}
+
+                            </span>
+
+                            <button mat-icon-button color="warn" type="button" aria-label="Quitar imagen"
+                                (click)="quitarArchivo(indice)">
+
+                                <mat-icon>
+                                    delete
+                                </mat-icon>
+
+                            </button>
+
+                        </div>
+
+                        }
+
+                    </div>
+
+                </div>
 
                 }
 
@@ -519,12 +461,7 @@
 
             <div class="botones">
 
-                <button
-                    mat-stroked-button
-                    color="warn"
-                    type="button"
-                    [disabled]="guardando"
-                    (click)="cancelar()">
+                <button mat-stroked-button color="warn" type="button" [disabled]="guardando" (click)="cancelar()">
 
                     <mat-icon>
                         close
@@ -535,33 +472,37 @@
                 </button>
 
 
-                <button
-                    mat-raised-button
-                    color="primary"
-                    type="submit"
-                    [disabled]="guardando">
+                <button mat-raised-button color="primary" type="submit" [disabled]="
+    guardando ||
+    cargandoClienteUsuario
+">
+@if (
+    guardando ||
+    cargandoClienteUsuario
+) {
 
-                    @if (guardando) {
+    <mat-spinner diameter="22">
+    </mat-spinner>
 
-                        <mat-spinner
-                            diameter="22">
-                        </mat-spinner>
+    @if (cargandoClienteUsuario) {
+        Cargando cliente...
+    } @else {
+        Guardando...
+    }
 
-                        Guardando...
+} @else {
 
-                    } @else {
+    <mat-icon>
+        save
+    </mat-icon>
 
-                        <mat-icon>
-                            save
-                        </mat-icon>
+    @if (!esEdicion) {
+        Crear solicitud
+    } @else {
+        Guardar cambios
+    }
 
-                        @if (!esEdicion) {
-                            Crear solicitud
-                        } @else {
-                            Guardar cambios
-                        }
-
-                    }
+}
 
                 </button>
 
