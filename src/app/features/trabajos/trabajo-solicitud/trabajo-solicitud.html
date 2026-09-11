@@ -880,36 +880,6 @@
                         }}/2000
                     </mat-hint>
 
-                    @if (
-                        presupuestoForm.controls
-                            .descripcion
-                            .touched &&
-                        presupuestoForm.controls
-                            .descripcion
-                            .hasError('required')
-                    ) {
-
-                        <mat-error>
-                            La descripción es obligatoria.
-                        </mat-error>
-
-                    }
-
-                    @if (
-                        presupuestoForm.controls
-                            .descripcion
-                            .touched &&
-                        presupuestoForm.controls
-                            .descripcion
-                            .hasError('minlength')
-                    ) {
-
-                        <mat-error>
-                            Debe escribir al menos cinco caracteres.
-                        </mat-error>
-
-                    }
-
                 </mat-form-field>
 
                 <div class="selector-archivo">

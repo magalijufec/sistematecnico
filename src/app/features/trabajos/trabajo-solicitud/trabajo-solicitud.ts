@@ -235,9 +235,7 @@ export class TrabajoSolicitudComponent
       descripcion: [
         '',
         [
-          Validators.required,
-          Validators.minLength(5),
-          Validators.maxLength(2000)
+          
         ]
       ]
 
@@ -1015,15 +1013,6 @@ export class TrabajoSolicitudComponent
         .descripcion
         .value
         .trim();
-
-    if (!descripcion) {
-
-      this.toastService.warning(
-        'Debe ingresar una descripción.'
-      );
-
-      return;
-    }
 
     this.guardandoPresupuesto =
       true;

@@ -159,19 +159,16 @@
                         </mat-label>
 
                         <mat-select formControlName="idTarea" [disabled]="
-                                form.controls.idSector.value <= 0 ||
-                                cargandoTareas
-                            ">
-
+        form.controls.idSector.value <= 0 ||
+        cargandoTareas
+    ">
                             @for (
                             tarea of tareas;
                             track tarea.id
                             ) {
 
                             <mat-option [value]="tarea.id">
-
                                 {{ tarea.nombre }}
-
                             </mat-option>
 
                             }
@@ -249,25 +246,26 @@
                         Técnicos asignados
                     </mat-label>
 
-                    <mat-select formControlName="idsTecnicos" multiple [disabled]="
-                                form.controls.idCliente.value <= 0 ||
-                                cargandoTecnicos
-                            ">
+                   <mat-select
+    formControlName="idsTecnicos"
+    multiple
+    [disabled]="
+        form.controls.idCliente.value <= 0 ||
+        cargandoTecnicos
+    ">
 
-                        @for (
-                        tecnico of tecnicos;
-                        track tecnico.id
-                        ) {
+    @for (
+        tecnico of tecnicos;
+        track tecnico.id
+    ) {
 
-                        <mat-option [value]="tecnico.id">
+        <mat-option [value]="tecnico.id">
+            {{ tecnico.nombre }}
+        </mat-option>
 
-                            {{ tecnico.nombre }}
+    }
 
-                        </mat-option>
-
-                        }
-
-                    </mat-select>
+</mat-select>
 
                     @if (cargandoTecnicos) {
 
@@ -476,33 +474,33 @@
     guardando ||
     cargandoClienteUsuario
 ">
-@if (
-    guardando ||
-    cargandoClienteUsuario
-) {
+                    @if (
+                    guardando ||
+                    cargandoClienteUsuario
+                    ) {
 
-    <mat-spinner diameter="22">
-    </mat-spinner>
+                    <mat-spinner diameter="22">
+                    </mat-spinner>
 
-    @if (cargandoClienteUsuario) {
-        Cargando cliente...
-    } @else {
-        Guardando...
-    }
+                    @if (cargandoClienteUsuario) {
+                    Cargando cliente...
+                    } @else {
+                    Guardando...
+                    }
 
-} @else {
+                    } @else {
 
-    <mat-icon>
-        save
-    </mat-icon>
+                    <mat-icon>
+                        save
+                    </mat-icon>
 
-    @if (!esEdicion) {
-        Crear solicitud
-    } @else {
-        Guardar cambios
-    }
+                    @if (!esEdicion) {
+                    Crear solicitud
+                    } @else {
+                    Guardar cambios
+                    }
 
-}
+                    }
 
                 </button>
 

@@ -421,6 +421,7 @@ export class TrabajoFormComponent
   get sectorRestringido(): boolean {
 
     return this.esRol(
+      'Sistemas',
       'Mantenimiento',
       'Monitoreo'
     );
@@ -642,182 +643,274 @@ export class TrabajoFormComponent
 
   }
 
-
-  // ==========================================
   // SECTORES
-  // ==========================================
-
   cargarSectores(): void {
 
-    this.sectorService
-      .obtenerTodas()
-      .subscribe({
+  this.sectorService
+    .obtenerTodas()
+    .subscribe({
 
-        next: data => {
+      next: data => {
 
-          const sectoresRecibidos =
-            data ?? [];
+        const sectoresRecibidos =
+          data ?? [];
 
-          if (
-            this.esRol('Mantenimiento')
-          ) {
+        if (this.esRol('Sistemas')) {
 
-            this.aplicarSectorDelRol(
-              sectoresRecibidos,
-              'Mantenimiento'
-            );
-
-            return;
-
-          }
-
-          if (
-            this.esRol('Monitoreo')
-          ) {
-
-            this.aplicarSectorDelRol(
-              sectoresRecibidos,
-              'Monitoreo'
-            );
-
-            return;
-
-          }
-
-          this.sectores =
-            sectoresRecibidos;
-
-        },
-
-        error: error => {
-
-          console.error(
-            'Error al cargar sectores',
-            error
+          this.aplicarSectorDelRol(
+            sectoresRecibidos,
+            'Sistemas'
           );
 
-          this.toastService.error(
-            'No se pudieron cargar los sectores.'
-          );
-
+          return;
         }
 
-      });
+        if (this.esRol('Mantenimiento')) {
 
-  }
+          this.aplicarSectorDelRol(
+            sectoresRecibidos,
+            'Mantenimiento'
+          );
 
+          return;
+        }
+
+        if (this.esRol('Monitoreo')) {
+
+          this.aplicarSectorDelRol(
+            sectoresRecibidos,
+            'Monitoreo'
+          );
+
+          return;
+        }
+
+        /*
+         * Administrador y otros perfiles autorizados
+         * pueden seleccionar cualquier sector.
+         */
+        this.sectores =
+          sectoresRecibidos;
+
+      },
+
+      error: error => {
+
+        console.error(
+          'Error al cargar sectores',
+          error
+        );
+
+        this.toastService.error(
+          'No se pudieron cargar los sectores.'
+        );
+
+      }
+
+    });
+}
 
   private aplicarSectorDelRol(
-    sectores: Combo[],
-    nombreSector: string
-  ): void {
+  sectores: Combo[],
+  nombreSector: string
+): void {
 
-    const sector =
-      sectores.find(
-        item =>
-          this.normalizarTexto(
-            item.nombre
-          ) ===
-          this.normalizarTexto(
-            nombreSector
-          )
-      );
+  const sector =
+    sectores.find(
+      item =>
+        this.normalizarTexto(
+          item.nombre
+        ) ===
+        this.normalizarTexto(
+          nombreSector
+        )
+    );
 
-    if (!sector) {
+  if (!sector) {
 
-      this.sectores = [];
+    this.sectores = [];
 
-      this.toastService.error(
-        `No se encontró el sector ${nombreSector}.`
-      );
-
-      return;
-
-    }
-
-    this.sectores = [
-      sector
-    ];
+    this.tareas = [];
 
     this.form.controls
       .idSector
       .setValue(
-        sector.id,
+        0,
         {
           emitEvent: false
         }
       );
 
     this.form.controls
-      .idSector
-      .disable(
+      .idTarea
+      .setValue(
+        0,
         {
           emitEvent: false
         }
       );
 
-    this.cargarTareasPorSector(
-      sector.id
+    this.toastService.error(
+      `No se encontró el sector ${nombreSector}.`
     );
 
+    return;
   }
 
+  /*
+   * Dejamos únicamente el sector correspondiente
+   * al perfil autenticado.
+   */
+  this.sectores = [
+    sector
+  ];
+
+  /*
+   * Asignamos el sector sin disparar el valueChanges,
+   * porque cargaremos las tareas explícitamente.
+   */
+  this.form.controls
+    .idSector
+    .setValue(
+      sector.id,
+      {
+        emitEvent: false
+      }
+    );
+
+  /*
+   * Sistemas, Mantenimiento y Monitoreo
+   * no pueden cambiar el sector.
+   */
+  this.form.controls
+    .idSector
+    .disable(
+      {
+        emitEvent: false
+      }
+    );
+
+  /*
+   * La tarea sí debe permanecer habilitada.
+   */
+  this.form.controls
+    .idTarea
+    .enable(
+      {
+        emitEvent: false
+      }
+    );
+
+  this.form.controls
+    .idTarea
+    .setValue(
+      0,
+      {
+        emitEvent: false
+      }
+    );
+
+  this.cargarTareasPorSector(
+    sector.id
+  );
+}
 
   // ==========================================
   // TAREAS POR SECTOR
   // ==========================================
+cargarTareasPorSector(
+  sectorId: number
+): void {
 
-  cargarTareasPorSector(
-    sectorId: number
-  ): void {
+  if (sectorId <= 0) {
 
-    if (sectorId <= 0) {
+    this.tareas = [];
 
-      this.tareas = [];
-
-      return;
-
-    }
-
-    this.cargandoTareas = true;
-
-    this.tareaService
-      .obtenerPorSector(
-        sectorId
-      )
-      .subscribe({
-
-        next: data => {
-
-          this.tareas =
-            data ?? [];
-
-          this.cargandoTareas =
-            false;
-
-        },
-
-        error: error => {
-
-          this.cargandoTareas =
-            false;
-
-          this.tareas = [];
-
-          console.error(
-            'Error al cargar tareas por sector',
-            error
-          );
-
-          this.toastService.error(
-            'No se pudieron cargar las tareas del sector.'
-          );
-
+    this.form.controls
+      .idTarea
+      .setValue(
+        0,
+        {
+          emitEvent: false
         }
+      );
 
-      });
-
+    return;
   }
+
+  this.cargandoTareas = true;
+
+  this.form.controls
+    .idTarea
+    .disable(
+      {
+        emitEvent: false
+      }
+    );
+
+  this.tareaService
+    .obtenerPorSector(
+      sectorId
+    )
+    .subscribe({
+
+      next: data => {
+
+        this.tareas =
+          data ?? [];
+
+        this.cargandoTareas =
+          false;
+
+        /*
+         * Una vez cargadas las tareas,
+         * habilitamos el selector.
+         */
+        this.form.controls
+        .idTarea
+          .enable(
+          {
+              emitEvent: false
+            }
+          );
+      },
+
+      error: error => {
+       this.cargandoTareas =
+         false;
+
+        this.tareas = [];
+
+        this.form.controls
+        .idTarea
+          .setValue(
+            0,
+            {
+            emitEvent: false
+          }
+          );
+
+        this.form.controls
+          .idTarea
+         .enable(
+            {
+             emitEvent: false
+           }
+          );
+
+        console.error(
+          'Error al cargar tareas por sector',
+          error
+        );
+
+        this.toastService.error(
+          'No se pudieron cargar las tareas del sector.'
+        );
+
+      }
+
+    });
+}
 
 
   // ==========================================
