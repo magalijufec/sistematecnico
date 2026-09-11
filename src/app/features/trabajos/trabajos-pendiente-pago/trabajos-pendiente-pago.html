@@ -377,42 +377,63 @@
                                     </button>
 
                                     <!-- ESTADO / PAGO -->
-                                    @if (factura.fechaPagado) {
-                                    <button mat-stroked-button type="button" class="boton-pagado" disabled>
-                                        <mat-icon>
-                                            check_circle
-                                        </mat-icon>
-                                        Pagada
-                                    </button>
+                                   @if (factura.fechaPagado) {
 
-                                    <span class="fecha-pago-factura">
+    <button
+        mat-stroked-button
+        type="button"
+        class="boton-pagado"
+        disabled>
 
-                                        Pagada el
+        <mat-icon>
+            check_circle
+        </mat-icon>
 
-                                        {{
-                                        factura.fechaPagado
-                                        | date:'dd/MM/yyyy HH:mm'
-                                        }}
+        Pagada
 
-                                    </span>
+    </button>
 
-                                    } @else {
+    <span class="fecha-pago-factura">
 
-                                    <button mat-raised-button color="accent" type="button" class="boton-registrar-pago"
-                                        [disabled]="!!factura.fechaPagado" (click)="pagarFactura(
-                                        trabajo,
-                                        factura.id
-                                    )">
+        {{
+            factura.fechaPagado
+            | date:'dd/MM/yyyy HH:mm'
+        }}
 
-                                        <mat-icon>
-                                            payments
-                                        </mat-icon>
+    </span>
 
-                                        Registrar pago
+} @else if (puedeRegistrarPagos) {
 
-                                    </button>
+    <button
+        mat-raised-button
+        color="accent"
+        type="button"
+        class="boton-registrar-pago"
+        (click)="
+            pagarFactura(
+                trabajo,
+                factura.id
+            )
+        ">
 
-                                    }
+        <mat-icon>
+            payments
+        </mat-icon>
+
+        Registrar pago
+
+    </button>
+
+} @else {
+
+    <span class="pendiente-pago">
+
+        Pendiente de pago
+
+    </span>
+
+}
+
 
                                 </div>
 
@@ -620,43 +641,62 @@
 
                                 @if (factura.fechaPagado) {
 
-                                <button mat-stroked-button type="button" class="boton-pagado" disabled>
+    <button
+        mat-stroked-button
+        type="button"
+        class="boton-pagado"
+        disabled>
 
-                                    <mat-icon>
-                                        check_circle
-                                    </mat-icon>
+        <mat-icon>
+            check_circle
+        </mat-icon>
 
-                                    Pagada
+        Pagada
 
-                                </button>
+    </button>
 
-                                <span class="fecha-pago-factura">
+    <span class="fecha-pago-factura">
 
-                                    {{
-                                    factura.fechaPagado
-                                    | date:'dd/MM/yyyy HH:mm'
-                                    }}
+        Pagada el
 
-                                </span>
+        {{
+            factura.fechaPagado
+            | date:'dd/MM/yyyy HH:mm'
+        }}
 
-                                } @else {
+    </span>
 
-                                <button mat-raised-button color="accent" type="button" class="boton-registrar-pago"
-                                    [disabled]="!!factura.fechaPagado" (click)="pagarFactura(
-                                    trabajo,
-                                    factura.id
-                                )">
+} @else if (puedeRegistrarPagos) {
 
-                                    <mat-icon>
-                                        payments
-                                    </mat-icon>
+    <button
+        mat-raised-button
+        color="accent"
+        type="button"
+        class="boton-registrar-pago"
+        (click)="
+            pagarFactura(
+                trabajo,
+                factura.id
+            )
+        ">
 
-                                    Registrar pago
+        <mat-icon>
+            payments
+        </mat-icon>
 
-                                </button>
+        Registrar pago
 
-                                }
+    </button>
 
+} @else {
+
+    <span class="pendiente-pago">
+
+        Pendiente de pago
+
+    </span>
+
+}
                             </div>
 
                             }

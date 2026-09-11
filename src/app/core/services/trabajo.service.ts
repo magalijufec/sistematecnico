@@ -224,14 +224,19 @@ export class TrabajoService {
     );
   }
 
-  cargarMateriales(idTrabajo: number, materiales: string) {
-    return this.http.put<{ mensaje?: string }>(
-      `${this.api}/${idTrabajo}/materiales`,
-      {
-        materiales
-      }
-    );
-  }
+  cargarMateriales(
+  idTrabajo: number,
+  materiales: string | null
+) {
+  return this.http.put<{
+    mensaje?: string;
+  }>(
+    `${this.api}/${idTrabajo}/materiales`,
+    {
+      materiales
+    }
+  );
+}
 
   marcarMaterialesEnviados(idTrabajo: number) {
     return this.http.put<{ mensaje?: string }>(

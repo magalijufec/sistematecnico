@@ -21,6 +21,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { ToastService } from '../../../core/services/toast.service';
 import { environment } from '../../../environments/environment';
 import { MatSelectModule } from '@angular/material/select';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-trabajos-pendiente-pago',
@@ -46,6 +47,7 @@ export class TrabajosPendientePagoComponent implements OnInit {
 
   private trabajoService = inject(TrabajoService);
   private toastService = inject(ToastService);
+  private authService = inject(AuthService);
   private router = inject(Router);
   trabajos: TrabajoFinalizado[] = [];
   trabajosFiltrados: TrabajoFinalizado[] = [];
@@ -82,6 +84,13 @@ export class TrabajosPendientePagoComponent implements OnInit {
   ngOnInit(): void {
     this.cargarTrabajos();
   }
+
+  get puedeRegistrarPagos(): boolean {
+  return this.authService.tieneRol(
+    'Pagos',
+    'Farmacia'
+  );
+}
 
   verFactura(rutaArchivo: string): void {
 

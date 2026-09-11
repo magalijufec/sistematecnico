@@ -243,7 +243,7 @@ export const routes: Routes = [
 
                 ]
 
-            },    
+            },
 
             // trabajo solicitud
             {
@@ -275,7 +275,7 @@ export const routes: Routes = [
                         'Farmacia'
                     ])
                 ]
-            },            
+            },
 
             // trabajos solicitud list
             {
@@ -309,7 +309,8 @@ export const routes: Routes = [
                     roleGuard([
                         'Administrador',
                         'Pagos',
-                        'Farmacia'
+                        'Farmacia',
+                        'Tecnico'
                     ])
 
                 ]

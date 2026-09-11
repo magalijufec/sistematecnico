@@ -138,9 +138,14 @@ export class TrabajoSolicitudComponent
     inject(ToastService);
 
 
-  readonly api = environment.api;
+  readonly api =
+    environment.api;
 
+
+  // ==========================================
   // ESTADOS DEL TRABAJO
+  // ==========================================
+
   readonly PENDIENTE_REVISION_SECTOR = 1;
 
   readonly SOLICITUD_RECHAZADA = 2;
@@ -157,8 +162,13 @@ export class TrabajoSolicitudComponent
 
   readonly MATERIALES_ENVIADOS = 8;
 
+  readonly EN_PROCESO = 9;
 
+
+  // ==========================================
   // ESTADOS DEL PRESUPUESTO
+  // ==========================================
+
   readonly PRESUPUESTO_EN_REVISION = 1;
 
   readonly PRESUPUESTO_ESTADO_APROBADO = 2;
@@ -169,41 +179,62 @@ export class TrabajoSolicitudComponent
 
   readonly PRESUPUESTO_RETIRADO = 5;
 
+
+  // ==========================================
   // DATOS
+  // ==========================================
+
   idTrabajo = 0;
+
   usuarioIdActual: number | null = null;
+
   trabajo?: TrabajoDetalle;
+
   tecnicos: TecnicoCombo[] = [];
+
   presupuestos: PresupuestoDetalle[] = [];
+
   presupuestoUsuario?: PresupuestoDetalle;
+
   archivoPresupuesto: File | null = null;
-  presupuestoARechazar: any | null = null;
-  mostrarFormularioRechazoPresupuesto = false;
-  rechazoPresupuestoForm =
-    this.fb.nonNullable.group({
-      motivo: [
-        '',
-        [
-          Validators.required,
-          Validators.minLength(5)
-        ]
-      ]
-    });
 
+  presupuestoARechazar:
+    PresupuestoDetalle | null = null;
+
+
+  // ==========================================
   // ESTADOS DE PANTALLA
-  cargando = false;
-  procesando = false;
-  cargandoTecnicos = false;
-  cargandoPresupuestos = false;
-  guardandoPresupuesto = false;
-  guardandoMateriales = false;
-  enviandoMateriales = false;
-  aprobandoPresupuestoId: number | null = null;
-  mostrarFormularioRechazo = false;
-  mostrarFormularioPresupuesto = false;
-  editandoPresupuesto = false;
+  // ==========================================
 
+  cargando = false;
+
+  procesando = false;
+
+  cargandoTecnicos = false;
+
+  cargandoPresupuestos = false;
+
+  guardandoPresupuesto = false;
+
+  guardandoMateriales = false;
+
+  enviandoMateriales = false;
+
+  aprobandoPresupuestoId:
+    number | null = null;
+
+  mostrarFormularioRechazo = false;
+
+  mostrarFormularioPresupuesto = false;
+
+  mostrarFormularioRechazoPresupuesto =
+    false;
+
+
+  // ==========================================
   // FORMULARIOS
+  // ==========================================
+
   rechazoForm =
     this.fb.nonNullable.group({
 
@@ -235,11 +266,12 @@ export class TrabajoSolicitudComponent
       descripcion: [
         '',
         [
-          
+          Validators.maxLength(2000)
         ]
       ]
 
     });
+
 
   materialesForm =
     this.fb.nonNullable.group({
@@ -247,15 +279,30 @@ export class TrabajoSolicitudComponent
       materiales: [
         '',
         [
-          Validators.required,
-          Validators.minLength(3),
           Validators.maxLength(5000)
         ]
       ]
 
     });
 
+
+  rechazoPresupuestoForm =
+    this.fb.nonNullable.group({
+
+      motivo: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(5),
+          Validators.maxLength(1000)
+        ]
+      ]
+
+    });
+
+
   ngOnInit(): void {
+
     this.idTrabajo =
       Number(
         this.route.snapshot
@@ -263,33 +310,51 @@ export class TrabajoSolicitudComponent
           .get('id')
       );
 
-    this.usuarioIdActual = this.authService.obtenerUsuarioId();
+    this.usuarioIdActual =
+      this.authService.obtenerUsuarioId();
 
     if (
       !this.idTrabajo ||
       this.idTrabajo <= 0
     ) {
+
       this.toastService.error(
         'El identificador del trabajo no es válido.'
       );
+
       this.volver();
+
       return;
     }
+
     this.cargarTrabajo();
   }
 
+
+  // ==========================================
   // ROLES
-  esRol(...roles: string[]): boolean {
+  // ==========================================
+
+  esRol(
+    ...roles: string[]
+  ): boolean {
+
     return this.authService.tieneRol(
       ...roles
     );
   }
 
+
   get esTecnico(): boolean {
-    return this.esRol('Tecnico');
+
+    return this.esRol(
+      'Tecnico'
+    );
   }
 
+
   get esResponsableSector(): boolean {
+
     return this.esRol(
       'Administrador',
       'Sistemas',
@@ -298,12 +363,17 @@ export class TrabajoSolicitudComponent
     );
   }
 
+
   get puedeGestionarSector(): boolean {
+
     return this.esResponsableSector;
   }
 
+
   get tecnicoAsignadoAlTrabajo(): boolean {
-    if (!this.esTecnico ||
+
+    if (
+      !this.esTecnico ||
       this.usuarioIdActual == null ||
       !this.trabajo?.idsTecnicos
     ) {
@@ -312,34 +382,46 @@ export class TrabajoSolicitudComponent
 
     return this.trabajo
       .idsTecnicos
+      .map(id => Number(id))
       .includes(
-        this.usuarioIdActual
+        Number(this.usuarioIdActual)
       );
   }
 
+
+  // ==========================================
   // ESTADOS DEL TRABAJO
+  // ==========================================
+
   get estaPendienteRevision(): boolean {
+
     return (
       this.trabajo?.idEstado ===
       this.PENDIENTE_REVISION_SECTOR
     );
   }
 
+
   get estaRechazada(): boolean {
+
     return (
       this.trabajo?.idEstado ===
       this.SOLICITUD_RECHAZADA
     );
   }
 
+
   get estaPendienteAsignacion(): boolean {
+
     return (
       this.trabajo?.idEstado ===
       this.PENDIENTE_ASIGNACION_TECNICOS
     );
   }
 
+
   get estaPendientePresupuestos(): boolean {
+
     return (
       this.trabajo?.idEstado ===
       this.PENDIENTE_PRESUPUESTOS ||
@@ -348,22 +430,70 @@ export class TrabajoSolicitudComponent
     );
   }
 
-  get tienePresupuestoAprobado(): boolean {
-    return this.presupuestos.some(
-      presupuesto =>
-        presupuesto.estadoId ===
-        this.PRESUPUESTO_ESTADO_APROBADO
-    );
-  }
 
   get estaPresupuestoAprobado(): boolean {
+
     return (
       this.trabajo?.idEstado ===
       this.PRESUPUESTO_APROBADO
     );
   }
 
+
+  get estaPendienteMateriales(): boolean {
+
+    return (
+      this.trabajo?.idEstado ===
+      this.PENDIENTE_MATERIALES
+    );
+  }
+
+
+  get estaMaterialesEnviados(): boolean {
+
+    return (
+      this.trabajo?.idEstado ===
+      this.MATERIALES_ENVIADOS
+    );
+  }
+
+
+  get estaEnProceso(): boolean {
+
+    return (
+      this.trabajo?.idEstado ===
+      this.EN_PROCESO
+    );
+  }
+
+
+  // ==========================================
+  // PRESUPUESTOS
+  // ==========================================
+
+  get tienePresupuestoAprobado(): boolean {
+
+    return this.presupuestos.some(
+      presupuesto =>
+        Number(presupuesto.estadoId) ===
+        this.PRESUPUESTO_ESTADO_APROBADO
+    );
+  }
+
+
+  get presupuestoAprobado():
+    PresupuestoDetalle | undefined {
+
+    return this.presupuestos.find(
+      presupuesto =>
+        Number(presupuesto.estadoId) ===
+        this.PRESUPUESTO_ESTADO_APROBADO
+    );
+  }
+
+
   get mostrarSeccionPresupuestoTecnico(): boolean {
+
     if (
       !this.trabajo ||
       !this.esTecnico ||
@@ -380,16 +510,6 @@ export class TrabajoSolicitudComponent
     );
   }
 
-  get presupuestoAprobado():
-    PresupuestoDetalle | undefined {
-
-    return this.presupuestos.find(
-      presupuesto =>
-        presupuesto.estadoId ===
-        this.PRESUPUESTO_ESTADO_APROBADO
-    );
-  }
-
 
   get mostrarPresupuestoAprobado(): boolean {
 
@@ -398,12 +518,15 @@ export class TrabajoSolicitudComponent
       (
         this.estaPresupuestoAprobado ||
         this.estaPendienteMateriales ||
-        this.estaMaterialesEnviados
+        this.estaMaterialesEnviados ||
+        this.estaEnProceso
       )
     );
   }
 
+
   get mostrarListadoPresupuestosSector(): boolean {
+
     if (
       !this.trabajo ||
       !this.puedeGestionarSector
@@ -419,37 +542,31 @@ export class TrabajoSolicitudComponent
     );
   }
 
-  get estaPendienteMateriales(): boolean {
-    return (
-      this.trabajo?.idEstado ===
-      this.PENDIENTE_MATERIALES
-    );
-  }
 
-  get estaMaterialesEnviados(): boolean {
+  // ==========================================
+  // PERMISOS
+  // ==========================================
 
-    return (
-      this.trabajo?.idEstado ===
-      this.MATERIALES_ENVIADOS
-    );
-  }
-
-  // PERMISOS POR ESTADO
   get mostrarAccionesRevision(): boolean {
+
     return (
       this.estaPendienteRevision &&
       this.puedeGestionarSector
     );
   }
 
+
   get puedeAsignarTecnicos(): boolean {
+
     return (
       this.estaPendienteAsignacion &&
       this.puedeGestionarSector
     );
   }
 
+
   get puedeCargarPresupuesto(): boolean {
+
     return (
       this.esTecnico &&
       this.tecnicoAsignadoAlTrabajo &&
@@ -459,7 +576,9 @@ export class TrabajoSolicitudComponent
     );
   }
 
+
   get puedeAprobarPresupuestos(): boolean {
+
     return (
       this.puedeGestionarSector &&
       this.estaPendientePresupuestos &&
@@ -467,32 +586,52 @@ export class TrabajoSolicitudComponent
     );
   }
 
+
   get puedeCargarMateriales(): boolean {
+
     return (
-      this.puedeGestionarSector &&
-      this.estaPresupuestoAprobado
+      this.esTecnico &&
+      this.tecnicoAsignadoAlTrabajo &&
+      this.estaPresupuestoAprobado &&
+      Number(
+        this.presupuestoUsuario?.estadoId
+      ) ===
+      this.PRESUPUESTO_ESTADO_APROBADO
     );
   }
 
+
   get puedeEnviarMateriales(): boolean {
+
     return (
       this.puedeGestionarSector &&
       this.estaPendienteMateriales
     );
   }
 
+
+  // ==========================================
   // CARGAR TRABAJO
+  // ==========================================
+
   cargarTrabajo(): void {
-    this.cargando = true;
+
+    this.cargando =
+      true;
+
     this.trabajoService
-      .obtenerDetalle(this.idTrabajo)
+      .obtenerDetalle(
+        this.idTrabajo
+      )
       .subscribe({
 
         next: data => {
 
-          this.trabajo = data;
+          this.trabajo =
+            data;
 
-          this.cargando = false;
+          this.cargando =
+            false;
 
           this.mostrarFormularioRechazo =
             false;
@@ -513,7 +652,8 @@ export class TrabajoSolicitudComponent
 
         error: error => {
 
-          this.cargando = false;
+          this.cargando =
+            false;
 
           console.error(
             'Error al cargar la solicitud',
@@ -524,21 +664,31 @@ export class TrabajoSolicitudComponent
             error.error?.mensaje ??
             'No se pudo cargar la solicitud.'
           );
-
         }
 
       });
   }
 
+
   private cargarInformacionSegunEstado(): void {
+
     if (!this.trabajo) {
       return;
     }
-    if (this.trabajo.idEstado >= this.PENDIENTE_PRESUPUESTOS) {
+
+    if (
+      this.trabajo.idEstado >=
+      this.PENDIENTE_PRESUPUESTOS
+    ) {
+
       this.cargarPresupuestos();
+
     } else {
+
       this.presupuestos = [];
-      this.presupuestoUsuario = undefined;
+
+      this.presupuestoUsuario =
+        undefined;
     }
 
     if (
@@ -547,13 +697,16 @@ export class TrabajoSolicitudComponent
     ) {
 
       this.cargarTecnicos();
-
     }
-
   }
 
-  // APROBAR SOLICITUD
+
+  // ==========================================
+  // APROBAR Y RECHAZAR SOLICITUD
+  // ==========================================
+
   aprobarSolicitud(): void {
+
     if (
       !this.trabajo ||
       this.procesando ||
@@ -570,7 +723,8 @@ export class TrabajoSolicitudComponent
       return;
     }
 
-    this.procesando = true;
+    this.procesando =
+      true;
 
     this.trabajoService
       .decidirSolicitud(
@@ -582,7 +736,8 @@ export class TrabajoSolicitudComponent
 
         next: response => {
 
-          this.procesando = false;
+          this.procesando =
+            false;
 
           this.toastService.success(
             response?.mensaje ??
@@ -594,10 +749,11 @@ export class TrabajoSolicitudComponent
 
         error: error => {
 
-          this.procesando = false;
+          this.procesando =
+            false;
 
           console.error(
-            'Error al aprobar la solicitud',
+            'Error al aprobar solicitud',
             error
           );
 
@@ -605,14 +761,14 @@ export class TrabajoSolicitudComponent
             error.error?.mensaje ??
             'No se pudo aprobar la solicitud.'
           );
-
         }
 
       });
   }
 
-  // RECHAZAR SOLICITUD
+
   habilitarRechazo(): void {
+
     if (!this.mostrarAccionesRevision) {
       return;
     }
@@ -625,7 +781,9 @@ export class TrabajoSolicitudComponent
     });
   }
 
+
   cancelarRechazo(): void {
+
     this.mostrarFormularioRechazo =
       false;
 
@@ -634,7 +792,9 @@ export class TrabajoSolicitudComponent
     });
   }
 
+
   rechazarSolicitud(): void {
+
     if (
       !this.trabajo ||
       this.procesando ||
@@ -645,7 +805,8 @@ export class TrabajoSolicitudComponent
 
     if (this.rechazoForm.invalid) {
 
-      this.rechazoForm.markAllAsTouched();
+      this.rechazoForm
+        .markAllAsTouched();
 
       this.toastService.warning(
         'Debe indicar el motivo del rechazo.'
@@ -677,7 +838,8 @@ export class TrabajoSolicitudComponent
       return;
     }
 
-    this.procesando = true;
+    this.procesando =
+      true;
 
     this.trabajoService
       .decidirSolicitud(
@@ -689,7 +851,8 @@ export class TrabajoSolicitudComponent
 
         next: response => {
 
-          this.procesando = false;
+          this.procesando =
+            false;
 
           this.mostrarFormularioRechazo =
             false;
@@ -704,10 +867,11 @@ export class TrabajoSolicitudComponent
 
         error: error => {
 
-          this.procesando = false;
+          this.procesando =
+            false;
 
           console.error(
-            'Error al rechazar la solicitud',
+            'Error al rechazar solicitud',
             error
           );
 
@@ -715,20 +879,24 @@ export class TrabajoSolicitudComponent
             error.error?.mensaje ??
             'No se pudo rechazar la solicitud.'
           );
-
         }
 
       });
   }
 
+
+  // ==========================================
   // TÉCNICOS
+  // ==========================================
+
   cargarTecnicos(): void {
 
     if (!this.trabajo) {
       return;
     }
 
-    this.cargandoTecnicos = true;
+    this.cargandoTecnicos =
+      true;
 
     this.usuarioService
       .obtenerTecnicos(
@@ -768,11 +936,11 @@ export class TrabajoSolicitudComponent
             error.error?.mensaje ??
             'No se pudieron cargar los técnicos.'
           );
-
         }
 
       });
   }
+
 
   asignarTecnicos(): void {
 
@@ -810,7 +978,8 @@ export class TrabajoSolicitudComponent
       return;
     }
 
-    this.procesando = true;
+    this.procesando =
+      true;
 
     this.trabajoService
       .asignarTecnicos(
@@ -821,7 +990,8 @@ export class TrabajoSolicitudComponent
 
         next: response => {
 
-          this.procesando = false;
+          this.procesando =
+            false;
 
           this.toastService.success(
             'Técnicos asignados correctamente.'
@@ -832,7 +1002,8 @@ export class TrabajoSolicitudComponent
 
         error: error => {
 
-          this.procesando = false;
+          this.procesando =
+            false;
 
           console.error(
             'Error al asignar técnicos',
@@ -843,43 +1014,70 @@ export class TrabajoSolicitudComponent
             error.error?.mensaje ??
             'No se pudieron asignar los técnicos.'
           );
-
         }
 
       });
   }
 
-  // CARGAR PRESUPUESTOS
+
+  // ==========================================
+  // PRESUPUESTOS
+  // ==========================================
+
   cargarPresupuestos(): void {
-    this.cargandoPresupuestos = true;
+
+    this.cargandoPresupuestos =
+      true;
+
     this.presupuestoService
       .obtenerPorTrabajo(
         this.idTrabajo
       )
       .subscribe({
+
         next: data => {
-          this.presupuestos = data ?? [];
+
+          this.presupuestos =
+            data ?? [];
+
           this.buscarPresupuestoUsuario();
-          this.cargandoPresupuestos = false;
+
+          this.cargandoPresupuestos =
+            false;
         },
 
         error: error => {
-          this.cargandoPresupuestos = false;
+
+          this.cargandoPresupuestos =
+            false;
+
           this.presupuestos = [];
-          this.presupuestoUsuario = undefined;
-          console.error('Error al cargar presupuestos', error);
+
+          this.presupuestoUsuario =
+            undefined;
+
+          console.error(
+            'Error al cargar presupuestos',
+            error
+          );
 
           this.toastService.error(
             error.error?.mensaje ??
             'No se pudieron cargar los presupuestos.'
           );
         }
+
       });
   }
 
+
   private buscarPresupuestoUsuario(): void {
+
     if (this.usuarioIdActual == null) {
-      this.presupuestoUsuario = undefined;
+
+      this.presupuestoUsuario =
+        undefined;
+
       return;
     }
 
@@ -891,7 +1089,7 @@ export class TrabajoSolicitudComponent
       );
   }
 
-  // FORMULARIO PRESUPUESTO
+
   abrirCargaPresupuesto(): void {
 
     if (!this.puedeCargarPresupuesto) {
@@ -909,6 +1107,7 @@ export class TrabajoSolicitudComponent
     });
   }
 
+
   cancelarPresupuesto(): void {
 
     if (this.guardandoPresupuesto) {
@@ -925,6 +1124,7 @@ export class TrabajoSolicitudComponent
       descripcion: ''
     });
   }
+
 
   seleccionarArchivoPresupuesto(
     event: Event
@@ -972,6 +1172,7 @@ export class TrabajoSolicitudComponent
       archivo;
   }
 
+
   guardarPresupuesto(): void {
 
     if (
@@ -981,6 +1182,7 @@ export class TrabajoSolicitudComponent
     ) {
       return;
     }
+
     if (!this.puedeCargarPresupuesto) {
 
       this.toastService.warning(
@@ -1003,8 +1205,9 @@ export class TrabajoSolicitudComponent
     if (!this.archivoPresupuesto) {
 
       this.toastService.warning(
-        'Debe seleccionar el archivo PDF del presupuesto.'
+        'Debe seleccionar el archivo PDF.'
       );
+
       return;
     }
 
@@ -1016,42 +1219,13 @@ export class TrabajoSolicitudComponent
 
     this.guardandoPresupuesto =
       true;
-    this.crearPresupuesto(
-      descripcion
-    );
-  }
-
-  private crearPresupuesto(
-    descripcion: string
-  ): void {
-
-    if (
-      !this.trabajo ||
-      !this.archivoPresupuesto ||
-      this.usuarioIdActual == null
-    ) {
-
-      this.guardandoPresupuesto =
-        false;
-
-      return;
-    }
-
-    const idTrabajo =
-      this.trabajo.id;
-
-    const idTecnico =
-      this.usuarioIdActual;
-
-    const archivo =
-      this.archivoPresupuesto
 
     this.presupuestoService
       .crear(
-        idTrabajo,
-        idTecnico,
+        this.trabajo.id,
+        this.usuarioIdActual,
         descripcion,
-        archivo
+        this.archivoPresupuesto
       )
       .subscribe({
 
@@ -1071,14 +1245,10 @@ export class TrabajoSolicitudComponent
           });
 
           this.toastService.success(
-            response.mensaje ??
+            response?.mensaje ??
             'Presupuesto cargado correctamente.'
           );
-          /*
-           * Recarga el *rabajo porque el backend puede
-     *     * haber cambiado el estado a
-  *        * PendienteAprobacionPresu*uesto.
-           */
+
           this.cargarTrabajo();
         },
 
@@ -1100,14 +1270,12 @@ export class TrabajoSolicitudComponent
 
       });
   }
-  mostrarRechazoPresupuesto(presupuesto: any): void {
-    this.presupuestoARechazar = presupuesto;
-    this.mostrarFormularioRechazoPresupuesto = true;
-    this.rechazoPresupuestoForm.reset({ motivo: '' });
-  }
 
-  // APROBAR PRESUPUESTO
-  aprobarPresupuesto(presupuesto: PresupuestoDetalle): void {
+
+  aprobarPresupuesto(
+    presupuesto: PresupuestoDetalle
+  ): void {
+
     if (
       !this.puedeAprobarPresupuestos ||
       this.aprobandoPresupuestoId != null
@@ -1123,19 +1291,41 @@ export class TrabajoSolicitudComponent
       return;
     }
 
+    if (this.usuarioIdActual == null) {
+
+      this.toastService.error(
+        'No se pudo identificar al usuario.'
+      );
+
+      return;
+    }
+
     this.aprobandoPresupuestoId =
       presupuesto.id;
 
     this.presupuestoService
-      .aprobar(presupuesto.id, this.usuarioIdActual!)
+      .aprobar(
+        presupuesto.id,
+        this.usuarioIdActual
+      )
       .subscribe({
+
         next: response => {
-          this.aprobandoPresupuestoId = null;
-          this.toastService.success('Presupuesto aprobado correctamente.');
+
+          this.aprobandoPresupuestoId =
+            null;
+
+          this.toastService.success(
+            'Presupuesto aprobado correctamente.'
+          );
+
           this.cargarTrabajo();
         },
+
         error: error => {
-          this.aprobandoPresupuestoId = null;
+
+          this.aprobandoPresupuestoId =
+            null;
 
           console.error(
             'Error al aprobar presupuesto',
@@ -1146,14 +1336,34 @@ export class TrabajoSolicitudComponent
             error.error?.mensaje ??
             'No se pudo aprobar el presupuesto.'
           );
-
         }
 
       });
   }
 
+
+  mostrarRechazoPresupuesto(
+    presupuesto: PresupuestoDetalle
+  ): void {
+
+    this.presupuestoARechazar =
+      presupuesto;
+
+    this.mostrarFormularioRechazoPresupuesto =
+      true;
+
+    this.rechazoPresupuestoForm.reset({
+      motivo: ''
+    });
+  }
+
+
+  // ==========================================
   // MATERIALES
+  // ==========================================
+
   guardarMateriales(): void {
+
     if (
       !this.trabajo ||
       !this.puedeCargarMateriales ||
@@ -1168,7 +1378,7 @@ export class TrabajoSolicitudComponent
         .markAllAsTouched();
 
       this.toastService.warning(
-        'Debe ingresar los materiales.'
+        'La lista de materiales no puede superar los 5000 caracteres.'
       );
 
       return;
@@ -1180,31 +1390,37 @@ export class TrabajoSolicitudComponent
         .value
         .trim();
 
-    if (!materiales) {
+    const mensaje =
+      materiales
+        ? '¿Confirma los materiales necesarios para este trabajo?'
+        : 'No indicó materiales. ¿Confirma que el trabajo no requiere materiales?';
 
-      this.toastService.warning(
-        'Debe ingresar los materiales.'
-      );
-
+    if (!confirm(mensaje)) {
       return;
     }
 
-    this.guardandoMateriales = true;
+    this.guardandoMateriales =
+      true;
 
     this.trabajoService
       .cargarMateriales(
         this.trabajo.id,
-        materiales
+        materiales || null
       )
       .subscribe({
 
         next: response => {
 
-          this.guardandoMateriales = false;
+          this.guardandoMateriales =
+            false;
 
           this.toastService.success(
             response?.mensaje ??
-            'Materiales cargados correctamente.'
+            (
+              materiales
+                ? 'Materiales registrados correctamente.'
+                : 'Se registró que el trabajo no requiere materiales.'
+            )
           );
 
           this.cargarTrabajo();
@@ -1212,24 +1428,26 @@ export class TrabajoSolicitudComponent
 
         error: error => {
 
-          this.guardandoMateriales = false;
+          this.guardandoMateriales =
+            false;
 
           console.error(
-            'Error al cargar materiales',
+            'Error al registrar materiales',
             error
           );
 
           this.toastService.error(
             error.error?.mensaje ??
-            'No se pudieron cargar los materiales.'
+            'No se pudo registrar la información de materiales.'
           );
-
         }
 
       });
   }
 
+
   enviarMateriales(): void {
+
     if (
       !this.trabajo ||
       !this.puedeEnviarMateriales ||
@@ -1238,15 +1456,17 @@ export class TrabajoSolicitudComponent
       return;
     }
 
-    if (
-      !confirm(
-        `¿Confirma que los materiales del trabajo #${this.trabajo.id} fueron enviados?`
-      )
-    ) {
+    const mensaje =
+      this.trabajo.materiales
+        ? `¿Confirma que los materiales del trabajo #${this.trabajo.id} fueron enviados?`
+        : `¿Confirma autorizar el inicio del trabajo #${this.trabajo.id} sin materiales?`;
+
+    if (!confirm(mensaje)) {
       return;
     }
 
-    this.enviandoMateriales = true;
+    this.enviandoMateriales =
+      true;
 
     this.trabajoService
       .marcarMaterialesEnviados(
@@ -1256,11 +1476,12 @@ export class TrabajoSolicitudComponent
 
         next: response => {
 
-          this.enviandoMateriales = false;
+          this.enviandoMateriales =
+            false;
 
           this.toastService.success(
             response?.mensaje ??
-            'Los materiales fueron marcados como enviados.'
+            'El trabajo fue autorizado para comenzar.'
           );
 
           this.cargarTrabajo();
@@ -1268,24 +1489,28 @@ export class TrabajoSolicitudComponent
 
         error: error => {
 
-          this.enviandoMateriales = false;
+          this.enviandoMateriales =
+            false;
 
           console.error(
-            'Error al enviar materiales',
+            'Error al autorizar el trabajo',
             error
           );
 
           this.toastService.error(
             error.error?.mensaje ??
-            'No se pudo registrar el envío de materiales.'
+            'No se pudo autorizar el inicio del trabajo.'
           );
-
         }
 
       });
   }
 
-  // ARCHIVOS E IMÁGENES
+
+  // ==========================================
+  // ARCHIVOS
+  // ==========================================
+
   obtenerUrlArchivo(
     rutaArchivo: string | null
   ): string {
@@ -1317,6 +1542,7 @@ export class TrabajoSolicitudComponent
     );
   }
 
+
   obtenerUrlImagen(
     rutaArchivo: string
   ): string {
@@ -1325,6 +1551,7 @@ export class TrabajoSolicitudComponent
       rutaArchivo
     );
   }
+
 
   verPresupuesto(
     presupuesto: PresupuestoDetalle
@@ -1351,11 +1578,12 @@ export class TrabajoSolicitudComponent
     );
   }
 
+
   obtenerClaseEstadoPresupuesto(
     estadoId: number
   ): string {
 
-    switch (estadoId) {
+    switch (Number(estadoId)) {
 
       case this.PRESUPUESTO_ESTADO_APROBADO:
         return 'estado-aprobado';
@@ -1371,11 +1599,14 @@ export class TrabajoSolicitudComponent
 
       default:
         return 'estado-revision';
-
     }
   }
 
+
+  // ==========================================
   // NAVEGACIÓN
+  // ==========================================
+
   volver(): void {
 
     this.router.navigate([
