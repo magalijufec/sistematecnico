@@ -302,6 +302,61 @@
 
             }
 
+            @if (trabajo.presupuestoAprobado) {
+
+            <mat-card class="detalle-card">
+
+                <mat-card-header>
+
+                    <mat-card-title>
+                        Presupuesto aprobado
+                    </mat-card-title>
+
+                </mat-card-header>
+
+                <mat-card-content>
+
+                    <div class="dato">
+
+                        <mat-icon>
+                            verified
+                        </mat-icon>
+
+                        <div>
+
+                            <span class="dato-label">
+                                Técnico seleccionado
+                            </span>
+
+                            <strong class="dato-valor">
+                                {{ trabajo.presupuestoAprobado.tecnico }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                    <div class="acciones">
+
+                        <a mat-raised-button color="primary"
+                            [href]="obtenerUrlArchivo(trabajo.presupuestoAprobado.archivo)" target="_blank"
+                            rel="noopener noreferrer">
+
+                            <mat-icon>
+                                picture_as_pdf
+                            </mat-icon>
+
+                            Ver presupuesto aprobado
+
+                        </a>
+
+                    </div>
+
+                </mat-card-content>
+
+            </mat-card>
+
+            }
 
             <!-- ========================================= -->
             <!-- EDICIÓN POR TÉCNICO -->
@@ -682,64 +737,7 @@
 
             </mat-card>
 
-            }
-
-            @if (trabajo.presupuestoAprobado) {
-
-            <mat-card class="detalle-card">
-
-                <mat-card-header>
-
-                    <mat-card-title>
-                        Presupuesto aprobado
-                    </mat-card-title>
-
-                </mat-card-header>
-
-                <mat-card-content>
-
-                    <div class="dato">
-
-                        <mat-icon>
-                            verified
-                        </mat-icon>
-
-                        <div>
-
-                            <span class="dato-label">
-                                Técnico seleccionado
-                            </span>
-
-                            <strong class="dato-valor">
-                                {{ trabajo.presupuestoAprobado.tecnico }}
-                            </strong>
-
-                        </div>
-
-                    </div>
-
-                    <div class="acciones">
-
-                        <a mat-raised-button color="primary"
-                            [href]="obtenerUrlArchivo(trabajo.presupuestoAprobado.archivo)" target="_blank"
-                            rel="noopener noreferrer">
-
-                            <mat-icon>
-                                picture_as_pdf
-                            </mat-icon>
-
-                            Ver presupuesto aprobado
-
-                        </a>
-
-                    </div>
-
-                </mat-card-content>
-
-            </mat-card>
-
-            }
-
+            }            
 
             <!-- ========================================= -->
             <!-- TRABAJO REALIZADO EN LECTURA -->

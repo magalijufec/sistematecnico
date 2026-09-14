@@ -919,6 +919,33 @@ export class TrabajoDetalleComponent
 
     }
 
+    if (this.comparaciones.length === 0) {
+
+      this.toastService.warning(
+        'Debe cargar al menos una comparación de imágenes.'
+      );
+
+      return;
+
+    }
+
+    const comparacionesIncompletas =
+      this.comparaciones.some(
+        c =>
+          !c.imagenAntes ||
+          !c.imagenDespues
+      );
+
+    if (comparacionesIncompletas) {
+
+      this.toastService.warning(
+        'Todas las comparaciones deben tener imagen Antes y Después.'
+      );
+
+      return;
+
+    }
+
     if (
       !confirm(
         this.tieneMejoraSolicitada
@@ -1161,7 +1188,7 @@ export class TrabajoDetalleComponent
       archivos.some(
         archivo =>
           archivo.type !==
-            'application/pdf' &&
+          'application/pdf' &&
           !archivo.name
             .toLowerCase()
             .endsWith('.pdf')
