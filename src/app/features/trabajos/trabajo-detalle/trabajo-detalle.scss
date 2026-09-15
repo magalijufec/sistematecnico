@@ -10,15 +10,111 @@
     overflow: hidden;
 }
 
-.trabajo-card > mat-card-header {
+.trabajo-card>mat-card-header {
     padding: 24px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 }
 
-.trabajo-card > mat-card-content {
+.trabajo-card>mat-card-content {
     padding: 24px;
 }
 
+.factura-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 14px;
+    border: 1px solid #dddddd;
+    border-radius: 10px;
+    background-color: #ffffff;
+}
+
+.factura-datos {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.factura-datos mat-icon {
+    color: #d32f2f;
+}
+
+.factura-datos>div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.factura-datos span {
+    color: #666666;
+    font-size: 13px;
+}
+
+.lista-facturas {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.resumen-facturas,
+.facturas-enviadas,
+.sin-facturas {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-top: 16px;
+    padding: 14px;
+    border-radius: 9px;
+}
+
+.resumen-facturas {
+    border: 1px solid #bbdefb;
+    background-color: #e3f2fd;
+    color: #1565c0;
+}
+
+.facturas-enviadas {
+    border: 1px solid #c8e6c9;
+    background-color: #f3faf4;
+    color: #2e7d32;
+}
+
+.facturas-enviadas p,
+.sin-facturas p {
+    margin: 5px 0 0;
+}
+
+.sin-facturas {
+    border: 1px dashed #bdbdbd;
+    background-color: #fafafa;
+    color: #555555;
+}
+
+.acciones-facturas {
+    margin-top: 18px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.ayuda-facturas {
+    margin-top: 10px;
+    color: #666666;
+    font-size: 13px;
+}
+
+@media (max-width: 650px) {
+
+    .factura-item {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .acciones-facturas {
+        flex-direction: column;
+    }
+}
 
 /* =========================================
    CARGA
@@ -60,7 +156,7 @@
     padding: 20px 0;
 }
 
-.seccion > h3 {
+.seccion>h3 {
     margin-top: 0;
 }
 
@@ -143,16 +239,13 @@
 }
 
 
-/* =========================================
-   INPUTS DE FECHA
-========================================= */
+/* INPUTS DE FECHA */
 
 .fechas-formulario {
     display: grid;
     grid-template-columns:
-        repeat(2, minmax(0, 1fr));
+        2fr 1fr 2fr 1fr;
     gap: 16px;
-    margin-bottom: 20px;
 }
 
 .fechas-formulario mat-form-field {
@@ -167,7 +260,7 @@
     margin-bottom: 20px;
 }
 
-.fechas-lectura > div {
+.fechas-lectura>div {
     display: flex;
     align-items: flex-start;
     gap: 12px;
@@ -181,7 +274,7 @@
     color: #3f51b5;
 }
 
-.fechas-lectura div > div {
+.fechas-lectura div>div {
     display: flex;
     flex-direction: column;
     gap: 4px;
@@ -336,7 +429,7 @@
     background-color: #fff8e1;
 }
 
-.aviso-mejora > mat-icon {
+.aviso-mejora>mat-icon {
     color: #ef6c00;
 }
 
@@ -392,7 +485,7 @@
     padding: 20px;
 }
 
-.resultado-card > mat-icon {
+.resultado-card>mat-icon {
     flex: 0 0 auto;
     width: 32px;
     height: 32px;
@@ -413,8 +506,8 @@
     background-color: #f3faf4;
 }
 
-.resultado-aprobado > mat-icon,
-.resultado-finalizado > mat-icon,
+.resultado-aprobado>mat-icon,
+.resultado-finalizado>mat-icon,
 .resultado-aprobado h3,
 .resultado-finalizado h3 {
     color: #2e7d32;
@@ -425,7 +518,7 @@
     background-color: #fff8e1;
 }
 
-.resultado-mejora > mat-icon,
+.resultado-mejora>mat-icon,
 .resultado-mejora h3 {
     color: #ef6c00;
 }
@@ -435,7 +528,7 @@
     background-color: #fff5f5;
 }
 
-.resultado-cancelado > mat-icon,
+.resultado-cancelado>mat-icon,
 .resultado-cancelado h3 {
     color: #c62828;
 }
@@ -461,8 +554,8 @@
 
 @media (max-width: 650px) {
 
-    .trabajo-card > mat-card-header,
-    .trabajo-card > mat-card-content {
+    .trabajo-card>mat-card-header,
+    .trabajo-card>mat-card-content {
         padding: 16px;
     }
 

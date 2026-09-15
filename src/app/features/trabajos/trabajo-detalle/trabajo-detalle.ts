@@ -29,9 +29,7 @@ import {
   MatButtonModule
 } from '@angular/material/button';
 
-import {
-  MatIconModule
-} from '@angular/material/icon';
+import { MatIconModule } from '@angular/material/icon';
 
 import {
   MatFormFieldModule
@@ -149,51 +147,26 @@ export class TrabajoDetalleComponent
 
   readonly ESTADO_CANCELADO = 16;
 
-
-  // ==========================================
   // DATOS
-  // ==========================================
-
   idTrabajo = 0;
-
   trabajo?: TrabajoDetalle;
-
   comparaciones: TrabajoImagenComparacion[] = [];
-
   comentariosMejora = '';
-
   mostrarSolicitudMejora = false;
+  fechaInicio = '';
+  horaInicio = '';
+  fechaFin = '';
+  horaFin = '';
 
-
-  /*
-   * Inputs datetime-local.
-   *
-   * El formato esperado es:
-   * yyyy-MM-ddTHH:mm
-   */
-  fechaInicioInput = '';
-
-  fechaFinInput = '';
-
-
-  // ==========================================
   // ESTADOS DE PANTALLA
-  // ==========================================
-
   cargando = false;
-
   cargandoComparaciones = false;
-
   guardandoTrabajo = false;
-
   procesandoRevision = false;
-
   subiendoFactura = false;
-
+  enviandoFacturasPago = false;
   registrandoPago = false;
-
   descargandoInforme = false;
-
 
   quillConfig = {
 
@@ -342,19 +315,13 @@ export class TrabajoDetalleComponent
       this.trabajo?.idEstado ===
       this.ESTADO_APROBADO
     );
-
   }
-
 
   get estaPendienteFacturacion(): boolean {
-
     return (
-      this.trabajo?.idEstado ===
-      this.ESTADO_PENDIENTE_FACTURACION
+      this.trabajo?.idEstado === this.ESTADO_PENDIENTE_FACTURACION
     );
-
   }
-
 
   get estaPendientePago(): boolean {
 
@@ -414,27 +381,33 @@ export class TrabajoDetalleComponent
 
 
   get tecnicoPuedeCargarFacturas(): boolean {
-
     return (
       this.esTecnico &&
       (
-        this.estaAprobado ||
-        this.estaPendienteFacturacion
+        this.estaAprobado || this.estaPendienteFacturacion
       )
     );
-
   }
 
+  get tieneFacturasCargadas(): boolean {
+
+    return (
+      this.trabajo?.facturas != null &&
+      this.trabajo.facturas.length > 0
+    );
+  }
+
+  get tecnicoPuedeEnviarFacturasPago(): boolean {
+    return (this.tecnicoPuedeCargarFacturas && this.tieneFacturasCargadas);
+  }
 
   get mostrarFacturas(): boolean {
-
     return (
       this.estaAprobado ||
       this.estaPendienteFacturacion ||
       this.estaPendientePago ||
       this.estaFinalizado
     );
-
   }
 
 
@@ -514,21 +487,31 @@ export class TrabajoDetalleComponent
   }
 
   private cargarFechasEnFormulario(): void {
-
     if (!this.trabajo) {
       return;
     }
+    if (this.trabajo.fechaInicio) {
+      const inicio = new Date(this.trabajo.fechaInicio);
 
-    this.fechaInicioInput =
-      this.convertirFechaParaInput(
-        this.trabajo.fechaInicio
-      );
+      this.fechaInicio =
+        inicio.toISOString().substring(0, 10);
 
-    this.fechaFinInput =
-      this.convertirFechaParaInput(
+      this.horaInicio =
+        inicio.toTimeString().substring(0, 5);
+    }
+
+    if (this.trabajo.fechaFinalizado) {
+
+      const fin = new Date(
         this.trabajo.fechaFinalizado
       );
 
+      this.fechaFin =
+        fin.toISOString().substring(0, 10);
+
+      this.horaFin =
+        fin.toTimeString().substring(0, 5);
+    }
   }
 
 
@@ -849,8 +832,7 @@ export class TrabajoDetalleComponent
       this.trabajo.trabajoRealizado
         ?.trim() ?? '';
 
-    if (!this.fechaInicioInput) {
-
+    if (!this.fechaInicio) {
       this.toastService.warning(
         'Debe indicar la fecha y hora de inicio.'
       );
@@ -859,8 +841,7 @@ export class TrabajoDetalleComponent
 
     }
 
-    if (!this.fechaFinInput) {
-
+    if (!this.fechaFin) {
       this.toastService.warning(
         'Debe indicar la fecha y hora de finalización.'
       );
@@ -868,15 +849,14 @@ export class TrabajoDetalleComponent
       return;
 
     }
-
     const fechaInicio =
       new Date(
-        this.fechaInicioInput
+        `${this.fechaInicio}T${this.horaInicio}`
       );
 
     const fechaFin =
       new Date(
-        this.fechaFinInput
+        `${this.fechaFin}T${this.horaFin}`
       );
 
     if (
@@ -963,8 +943,8 @@ export class TrabajoDetalleComponent
       .finalizarTrabajo(
         this.trabajo.id,
         trabajoRealizado,
-        fechaInicio.toISOString(),
-        fechaFin.toISOString()
+        fechaInicio,
+        fechaFin
       )
       .subscribe({
 
@@ -1162,10 +1142,7 @@ export class TrabajoDetalleComponent
   }
 
   // FACTURAS
-  subirFactura(
-    event: Event
-  ): void {
-
+  subirFactura(event: Event): void {
     const input =
       event.target as HTMLInputElement;
 
@@ -1174,7 +1151,8 @@ export class TrabajoDetalleComponent
       input.files.length === 0 ||
       !this.trabajo ||
       !this.tecnicoPuedeCargarFacturas ||
-      this.subiendoFactura
+      this.subiendoFactura ||
+      this.enviandoFacturasPago
     ) {
       return;
     }
@@ -1184,7 +1162,7 @@ export class TrabajoDetalleComponent
         input.files
       );
 
-    const tieneArchivoInvalido =
+    const archivosInvalidos =
       archivos.some(
         archivo =>
           archivo.type !==
@@ -1194,20 +1172,15 @@ export class TrabajoDetalleComponent
             .endsWith('.pdf')
       );
 
-    if (tieneArchivoInvalido) {
-
+    if (archivosInvalidos) {
       input.value = '';
-
       this.toastService.warning(
         'Todos los archivos deben ser PDF.'
       );
-
       return;
-
     }
 
-    this.subiendoFactura =
-      true;
+    this.subiendoFactura = true;
 
     this.trabajoService
       .subirFacturas(
@@ -1215,53 +1188,111 @@ export class TrabajoDetalleComponent
         archivos
       )
       .subscribe({
-
         next: response => {
-
-          this.subiendoFactura =
-            false;
-
+          this.subiendoFactura = false;
           input.value = '';
-
           this.toastService.success(
             response?.mensaje ??
             (
               archivos.length === 1
-                ? 'Factura cargada correctamente.'
-                : `${archivos.length} facturas cargadas correctamente.`
+                ? 'Factura agregada correctamente.'
+                : `${archivos.length} facturas agregadas correctamente.`
             )
           );
-
           this.cargarTrabajo();
-
         },
 
         error: error => {
+          this.subiendoFactura = false;
 
-          this.subiendoFactura =
-            false;
+          input.value = '';
 
           console.error(
-            'Error al cargar facturas',
+            'Error al agregar facturas',
             error
           );
 
           this.toastService.error(
             error.error?.mensaje ??
-            'No se pudieron cargar las facturas.'
+            'No se pudieron agregar las facturas.'
           );
-
         }
-
       });
-
   }
 
+  enviarFacturasPago(): void {
 
-  // ==========================================
+  if (
+    !this.trabajo ||
+    !this.tecnicoPuedeEnviarFacturasPago ||
+    this.enviandoFacturasPago ||
+    this.subiendoFactura
+  ) {
+    return;
+  }
+
+  const cantidadFacturas =
+    this.trabajo.facturas?.length ?? 0;
+
+  if (cantidadFacturas === 0) {
+
+    this.toastService.warning(
+      'Debe cargar al menos una factura antes de enviarlas a pago.'
+    );
+
+    return;
+  }
+
+  if (
+    !confirm(
+      `¿Confirma enviar ${cantidadFacturas} factura(s) a pago? Después de enviarlas no podrá agregar más facturas.`
+    )
+  ) {
+    return;
+  }
+
+  this.enviandoFacturasPago =
+    true;
+
+  this.trabajoService
+    .enviarFacturasPago(
+      this.trabajo.id
+    )
+    .subscribe({
+
+      next: response => {
+
+        this.enviandoFacturasPago =
+          false;
+
+        this.toastService.success(
+          response?.mensaje ??
+          'Las facturas fueron enviadas a pago correctamente.'
+        );
+
+        this.cargarTrabajo();
+      },
+
+      error: error => {
+
+        this.enviandoFacturasPago =
+          false;
+
+        console.error(
+          'Error al enviar facturas a pago',
+          error
+        );
+
+        this.toastService.error(
+          error.error?.mensaje ??
+          'No se pudieron enviar las facturas a pago.'
+        );
+      }
+
+    });
+}
+
   // PAGO
-  // ==========================================
-
   registrarPago(): void {
 
     if (
@@ -1325,15 +1356,8 @@ export class TrabajoDetalleComponent
 
   }
 
-
-  // ==========================================
   // INFORME
-  // ==========================================
-
-  descargarInforme(
-    idTrabajo: number
-  ): void {
-
+  descargarInforme(idTrabajo: number): void {
     if (this.descargandoInforme) {
       return;
     }

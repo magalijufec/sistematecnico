@@ -1,48 +1,15 @@
-import {
-  Component,
-  OnInit,
-  inject
-} from '@angular/core';
-
-import {
-  CommonModule
-} from '@angular/common';
-
-import {
-  ActivatedRoute,
-  Router
-} from '@angular/router';
-
-import {
-  FormBuilder,
-  ReactiveFormsModule,
-  Validators
-} from '@angular/forms';
-
-import {
-  MatCardModule
-} from '@angular/material/card';
-
-import {
-  MatButtonModule
-} from '@angular/material/button';
-
-import {
-  MatIconModule
-} from '@angular/material/icon';
-
-import {
-  MatFormFieldModule
-} from '@angular/material/form-field';
-
-import {
-  MatInputModule
-} from '@angular/material/input';
-
+import {Component,OnInit,inject} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {ActivatedRoute,Router} from '@angular/router';
+import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
+import { MatCardModule } from '@angular/material/card';
+import {MatButtonModule} from '@angular/material/button';
+import {MatIconModule} from '@angular/material/icon';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
 import {
   MatProgressSpinnerModule
 } from '@angular/material/progress-spinner';
-
 import {
   MatSelectModule
 } from '@angular/material/select';
@@ -82,17 +49,12 @@ import {
 import {
   TecnicoCombo
 } from '../../../core/models/tecnico-combo';
-
-import {
-  environment
-} from '../../../environments/environment';
+import { environment } from '../../../environments/environment';
 
 
 @Component({
   selector: 'app-trabajo-solicitud',
-
   standalone: true,
-
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -105,139 +67,66 @@ import {
     MatSelectModule,
     MatTooltipModule
   ],
-
   templateUrl: './trabajo-solicitud.html',
-
   styleUrl: './trabajo-solicitud.scss'
 })
 export class TrabajoSolicitudComponent
   implements OnInit {
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly fb = inject(FormBuilder);
+  private readonly trabajoService = inject(TrabajoService);
+  private readonly presupuestoService = inject(PresupuestoService);
+  private readonly usuarioService = inject(UsuarioService);
+  private readonly authService = inject(AuthService);
+  private readonly toastService = inject(ToastService);
 
-  private readonly route =
-    inject(ActivatedRoute);
+  readonly api = environment.api;
 
-  private readonly router =
-    inject(Router);
-
-  private readonly fb =
-    inject(FormBuilder);
-
-  private readonly trabajoService =
-    inject(TrabajoService);
-
-  private readonly presupuestoService =
-    inject(PresupuestoService);
-
-  private readonly usuarioService =
-    inject(UsuarioService);
-
-  private readonly authService =
-    inject(AuthService);
-
-  private readonly toastService =
-    inject(ToastService);
-
-
-  readonly api =
-    environment.api;
-
-
-  // ==========================================
   // ESTADOS DEL TRABAJO
-  // ==========================================
-
   readonly PENDIENTE_REVISION_SECTOR = 1;
-
   readonly SOLICITUD_RECHAZADA = 2;
-
   readonly PENDIENTE_ASIGNACION_TECNICOS = 3;
-
   readonly PENDIENTE_PRESUPUESTOS = 4;
-
   readonly PENDIENTE_APROBACION_PRESUPUESTO = 5;
-
   readonly PRESUPUESTO_APROBADO = 6;
-
   readonly PENDIENTE_MATERIALES = 7;
-
   readonly MATERIALES_ENVIADOS = 8;
-
   readonly EN_PROCESO = 9;
 
-
-  // ==========================================
   // ESTADOS DEL PRESUPUESTO
-  // ==========================================
-
   readonly PRESUPUESTO_EN_REVISION = 1;
-
   readonly PRESUPUESTO_ESTADO_APROBADO = 2;
-
   readonly PRESUPUESTO_RECHAZADO = 3;
-
   readonly PRESUPUESTO_APROBACION_REVOCADA = 4;
-
   readonly PRESUPUESTO_RETIRADO = 5;
 
-
-  // ==========================================
   // DATOS
-  // ==========================================
-
   idTrabajo = 0;
-
   usuarioIdActual: number | null = null;
-
   trabajo?: TrabajoDetalle;
-
   tecnicos: TecnicoCombo[] = [];
-
   presupuestos: PresupuestoDetalle[] = [];
-
   presupuestoUsuario?: PresupuestoDetalle;
-
   archivoPresupuesto: File | null = null;
+  presupuestoARechazar: PresupuestoDetalle | null = null;
 
-  presupuestoARechazar:
-    PresupuestoDetalle | null = null;
-
-
-  // ==========================================
   // ESTADOS DE PANTALLA
-  // ==========================================
-
   cargando = false;
-
   procesando = false;
-
   cargandoTecnicos = false;
-
   cargandoPresupuestos = false;
-
   guardandoPresupuesto = false;
-
   guardandoMateriales = false;
-
   enviandoMateriales = false;
-
-  aprobandoPresupuestoId:
-    number | null = null;
-
+  aprobandoPresupuestoId: number | null = null;
   mostrarFormularioRechazo = false;
-
   mostrarFormularioPresupuesto = false;
+  mostrarFormularioRechazoPresupuesto = false;
 
-  mostrarFormularioRechazoPresupuesto =
-    false;
-
-
-  // ==========================================
   // FORMULARIOS
-  // ==========================================
-
   rechazoForm =
     this.fb.nonNullable.group({
-
       motivoRechazo: [
         '',
         [
@@ -246,49 +135,39 @@ export class TrabajoSolicitudComponent
           Validators.maxLength(1000)
         ]
       ]
-
     });
 
 
   tecnicosForm =
     this.fb.nonNullable.group({
-
       idsTecnicos: [
         [] as number[]
       ]
-
     });
-
 
   presupuestoForm =
     this.fb.nonNullable.group({
-
       descripcion: [
         '',
         [
           Validators.maxLength(2000)
         ]
       ]
-
     });
-
 
   materialesForm =
     this.fb.nonNullable.group({
-
       materiales: [
         '',
         [
           Validators.maxLength(5000)
         ]
       ]
-
     });
 
 
   rechazoPresupuestoForm =
     this.fb.nonNullable.group({
-
       motivo: [
         '',
         [
@@ -297,33 +176,22 @@ export class TrabajoSolicitudComponent
           Validators.maxLength(1000)
         ]
       ]
-
     });
 
-
   ngOnInit(): void {
-
     this.idTrabajo =
       Number(
         this.route.snapshot
           .paramMap
           .get('id')
       );
-
     this.usuarioIdActual =
       this.authService.obtenerUsuarioId();
-
-    if (
-      !this.idTrabajo ||
-      this.idTrabajo <= 0
-    ) {
-
+    if (!this.idTrabajo || this.idTrabajo <= 0) {
       this.toastService.error(
         'El identificador del trabajo no es válido.'
       );
-
       this.volver();
-
       return;
     }
 
@@ -1202,20 +1070,29 @@ export class TrabajoSolicitudComponent
       return;
     }
 
-    if (!this.archivoPresupuesto) {
-
-      this.toastService.warning(
-        'Debe seleccionar el archivo PDF.'
-      );
-
-      return;
-    }
-
     const descripcion =
-      this.presupuestoForm.controls
-        .descripcion
-        .value
-        .trim();
+  this.presupuestoForm.controls
+    .descripcion
+    .value
+    .trim();
+
+/*
+ * Debe existir al menos:
+ * - PDF
+ * o
+ * - Descripción
+ */
+if (
+  !this.archivoPresupuesto &&
+  !descripcion
+) {
+
+  this.toastService.warning(
+    'Debe adjuntar un PDF o ingresar una descripción.'
+  );
+
+  return;
+}
 
     this.guardandoPresupuesto =
       true;
@@ -1468,30 +1345,17 @@ export class TrabajoSolicitudComponent
     this.enviandoMateriales =
       true;
 
-    this.trabajoService
-      .marcarMaterialesEnviados(
-        this.trabajo.id
-      )
+    this.trabajoService.marcarMaterialesEnviados(this.trabajo.id)
       .subscribe({
-
         next: response => {
-
-          this.enviandoMateriales =
-            false;
-
-          this.toastService.success(
-            response?.mensaje ??
-            'El trabajo fue autorizado para comenzar.'
+          this.enviandoMateriales =false;
+          this.toastService.success(response?.mensaje ?? 'El trabajo fue autorizado para comenzar.'
           );
-
           this.cargarTrabajo();
         },
 
         error: error => {
-
-          this.enviandoMateriales =
-            false;
-
+          this.enviandoMateriales = false;
           console.error(
             'Error al autorizar el trabajo',
             error
@@ -1579,39 +1443,23 @@ export class TrabajoSolicitudComponent
   }
 
 
-  obtenerClaseEstadoPresupuesto(
-    estadoId: number
-  ): string {
-
+  obtenerClaseEstadoPresupuesto(estadoId: number): string {
     switch (Number(estadoId)) {
-
       case this.PRESUPUESTO_ESTADO_APROBADO:
         return 'estado-aprobado';
-
       case this.PRESUPUESTO_RECHAZADO:
         return 'estado-rechazado';
-
       case this.PRESUPUESTO_APROBACION_REVOCADA:
         return 'estado-revocado';
-
       case this.PRESUPUESTO_RETIRADO:
         return 'estado-retirado';
-
       default:
         return 'estado-revision';
     }
   }
 
-
-  // ==========================================
-  // NAVEGACIÓN
-  // ==========================================
-
   volver(): void {
-
-    this.router.navigate([
-      '/trabajos-solicitud-list'
-    ]);
+    this.router.navigate(['/trabajos-solicitud-list']);
   }
 
 }

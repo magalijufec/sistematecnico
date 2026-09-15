@@ -303,57 +303,33 @@
             }
 
             @if (trabajo.presupuestoAprobado) {
-
             <mat-card class="detalle-card">
-
                 <mat-card-header>
-
-                    <mat-card-title>
-                        Presupuesto aprobado
-                    </mat-card-title>
-
+                    <mat-card-title>Presupuesto aprobado</mat-card-title>
                 </mat-card-header>
 
                 <mat-card-content>
-
                     <div class="dato">
-
-                        <mat-icon>
-                            verified
-                        </mat-icon>
-
+                        <mat-icon>verified</mat-icon>
                         <div>
-
-                            <span class="dato-label">
-                                Técnico seleccionado
-                            </span>
-
+                            <span class="dato-label">Técnico seleccionado</span>
                             <strong class="dato-valor">
                                 {{ trabajo.presupuestoAprobado.tecnico }}
                             </strong>
-
                         </div>
-
                     </div>
 
+                    @if (trabajo.presupuestoAprobado.archivo != null) {
                     <div class="acciones">
-
                         <a mat-raised-button color="primary"
                             [href]="obtenerUrlArchivo(trabajo.presupuestoAprobado.archivo)" target="_blank"
                             rel="noopener noreferrer">
-
-                            <mat-icon>
-                                picture_as_pdf
-                            </mat-icon>
-
+                            <mat-icon>picture_as_pdf</mat-icon>
                             Ver presupuesto aprobado
-
                         </a>
-
                     </div>
-
+                    }
                 </mat-card-content>
-
             </mat-card>
 
             }
@@ -423,85 +399,45 @@
                         </div>
 
                     </div>
-
                     }
 
-
-                    <!-- ================================= -->
                     <!-- FECHAS DEL TRABAJO -->
-                    <!-- ================================= -->
-
                     <div class="fechas-formulario">
-
                         <mat-form-field appearance="outline">
-
-                            <mat-label>
-                                Fecha y hora de inicio
-                            </mat-label>
-
-                            <input matInput type="datetime-local" name="fechaInicio" required
-                                [(ngModel)]="fechaInicioInput">
-
-                            <mat-icon matSuffix>
-                                play_arrow
-                            </mat-icon>
-
-                            <mat-hint>
-                                Momento en que comenzó el trabajo
-                            </mat-hint>
-
+                            <mat-label>Fecha inicio</mat-label>
+                            <input matInput type="date" name="fechaInicio" [(ngModel)]="fechaInicio">
                         </mat-form-field>
 
+                        <mat-form-field appearance="outline">
+                            <mat-label>Hora inicio</mat-label>
+                            <input matInput type="time" name="horaInicio" [(ngModel)]="horaInicio">
+                        </mat-form-field>
 
                         <mat-form-field appearance="outline">
+                            <mat-label>Fecha finalización</mat-label>
+                            <input matInput type="date" name="fechaFin" [(ngModel)]="fechaFin">
+                        </mat-form-field>
 
-                            <mat-label>
-                                Fecha y hora de finalización
-                            </mat-label>
-
-                            <input matInput type="datetime-local" name="fechaFin" required [(ngModel)]="fechaFinInput">
-
-                            <mat-icon matSuffix>
-                                stop
-                            </mat-icon>
-
-                            <mat-hint>
-                                Momento en que terminó el trabajo
-                            </mat-hint>
-
+                        <mat-form-field appearance="outline">
+                            <mat-label>Hora finalización</mat-label>
+                            <input matInput type="time" name="horaFin" [(ngModel)]="horaFin">
                         </mat-form-field>
 
                     </div>
-
 
                     <mat-divider>
                     </mat-divider>
 
-
-                    <!-- ================================= -->
                     <!-- IMÁGENES -->
-                    <!-- ================================= -->
 
-                    <h3>
-                        Imágenes del trabajo
-                    </h3>
-
-
+                    <h3>Imágenes del trabajo</h3>
                     @if (cargandoComparaciones) {
-
                     <div class="carga-inline">
-
-                        <mat-spinner diameter="30">
-                        </mat-spinner>
-
+                        <mat-spinner diameter="30"></mat-spinner>
                         Cargando imágenes...
-
                     </div>
-
                     } @else {
-
                     <div class="comparaciones">
-
                         @for (
                         comparacion of comparaciones;
                         track comparacion.id
@@ -737,7 +673,7 @@
 
             </mat-card>
 
-            }            
+            }
 
             <!-- ========================================= -->
             <!-- TRABAJO REALIZADO EN LECTURA -->
@@ -1207,12 +1143,14 @@
             <!-- ========================================= -->
             <!-- FACTURAS -->
             <!-- ========================================= -->
+            <!-- ========================================= -->
+            <!-- FACTURAS -->
+            <!-- ========================================= -->
 
             @if (mostrarFacturas) {
 
             <mat-divider>
             </mat-divider>
-
 
             <mat-card class="seccion-accion">
 
@@ -1223,91 +1161,242 @@
                     </mat-card-title>
 
                     <mat-card-subtitle>
+
+                        @if (tecnicoPuedeCargarFacturas) {
+
+                        Agregue todas las facturas necesarias.
+                        Cuando termine, envíelas al sector de pagos.
+
+                        } @else if (estaPendientePago) {
+
+                        Las facturas fueron enviadas y se encuentran pendientes de pago.
+
+                        } @else {
+
                         Facturación asociada al trabajo.
+
+                        }
+
                     </mat-card-subtitle>
 
                 </mat-card-header>
 
-
                 <mat-card-content>
 
-                    @if (
-                    trabajo.facturas &&
-                    trabajo.facturas.length > 0
-                    ) {
+                    <!-- ========================================= -->
+                    <!-- LISTADO DE FACTURAS CARGADAS -->
+                    <!-- ========================================= -->
+
+                    @if (tieneFacturasCargadas) {
 
                     <div class="lista-facturas">
 
                         @for (
                         factura of trabajo.facturas;
-                        track factura.id
+                        track factura.id;
+                        let numero = $index
                         ) {
 
-                        <a mat-stroked-button color="primary" [href]="
-                                                obtenerUrlFactura(
-                                                    factura.rutaArchivo
-                                                )
-                                            " target="_blank" rel="noopener noreferrer">
+                        <div class="factura-item">
 
-                            <mat-icon>
-                                picture_as_pdf
-                            </mat-icon>
+                            <div class="factura-datos">
 
-                            Factura {{ factura.id }}
+                                <mat-icon>
+                                    picture_as_pdf
+                                </mat-icon>
 
-                        </a>
+                                <div>
+
+                                    <strong>
+                                        Factura #{{ numero + 1 }}
+                                    </strong>
+
+                                    @if (factura.fechaCarga) {
+
+                                    <span>
+                                        Cargada el
+                                        {{
+                                        factura.fechaCarga
+                                        | date:'dd/MM/yyyy HH:mm'
+                                        }}
+                                    </span>
+
+                                    }
+
+                                </div>
+
+                            </div>
+
+                            <a mat-stroked-button color="primary" [href]="
+                                    obtenerUrlFactura(
+                                        factura.rutaArchivo
+                                    )
+                                " target="_blank" rel="noopener noreferrer">
+
+                                <mat-icon>
+                                    visibility
+                                </mat-icon>
+
+                                Ver factura
+
+                            </a>
+
+                        </div>
 
                         }
 
                     </div>
 
+                    <div class="resumen-facturas">
+
+                        <mat-icon>
+                            receipt_long
+                        </mat-icon>
+
+                        <span>
+
+                            {{
+                            trabajo.facturas?.length ?? 0
+                            }}
+
+                            factura(s) cargada(s)
+
+                        </span>
+
+                    </div>
+
                     } @else {
 
-                    <p class="sin-informacion">
-                        Todavía no se cargaron facturas.
-                    </p>
+                    <div class="sin-facturas">
+
+                        <mat-icon>
+                            receipt_long
+                        </mat-icon>
+
+                        <div>
+
+                            <strong>
+                                No hay facturas cargadas
+                            </strong>
+
+                            <p>
+                                Agregue al menos una factura para poder enviarlas a pago.
+                            </p>
+
+                        </div>
+
+                    </div>
 
                     }
 
 
+                    <!-- ========================================= -->
+                    <!-- ACCIONES DEL TÉCNICO -->
+                    <!-- ========================================= -->
+
                     @if (tecnicoPuedeCargarFacturas) {
 
-                    <input #facturaInput type="file" multiple accept="application/pdf" hidden
+                    <input #facturaInput type="file" multiple accept="application/pdf,.pdf" hidden
                         (change)="subirFactura($event)">
 
+                    <div class="acciones acciones-facturas">
 
-                    <button mat-raised-button color="primary" type="button" [disabled]="subiendoFactura"
-                        (click)="facturaInput.click()">
+                        <button mat-stroked-button color="primary" type="button" [disabled]="
+                            subiendoFactura ||
+                            enviandoFacturasPago
+                        " (click)="facturaInput.click()">
+
+                            <mat-icon>
+                                add
+                            </mat-icon>
+
+                            @if (subiendoFactura) {
+
+                            Cargando...
+
+                            } @else if (tieneFacturasCargadas) {
+
+                            Agregar otra factura
+
+                            } @else {
+
+                            Agregar factura
+
+                            }
+
+                        </button>
+
+                        <button mat-raised-button color="primary" type="button" [disabled]="
+                            !tecnicoPuedeEnviarFacturasPago ||
+                            subiendoFactura ||
+                            enviandoFacturasPago
+                        " (click)="enviarFacturasPago()">
+
+                            <mat-icon>
+                                send
+                            </mat-icon>
+
+                            @if (enviandoFacturasPago) {
+
+                            Enviando...
+
+                            } @else {
+
+                            Enviar facturas a pago
+
+                            }
+
+                        </button>
+
+                    </div>
+
+                    @if (!tieneFacturasCargadas) {
+
+                    <p class="ayuda-facturas">
+                        El botón “Enviar facturas a pago” se habilitará
+                        cuando haya al menos una factura cargada.
+                    </p>
+
+                    }
+
+                    }
+
+
+                    <!-- ========================================= -->
+                    <!-- FACTURAS YA ENVIADAS -->
+                    <!-- ========================================= -->
+
+                    @if (estaPendientePago) {
+
+                    <div class="facturas-enviadas">
 
                         <mat-icon>
-                            upload_file
+                            check_circle
                         </mat-icon>
 
-                        @if (subiendoFactura) {
+                        <div>
 
-                        Cargando...
+                            <strong>
+                                Facturas enviadas a pago
+                            </strong>
 
-                        } @else {
+                            <p>
+                                Ya no pueden agregarse nuevas facturas mientras
+                                el trabajo se encuentre pendiente de pago.
+                            </p>
 
-                        Cargar facturas
+                        </div>
 
-                        }
-
-                    </button>
+                    </div>
 
                     }
 
                 </mat-card-content>
 
             </mat-card>
-
             }
 
-
-            <!-- ========================================= -->
             <!-- PAGO -->
-            <!-- ========================================= -->
-
             @if (estaPendientePago) {
 
             <mat-divider>

@@ -165,10 +165,7 @@ export class TrabajoService {
     );
   }
 
-  registrarPago(
-    idTrabajo: number
-  ) {
-
+  registrarPago(idTrabajo: number) {
     return this.http.put<{
       mensaje?: string;
     }>(
@@ -178,22 +175,31 @@ export class TrabajoService {
   }
 
   finalizarTrabajo(
-  idTrabajo: number,
-  trabajoRealizado: string,
-  fechaInicio: string,
-  fechaFin: string
-) {
-  return this.http.put<{
-    mensaje?: string;
-  }>(
-    `${this.api}/${idTrabajo}/finalizar`,
-    {
-      trabajoRealizado,
-      fechaInicio,
-      fechaFin
-    }
-  );
-}
+    idTrabajo: number,
+    trabajoRealizado: string,
+    fechaInicio: Date,
+    fechaFin: Date
+  ) {
+    return this.http.put<{
+      mensaje?: string;
+    }>(
+      `${this.api}/${idTrabajo}/finalizar`,
+      {
+        trabajoRealizado,
+        fechaInicio,
+        fechaFin
+      }
+    );
+  }
+
+  enviarFacturasPago(idTrabajo: number) {
+    return this.http.put<{
+      mensaje?: string;
+    }>(
+      `${this.api}/${idTrabajo}/enviar-facturas-pago`,
+      {}
+    );
+  }
 
   descargarInformePdf(id: number): Observable<Blob> {
     return this.http.get(
@@ -224,19 +230,16 @@ export class TrabajoService {
     );
   }
 
-  cargarMateriales(
-  idTrabajo: number,
-  materiales: string | null
-) {
-  return this.http.put<{
-    mensaje?: string;
-  }>(
-    `${this.api}/${idTrabajo}/materiales`,
-    {
-      materiales
-    }
-  );
-}
+  cargarMateriales(idTrabajo: number, materiales: string | null) {
+    return this.http.put<{
+      mensaje?: string;
+    }>(
+      `${this.api}/${idTrabajo}/materiales`,
+      {
+        materiales
+      }
+    );
+  }
 
   marcarMaterialesEnviados(idTrabajo: number) {
     return this.http.put<{ mensaje?: string }>(

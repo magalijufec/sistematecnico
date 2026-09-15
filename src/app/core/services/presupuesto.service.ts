@@ -17,7 +17,7 @@ export class PresupuestoService {
         );
     }
 
-    crear(trabajoId: number, tecnicoId: number, descripcion: string, archivo: File) {
+    crear(trabajoId: number, tecnicoId: number, descripcion: string, archivo: File | null) {
         const formData = new FormData();
 
         formData.append(
@@ -35,11 +35,15 @@ export class PresupuestoService {
             descripcion
         );
 
-        formData.append(
-            'archivo',
-            archivo,
-            archivo.name
-        );
+        if (archivo) {
+
+            formData.append(
+                'archivo',
+                archivo
+            );
+
+        }
+
 
         return this.http.post<{
             mensaje: string;
