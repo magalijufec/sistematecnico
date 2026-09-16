@@ -230,8 +230,8 @@
                             <div class="imagen-columna">
                                 <h4>Antes</h4>
                                 @if (comparacion.imagenAntes) {
-                                <img class="imagen-trabajo" 
-                                [src]="obtenerUrlImagen(comparacion.imagenAntes.rutaArchivo)" alt="Imagen anterior">
+                                <img class="imagen-trabajo"
+                                    [src]="obtenerUrlImagen(comparacion.imagenAntes.rutaArchivo)" alt="Imagen anterior">
 
                                 } @else {
                                 <div class="sin-imagen">
@@ -240,8 +240,8 @@
                                 </div>
                                 }
 
-                                <input #inputAntes type="file" accept="image/*" hidden 
-                                (change)="subirAntes($event, comparacion)">
+                                <input #inputAntes type="file" accept="image/*" hidden
+                                    (change)="subirAntes($event, comparacion)">
 
                                 <button mat-stroked-button color="primary" type="button" (click)="inputAntes.click()">
                                     <mat-icon>upload</mat-icon>
@@ -259,9 +259,9 @@
                                 <h4>Después</h4>
                                 @if (comparacion.imagenDespues) {
 
-                                <img class="imagen-trabajo" 
-                                [src]="obtenerUrlImagen(comparacion.imagenDespues.rutaArchivo)" 
-                                alt="Imagen posterior">
+                                <img class="imagen-trabajo"
+                                    [src]="obtenerUrlImagen(comparacion.imagenDespues.rutaArchivo)"
+                                    alt="Imagen posterior">
                                 } @else {
                                 <div class="sin-imagen">
                                     <mat-icon>image</mat-icon>
@@ -269,8 +269,8 @@
                                 </div>
                                 }
 
-                                <input #inputDespues type="file" accept="image/*" hidden 
-                                (change)="subirDespues($event, comparacion)">
+                                <input #inputDespues type="file" accept="image/*" hidden
+                                    (change)="subirDespues($event, comparacion)">
 
                                 <button mat-stroked-button color="primary" type="button" (click)="inputDespues.click()">
 
@@ -388,8 +388,7 @@
                                 <a [href]="obtenerUrlImagen(comparacion.imagenAntes.rutaArchivo)
                                                         " target="_blank" rel="noopener noreferrer">
 
-                                    <img class="imagen-trabajo" 
-                                    [src]="obtenerUrlImagen(comparacion.imagenAntes.rutaArchivo)
+                                    <img class="imagen-trabajo" [src]="obtenerUrlImagen(comparacion.imagenAntes.rutaArchivo)
                                                             " alt="Imagen anterior">
                                 </a>
                                 } @else {
@@ -405,8 +404,7 @@
                                 @if (comparacion.imagenDespues) {
                                 <a [href]="obtenerUrlImagen(comparacion.imagenDespues.rutaArchivo)
                                                         " target="_blank" rel="noopener noreferrer">
-                                    <img class="imagen-trabajo" 
-                                    [src]="obtenerUrlImagen(comparacion.imagenDespues.rutaArchivo)
+                                    <img class="imagen-trabajo" [src]="obtenerUrlImagen(comparacion.imagenDespues.rutaArchivo)
                                                             " alt="Imagen posterior">
                                 </a>
                                 } @else {
@@ -764,9 +762,7 @@
 
                         <span>
 
-                            {{
-                            trabajo.facturas?.length ?? 0
-                            }}
+                            {{ trabajo.facturas.length }}
 
                             factura(s) cargada(s)
 

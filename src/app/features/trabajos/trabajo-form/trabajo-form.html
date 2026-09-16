@@ -246,26 +246,23 @@
                         Técnicos asignados
                     </mat-label>
 
-                   <mat-select
-    formControlName="idsTecnicos"
-    multiple
-    [disabled]="
+                    <mat-select formControlName="idsTecnicos" multiple [disabled]="
         form.controls.idCliente.value <= 0 ||
         cargandoTecnicos
     ">
 
-    @for (
-        tecnico of tecnicos;
-        track tecnico.id
-    ) {
+                        @for (
+                        tecnico of tecnicos;
+                        track tecnico.id
+                        ) {
 
-        <mat-option [value]="tecnico.id">
-            {{ tecnico.nombre }}
-        </mat-option>
+                        <mat-option [value]="tecnico.id">
+                            {{ tecnico.nombre }}
+                        </mat-option>
 
-    }
+                        }
 
-</mat-select>
+                    </mat-select>
 
                     @if (cargandoTecnicos) {
 
@@ -469,39 +466,21 @@
 
                 </button>
 
-
-                <button mat-raised-button color="primary" type="submit" [disabled]="
-    guardando ||
-    cargandoClienteUsuario
-">
-                    @if (
-                    guardando ||
-                    cargandoClienteUsuario
-                    ) {
-
-                    <mat-spinner diameter="22">
-                    </mat-spinner>
-
-                    @if (cargandoClienteUsuario) {
-                    Cargando cliente...
-                    } @else {
-                    Guardando...
+                <button mat-raised-button color="primary" type="submit"
+                    [disabled]="guardando || cargandoClienteUsuario">
+                    @if (!(guardando || cargandoClienteUsuario)) {
+                    <mat-icon>save</mat-icon>
                     }
-
+                    @if (guardando || cargandoClienteUsuario) {
+                    <mat-spinner diameter="22"></mat-spinner>
+                    <span>
+                        {{ cargandoClienteUsuario ? 'Cargando cliente...' : 'Guardando...' }}
+                    </span>
                     } @else {
-
-                    <mat-icon>
-                        save
-                    </mat-icon>
-
-                    @if (!esEdicion) {
-                    Crear solicitud
-                    } @else {
-                    Guardar cambios
+                    <span>
+                        {{ !esEdicion ? 'Crear solicitud' : 'Guardar cambios' }}
+                    </span>
                     }
-
-                    }
-
                 </button>
 
             </div>

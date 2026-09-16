@@ -154,32 +154,15 @@
 
 
                 @if (esResponsableSector) {
-
                 <div class="dato">
-
-                    <mat-icon>
-                        engineering
-                    </mat-icon>
-
+                    <mat-icon>engineering</mat-icon>
                     <div>
-
-                        <span class="dato-label">
-                            Técnicos asignados
-                        </span>
-
+                        <span class="dato-label">Técnicos asignados</span>
                         <strong class="dato-valor">
-
-                            {{
-                            trabajo.tecnicosAsignados
-                            ?.join(', ') || '-'
-                            }}
-
+                            {{ trabajo.tecnicosAsignados.join(', ') || '-' }}
                         </strong>
-
                     </div>
-
                 </div>
-
                 }
 
 

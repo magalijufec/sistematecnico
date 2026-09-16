@@ -71,43 +71,26 @@
                     </span>
 
                 </div>
-
                 }
-
-
-                <!-- BOTÓN -->
 
                 <button mat-raised-button color="primary" type="submit" class="login-button"
                     [disabled]="form.invalid || cargando">
-
                     @if (cargando) {
-
-                    <mat-spinner diameter="20">
-                    </mat-spinner>
-
-                    <span>
-                        Ingresando...
-                    </span>
-
+                    <ng-container>
+                        <mat-spinner diameter="20"></mat-spinner>
+                        <span>Ingresando...</span>
+                    </ng-container>
                     } @else {
-
-                    <mat-icon>
-                        login
-                    </mat-icon>
-
-                    <span>
-                        Ingresar
-                    </span>
-
+                    <ng-container>
+                        <mat-icon>login</mat-icon>
+                        <span>Ingresar</span>
+                    </ng-container>
                     }
-
                 </button>
-
 
             </form>
 
         </mat-card-content>
-
 
         <mat-card-footer class="login-footer">
 
