@@ -61,7 +61,7 @@ export class UsuariosListComponent implements OnInit {
   filtroCiudad: number | null = null;
   filtroCliente: number | null = null;
   paginaActual = 0;
-  tamanoPagina = 20;
+  tamanoPagina = 10;
 
   displayedColumns = [
     'userName',
