@@ -13,6 +13,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { EstadoService } from '../../../core/services/estado.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-trabajos-list',
@@ -27,7 +28,8 @@ import { AuthService } from '../../../core/services/auth.service';
     FormsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatSelectModule
+    MatSelectModule,
+    MatPaginatorModule
   ],
   templateUrl: './trabajos-list.html',
   styleUrl: './trabajos-list.scss'
@@ -41,11 +43,12 @@ export class TrabajosListComponent implements OnInit {
 
   trabajos: Trabajo[] = [];
   trabajosFiltrados: Trabajo[] = [];
-
   estados: any[] = [];
   buscar = '';
   estadoSeleccionado: number | null = null;
   dataSource = new MatTableDataSource<Trabajo>();
+  paginaActual = 0;
+  tamanoPagina = 10;
 
   displayedColumns = [
     'id',
@@ -58,12 +61,16 @@ export class TrabajosListComponent implements OnInit {
     'acciones'
   ];
 
-  constructor() {
-  }
+  constructor() { }
 
   ngOnInit() {
     this.cargarTrabajos();
     this.cargarEstados();
+  }
+
+  get trabajosPaginados() {
+    const inicio = this.paginaActual * this.tamanoPagina;
+    return this.trabajosFiltrados.slice(inicio, inicio + this.tamanoPagina);
   }
 
   esRol(...roles: string[]): boolean {
@@ -98,11 +105,8 @@ export class TrabajosListComponent implements OnInit {
   }
 
   filtrar(): void {
-
     const texto = this.buscar.toLowerCase().trim();
-
     this.trabajosFiltrados = this.trabajos.filter(trabajo => {
-
       const coincideTexto =
         !texto ||
         trabajo.id.toString().includes(texto) ||
@@ -113,12 +117,20 @@ export class TrabajosListComponent implements OnInit {
       const coincideEstado =
         this.estadoSeleccionado === null ||
         trabajo.idEstado === this.estadoSeleccionado;
-
       return coincideTexto && coincideEstado;
-
     });
-
+    this.paginaActual = 0;
   }
+
+  cambiarPagina(event: any): void {
+
+  this.paginaActual =
+    event.pageIndex;
+
+  this.tamanoPagina =
+    event.pageSize;
+
+}
 
   limpiarFiltros(): void {
     this.buscar = '';

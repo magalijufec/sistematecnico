@@ -37,26 +37,13 @@ import {
 import {
   FormsModule
 } from '@angular/forms';
-
-import {
-  MatFormFieldModule
-} from '@angular/material/form-field';
-
-import {
-  MatInputModule
-} from '@angular/material/input';
-
-import {
-  MatTooltipModule
-} from '@angular/material/tooltip';
-
-import {
-  TrabajoService
-} from '../../../core/services/trabajo.service';
-
-import {
-  TrabajoFinalizado
-} from '../../../core/models/trabajo-finalizado';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { TrabajoService } from '../../../core/services/trabajo.service';
+import { TrabajoFinalizado } from '../../../core/models/trabajo-finalizado';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-trabajos-finalizados',
@@ -74,7 +61,8 @@ import {
     MatSelectModule,
     MatFormFieldModule,
     MatInputModule,
-    MatTooltipModule    
+    MatTooltipModule,
+    MatPaginatorModule
   ],
 
   templateUrl: './trabajos-pagados.html',
@@ -88,30 +76,18 @@ export class TrabajosPagadosComponent implements OnInit {
 
   trabajos: TrabajoFinalizado[] = [];
   trabajosFiltrados: TrabajoFinalizado[] = [];
-
-  /*
-   * Filtros generales
-   */
   buscar = '';
-
   provinciaSeleccionada = '';
   ciudadSeleccionada = '';
   clienteSeleccionado = '';
   tecnicoSeleccionado = '';
   tareaSeleccionada = '';
-
-  /*
-   * Filtros por fecha exacta
-   * El input type="date" devuelve yyyy-MM-dd
-   */
+  paginaActual = 0;
+  tamanoPagina = 20;
   fechaSolicitudSeleccionada = '';
   fechaInicioSeleccionada = '';
   fechaFinalizadoSeleccionada = '';
   fechaPagadoSeleccionada = '';
-
-  /*
-   * Opciones para los selects
-   */
   provincias: string[] = [];
   ciudades: string[] = [];
   clientes: string[] = [];
@@ -136,34 +112,32 @@ export class TrabajosPagadosComponent implements OnInit {
     this.cargarTrabajos();
   }
 
-  cargarTrabajos(): void {
+  get trabajosPaginados() {
+    const inicio = this.paginaActual * this.tamanoPagina;
+    return this.trabajosFiltrados.slice(inicio, inicio + this.tamanoPagina);
+  }
 
+  cargarTrabajos(): void {
     this.trabajoService
       .obtenerPagados()
       .subscribe({
-
         next: data => {
-
           this.trabajos = data ?? [];
           this.trabajosFiltrados = [...this.trabajos];
-
           this.cargarOpcionesFiltros();
         },
-
         error: error => {
-
-          console.error(
-            'Error al cargar trabajos finalizados',
-            error
-          );
-
+          console.error('Error al cargar trabajos finalizados', error);
         }
-
       });
   }
 
-  cargarOpcionesFiltros(): void {
+  cambiarPagina(event: PageEvent): void {
+    this.paginaActual = event.pageIndex;
+    this.tamanoPagina = event.pageSize;
+  }
 
+  cargarOpcionesFiltros(): void {
     this.provincias = this.obtenerValoresUnicos(
       this.trabajos.map(trabajo => trabajo.provincia)
     );
@@ -179,16 +153,10 @@ export class TrabajosPagadosComponent implements OnInit {
     this.tareas = this.obtenerValoresUnicos(
       this.trabajos.map(trabajo => trabajo.tarea)
     );
-
-    /*
-     * Inicialmente se muestran todas las ciudades.
-     */
     this.actualizarCiudades();
   }
 
-  obtenerValoresUnicos(
-    valores: Array<string | null | undefined>
-  ): string[] {
+  obtenerValoresUnicos(valores: Array<string | null | undefined>): string[] {
 
     return [
       ...new Set(
@@ -213,20 +181,13 @@ export class TrabajosPagadosComponent implements OnInit {
   }
 
   cambiarProvincia(): void {
-
-    /*
-     * Al cambiar la provincia se limpia la ciudad seleccionada.
-     */
     this.ciudadSeleccionada = '';
-
     this.actualizarCiudades();
     this.filtrar();
   }
 
   actualizarCiudades(): void {
-
     let trabajosParaCiudades = this.trabajos;
-
     if (this.provinciaSeleccionada) {
 
       trabajosParaCiudades = this.trabajos.filter(
@@ -272,27 +233,27 @@ export class TrabajosPagadosComponent implements OnInit {
         const coincideProvincia =
           !this.provinciaSeleccionada ||
           trabajo.provincia ===
-            this.provinciaSeleccionada;
+          this.provinciaSeleccionada;
 
         const coincideCiudad =
           !this.ciudadSeleccionada ||
           trabajo.ciudad ===
-            this.ciudadSeleccionada;
+          this.ciudadSeleccionada;
 
         const coincideCliente =
           !this.clienteSeleccionado ||
           trabajo.cliente ===
-            this.clienteSeleccionado;
+          this.clienteSeleccionado;
 
         const coincideTecnico =
           !this.tecnicoSeleccionado ||
           trabajo.tecnico ===
-            this.tecnicoSeleccionado;
+          this.tecnicoSeleccionado;
 
         const coincideTarea =
           !this.tareaSeleccionada ||
           trabajo.tarea ===
-            this.tareaSeleccionada;
+          this.tareaSeleccionada;
 
         const coincideFechaSolicitud =
           this.coincideFecha(
@@ -332,6 +293,7 @@ export class TrabajosPagadosComponent implements OnInit {
         );
       }
     );
+    this.paginaActual = 0;
   }
 
   /**
