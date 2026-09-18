@@ -18,6 +18,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 @Component({
   selector: 'app-usuarios-list',
   standalone: true,
@@ -33,7 +35,8 @@ import { MatOptionModule } from '@angular/material/core';
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
-    MatOptionModule
+    MatOptionModule,
+    MatPaginatorModule
   ],
   templateUrl: './usuarios-list.html',
   styleUrl: './usuarios-list.scss'
@@ -57,6 +60,8 @@ export class UsuariosListComponent implements OnInit {
   filtroProvincia: number | null = null;
   filtroCiudad: number | null = null;
   filtroCliente: number | null = null;
+  paginaActual = 0;
+  tamanoPagina = 20;
 
   displayedColumns = [
     'userName',
@@ -75,6 +80,16 @@ export class UsuariosListComponent implements OnInit {
     this.cargarProvincias();
   }
 
+  get usuariosPaginados() {
+    const inicio = this.paginaActual * this.tamanoPagina;
+    return this.usuariosFiltrados.slice(inicio, inicio + this.tamanoPagina);
+  }
+
+  cambiarPagina(event: PageEvent): void {
+    this.paginaActual = event.pageIndex;
+    this.tamanoPagina = event.pageSize;
+  }
+
   cargarUsuarios() {
     this.usuarioService.obtenerTodos().subscribe({
       next: data => {
@@ -85,8 +100,7 @@ export class UsuariosListComponent implements OnInit {
   }
 
   cargarPerfiles(): void {
-    this.perfilService
-      .obtenerPerfiles()
+    this.perfilService.obtenerPerfiles()
       .subscribe({
         next: data => {
           this.perfiles = data;
@@ -97,10 +111,8 @@ export class UsuariosListComponent implements OnInit {
       });
   }
 
-
   cargarProvincias(): void {
-    this.provinciaService
-      .obtenerCombo()
+    this.provinciaService.obtenerCombo()
       .subscribe({
         next: data => {
           this.provincias = data;
@@ -117,88 +129,43 @@ export class UsuariosListComponent implements OnInit {
     this.ciudades = [];
     this.clientes = [];
 
-
     if (!this.filtroProvincia) {
       this.aplicarFiltros();
       return;
     }
 
     // Cargar ciudades de esa provincia
-
-    this.ciudadService
-      .obtenerPorProvincia(
-        this.filtroProvincia
-      )
+    this.ciudadService.obtenerPorProvincia(this.filtroProvincia)
       .subscribe({
-
         next: data => {
-
           this.ciudades = data;
-
         },
-
         error: error => {
-
-          console.error(
-            'Error al cargar ciudades',
-            error
-          );
-
+          console.error('Error al cargar ciudades', error);
         }
-
       });
-
-
     this.aplicarFiltros();
-
   }
 
-
-  // =========================
   // CAMBIO CIUDAD
-  // =========================
-
   cambioCiudad(): void {
-
     this.filtroCliente = null;
-
     this.clientes = [];
 
-
-    if (
-      !this.filtroProvincia ||
-      !this.filtroCiudad
-    ) {
-
+    if (!this.filtroProvincia || !this.filtroCiudad) {
       this.aplicarFiltros();
-
       return;
-
     }
 
-
     // Cargar clientes de provincia + ciudad
-
-    this.clienteService
-      .obtenerPorProvinciaCiudad(
-        this.filtroProvincia,
-        this.filtroCiudad
-      )
+    this.clienteService.obtenerPorProvinciaCiudad(this.filtroProvincia, this.filtroCiudad)
       .subscribe({
-
         next: data => {
-
           this.clientes = data;
-
         },
 
         error: error => {
-
-          console.error(
-            'Error al cargar clientes',
-            error
-          );
-
+          console.error('Error al cargar clientes', error);
         }
 
       });
@@ -206,10 +173,7 @@ export class UsuariosListComponent implements OnInit {
   }
 
   aplicarFiltros(): void {
-    const texto =
-      this.filtroTexto
-        .trim()
-        .toLowerCase();
+    const texto = this.filtroTexto.trim().toLowerCase();
 
     this.usuariosFiltrados =
       this.usuarios.filter(usuario => {
@@ -237,6 +201,7 @@ export class UsuariosListComponent implements OnInit {
           coincideCliente
         );
       });
+    this.paginaActual = 0;
   }
 
   limpiarFiltros(): void {
@@ -248,6 +213,7 @@ export class UsuariosListComponent implements OnInit {
     this.ciudades = [];
     this.clientes = [];
     this.usuariosFiltrados = this.usuarios;
+    this.paginaActual = 0;
   }
 
 }
