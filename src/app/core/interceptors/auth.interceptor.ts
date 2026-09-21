@@ -1,19 +1,89 @@
-import { HttpInterceptorFn } from '@angular/common/http';
+import {
+  HttpErrorResponse,
+  HttpInterceptorFn
+} from '@angular/common/http';
 
-export const authInterceptor: HttpInterceptorFn = (req, next) => {
+import {
+  inject
+} from '@angular/core';
 
-  const token = localStorage.getItem('token');
+import {
+  Router
+} from '@angular/router';
 
-  if (token) {
+import {
+  catchError,
+  throwError
+} from 'rxjs';
 
-    const requestClonada = req.clone({
-      setHeaders: {
-        Authorization: `Bearer ${token}`
-      }
-    });
 
-    return next(requestClonada);
-  }
+export const authInterceptor:
+  HttpInterceptorFn = (
+    req,
+    next
+  ) => {
 
-  return next(req);
-};
+    const router =
+      inject(Router);
+
+    const token =
+      localStorage.getItem(
+        'token'
+      );
+
+    const requestAutenticada =
+      token
+        ? req.clone({
+            setHeaders: {
+              Authorization:
+                `Bearer ${token}`
+            }
+          })
+        : req;
+
+    return next(
+      requestAutenticada
+    )
+    .pipe(
+
+      catchError(
+        (
+          error:
+            HttpErrorResponse
+        ) => {
+          if (error.status === 401) {
+
+            localStorage.removeItem(
+              'token'
+            );
+
+            localStorage.removeItem(
+              'usuario'
+            );
+
+            localStorage.removeItem(
+              'rol'
+            );
+
+            localStorage.removeItem(
+              'usuarioId'
+            );
+
+            void router.navigate(
+              ['/login'],
+              {
+                queryParams: {
+                  sesionExpirada: true
+                }
+              }
+            );
+          }
+
+          return throwError(
+            () => error
+          );
+        }
+      )
+
+    );
+  };
