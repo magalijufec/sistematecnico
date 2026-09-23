@@ -65,6 +65,9 @@ import {
 } from './core/guards/role.guard';
 import { TrabajoSolicitudComponent } from './features/trabajos/trabajo-solicitud/trabajo-solicitud';
 import { TrabajosSolicitudListComponent } from './features/trabajos/trabajos-solicitud-list/trabajos-solicitud-list';
+import { NuevaIncidenciaComponent } from './features/incidencias/nueva-incidencia/nueva-incidencia';
+import { IncidenciasPendientesComponent } from './features/incidencias/incidencias-pendiente/incidencias-pendiente';
+import { IncidenciasFinalizadasComponent } from './features/incidencias/incidencias-finalizadas/incidencias-finalizadas';
 
 export const routes: Routes = [
 
@@ -292,20 +295,11 @@ export const routes: Routes = [
                     ])
                 ]
             },
-
-            // ============================
             // PENDIENTES DE PAGO
-            // ============================
-
             {
-                path:
-                    'trabajos-pendiente-pago',
-
-                component:
-                    TrabajosPendientePagoComponent,
-
+                path: 'trabajos-pendiente-pago',
+                component: TrabajosPendientePagoComponent,
                 canActivate: [
-
                     roleGuard([
                         'Administrador',
                         'Pagos',
@@ -317,20 +311,11 @@ export const routes: Routes = [
 
             },
 
-
-            // ============================
             // TRABAJOS PAGADOS
-            // ============================
-
             {
-                path:
-                    'trabajos-pagados',
-
-                component:
-                    TrabajosPagadosComponent,
-
+                path: 'trabajos-pagados',
+                component: TrabajosPagadosComponent,
                 canActivate: [
-
                     roleGuard([
                         'Administrador',
                         'Sistemas',
@@ -340,9 +325,30 @@ export const routes: Routes = [
                         'Tecnico',
                         'Farmacia'
                     ])
-
                 ]
-
+            },
+            {
+                path: 'incidencias',
+                canActivate: [
+                    roleGuard([
+                        'Administrador',
+                        'Sistemas'
+                    ])
+                ],
+                children: [
+                    {
+                        path: 'nueva-incidencia',
+                        component: NuevaIncidenciaComponent
+                    },
+                    {
+                        path: 'pendientes',
+                        component: IncidenciasPendientesComponent
+                    },
+                    {
+                        path: 'finalizadas',
+                        component: IncidenciasFinalizadasComponent
+                    }
+                ]
             }
 
         ]

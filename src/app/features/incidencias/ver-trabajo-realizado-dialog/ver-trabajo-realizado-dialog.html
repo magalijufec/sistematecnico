@@ -1,0 +1,73 @@
+<h2 mat-dialog-title>
+  Trabajo realizado
+</h2>
+
+<mat-dialog-content>
+
+  <div class="datos-incidencia">
+
+    <div class="dato">
+      <span class="etiqueta">Cliente</span>
+      <span class="valor">
+        {{ incidencia.cliente }}
+      </span>
+    </div>
+
+    <div class="dato">
+      <span class="etiqueta">Incidencia</span>
+      <span class="valor">
+        {{ incidencia.incidencia }}
+      </span>
+    </div>
+
+    <div
+      class="dato"
+      *ngIf="incidencia.otro">
+
+      <span class="etiqueta">Detalle</span>
+      <span class="valor">
+        {{ incidencia.otro }}
+      </span>
+
+    </div>
+
+    <div class="dato">
+      <span class="etiqueta">Asistencia</span>
+      <span class="valor">
+        {{ incidencia.asistencia }}
+      </span>
+    </div>
+
+  </div>
+
+  <div class="separador"></div>
+
+  <div class="trabajo-realizado">
+
+    <span class="etiqueta">
+      Trabajo realizado
+    </span>
+
+    <p>
+      {{
+        incidencia.trabajoRealizado
+        || 'No se registró el trabajo realizado.'
+      }}
+    </p>
+
+  </div>
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+
+  <button
+    mat-button
+    mat-dialog-close>
+
+    Cerrar
+
+  </button>
+
+</mat-dialog-actions>
+

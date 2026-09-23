@@ -21,4 +21,10 @@ export class TareaService {
     );
   }
 
+  obtenerSoporte() {
+    return this.http.get<Combo[]>(
+      `${this.api}/soporte`
+    );
+  }
+
 }

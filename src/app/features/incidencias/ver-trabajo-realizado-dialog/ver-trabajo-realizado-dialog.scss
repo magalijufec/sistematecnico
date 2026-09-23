@@ -1,0 +1,45 @@
+.datos-incidencia {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.dato {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.etiqueta {
+  color: #616161;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.valor {
+  color: #212121;
+  font-size: 15px;
+}
+
+.separador {
+  height: 1px;
+  margin: 8px 0 20px;
+  background: #e0e0e0;
+}
+
+.trabajo-realizado p {
+  margin: 8px 0 0;
+  padding: 16px;
+  border-radius: 8px;
+  background: #f5f5f5;
+  white-space: pre-wrap;
+  line-height: 1.5;
+}
+
+@media (max-width: 600px) {
+  .datos-incidencia {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,146 @@
+<div class="contenedor-incidencia">
+
+    <h2 class="titulo">
+        {{
+        esPendiente
+        ? 'Nueva incidencia pendiente'
+        : 'Nueva incidencia finalizada'
+        }}
+    </h2>
+
+    <form [formGroup]="formulario" class="formulario-incidencia">
+
+
+        <!-- CLIENTE -->
+
+        <mat-form-field appearance="outline" class="full-width">
+
+            <mat-label>Cliente</mat-label>
+
+            <mat-select formControlName="clienteId">
+
+                <mat-option>
+
+                    <ngx-mat-select-search [formControl]="clienteFiltro" placeholderLabel="Buscar cliente..."
+                        noEntriesFoundLabel="Sin resultados">
+                    </ngx-mat-select-search>
+
+                </mat-option>
+
+                <mat-option *ngFor="let item of clientesFiltrados" [value]="item.id">
+
+                    {{ item.nombre }}
+
+                </mat-option>
+
+            </mat-select>
+
+        </mat-form-field>
+
+        <!-- DESTINO -->
+
+        <mat-form-field appearance="outline" class="campo">
+
+            <mat-label>Destino</mat-label>
+
+            <mat-select formControlName="destinoId">
+
+                <mat-option *ngFor="let item of catalogos.destinos" [value]="item.id">
+
+                    {{ item.nombre }}
+
+                </mat-option>
+
+            </mat-select>
+
+        </mat-form-field>
+
+        <!-- ASISTENCIA -->
+
+        <mat-form-field appearance="outline" class="campo">
+
+            <mat-label>Asistencia</mat-label>
+
+            <mat-select formControlName="asistenciaId">
+
+                <mat-option *ngFor="let item of catalogos.asistencias" [value]="item.id">
+
+                    {{ item.nombre }}
+
+                </mat-option>
+
+            </mat-select>
+
+        </mat-form-field>
+
+        <!-- INCIDENCIA -->
+
+        <mat-form-field appearance="outline" class="campo">
+
+            <mat-label>Incidencia</mat-label>
+
+            <mat-select formControlName="tareaId">
+
+                <mat-option *ngFor="let item of catalogos.tareas" [value]="item.id">
+
+                    {{ item.nombre }}
+
+                </mat-option>
+
+            </mat-select>
+
+        </mat-form-field>
+
+        <div class="guardia-container">
+
+            <mat-checkbox formControlName="guardia">
+                Guardia
+            </mat-checkbox>
+
+        </div>
+
+        <!-- OTROS -->
+
+        <mat-form-field *ngIf="mostrarOtro" appearance="outline" class="full-width">
+
+            <mat-label>Detalle</mat-label>
+
+            <input matInput formControlName="otro">
+
+        </mat-form-field>
+
+        <!-- COMENTARIO -->
+
+        <mat-form-field *ngIf="esPendiente" appearance="outline" class="full-width">
+
+            <mat-label>Comentario</mat-label>
+
+            <textarea matInput rows="5" formControlName="comentario">
+      </textarea>
+
+        </mat-form-field>
+
+        <!-- TRABAJO REALIZADO -->
+
+        <mat-form-field *ngIf="esFinalizada" appearance="outline" class="full-width">
+
+            <mat-label>Trabajo realizado</mat-label>
+
+            <textarea matInput rows="5" formControlName="trabajoRealizado">
+      </textarea>
+
+        </mat-form-field>
+
+    </form>
+
+    <div class="acciones">
+
+        <button mat-raised-button color="primary" (click)="guardar()">
+
+            Guardar incidencia
+
+        </button>
+
+    </div>
+
+</div>

@@ -1,0 +1,52 @@
+.datos-incidencia {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.dato {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dato-completo {
+  grid-column: 1 / -1;
+}
+
+.etiqueta {
+  color: #616161;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.valor {
+  color: #212121;
+  font-size: 15px;
+}
+
+.comentario {
+  margin-top: 4px;
+  padding: 14px;
+  border-left: 4px solid #1976d2;
+  border-radius: 4px;
+  background: #f5f7fa;
+  white-space: pre-wrap;
+  line-height: 1.5;
+}
+
+.full-width {
+  width: 100%;
+}
+
+@media (max-width: 600px) {
+  .datos-incidencia {
+    grid-template-columns: 1fr;
+  }
+
+  .dato-completo {
+    grid-column: auto;
+  }
+}
