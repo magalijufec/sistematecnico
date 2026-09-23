@@ -35,6 +35,7 @@ export class IncidenciasPendientesComponent
   incidencias: IncidenciaPendiente[] = [];
 
   displayedColumns = [
+    'id',
     'fecha',
     'usuario',
     'cliente',

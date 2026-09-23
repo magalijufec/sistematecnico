@@ -20,17 +20,25 @@
   <table
     mat-table
     [dataSource]="incidencias">
+   <ng-container matColumnDef="id">
+
+    <th mat-header-cell *matHeaderCellDef>
+        ID
+    </th>
+
+    <td mat-cell *matCellDef="let item">
+        {{ item.id }}
+    </td>
+
+</ng-container>
 
     <ng-container matColumnDef="fecha">
-
       <th mat-header-cell *matHeaderCellDef>
         Fecha
       </th>
-
       <td mat-cell *matCellDef="let item">
         {{ item.fecha | date:'dd/MM/yyyy HH:mm' }}
       </td>
-
     </ng-container>
 
     <ng-container matColumnDef="usuario">

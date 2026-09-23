@@ -121,6 +121,7 @@ export class IncidenciasFinalizadasComponent
   asistencias: string[] = [];
 
   displayedColumns: string[] = [
+    'id',
     'fecha',
     'usuario',
     'cliente',
