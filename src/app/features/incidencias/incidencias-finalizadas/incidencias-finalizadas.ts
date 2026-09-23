@@ -75,6 +75,9 @@ import {
 import {
   VerTrabajoRealizadoDialogComponent
 } from '../ver-trabajo-realizado-dialog/ver-trabajo-realizado-dialog';
+import { FormControl } from '@angular/forms';
+import { NgxMatSelectSearchModule }
+from 'ngx-mat-select-search';
 
 @Component({
   selector: 'app-incidencias-finalizadas',
@@ -82,19 +85,18 @@ import {
   imports: [
     CommonModule,
     ReactiveFormsModule,
-
     MatTableModule,
     MatButtonModule,
     MatIconModule,
     MatDialogModule,
     MatTooltipModule,
     MatPaginatorModule,
-
     MatFormFieldModule,
     MatSelectModule,
     MatInputModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    NgxMatSelectSearchModule
   ],
   templateUrl: './incidencias-finalizadas.html',
   styleUrl: './incidencias-finalizadas.scss'
@@ -108,6 +110,10 @@ export class IncidenciasFinalizadasComponent
   incidenciasOriginales: IncidenciaFinalizada[] = [];
 
   formularioFiltros!: FormGroup;
+
+  clienteFiltro = new FormControl('');
+
+  clientesOriginales: string[] = [];
 
   clientes: string[] = [];
   usuarios: string[] = [];
@@ -188,21 +194,63 @@ export class IncidenciasFinalizadasComponent
     incidencias: IncidenciaFinalizada[]
   ): void {
 
-    this.clientes = this.obtenerValoresUnicos(
-      incidencias.map(x => x.cliente)
-    );
+    this.clientesOriginales =
+      this.obtenerValoresUnicos(
+        incidencias.map(x => x.cliente)
+      );
 
-    this.usuarios = this.obtenerValoresUnicos(
-      incidencias.map(x => x.usuario)
-    );
+    this.clientes =
+      [...this.clientesOriginales];
 
-    this.tiposIncidencia = this.obtenerValoresUnicos(
-      incidencias.map(x => x.incidencia)
-    );
+    this.usuarios =
+      this.obtenerValoresUnicos(
+        incidencias.map(x => x.usuario)
+      );
 
-    this.asistencias = this.obtenerValoresUnicos(
-      incidencias.map(x => x.asistencia)
-    );
+    this.tiposIncidencia =
+      this.obtenerValoresUnicos(
+        incidencias.map(x => x.incidencia)
+      );
+
+    this.asistencias =
+      this.obtenerValoresUnicos(
+        incidencias.map(x => x.asistencia)
+      );
+
+    this.configurarFiltroClientes();
+  }
+
+  private configurarFiltroClientes(): void {
+
+    this.clienteFiltro.valueChanges
+      .subscribe(texto => {
+
+        const filtro =
+          this.normalizarTexto(texto ?? '');
+
+        this.clientes =
+          this.clientesOriginales.filter(
+            cliente =>
+
+              this.normalizarTexto(
+                cliente
+              ).includes(filtro)
+
+          );
+
+      });
+
+  }
+
+  private normalizarTexto(
+    texto: string
+  ): string {
+
+    return (texto || '')
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
+
   }
 
   private obtenerValoresUnicos(
@@ -265,15 +313,15 @@ export class IncidenciasFinalizadasComponent
         const fechaDesde =
           filtros.fechaDesde
             ? this.inicioDelDia(
-                new Date(filtros.fechaDesde)
-              )
+              new Date(filtros.fechaDesde)
+            )
             : null;
 
         const fechaHasta =
           filtros.fechaHasta
             ? this.finDelDia(
-                new Date(filtros.fechaHasta)
-              )
+              new Date(filtros.fechaHasta)
+            )
             : null;
 
         const coincideFechaDesde =
@@ -330,12 +378,22 @@ export class IncidenciasFinalizadasComponent
   }
 
   limpiarFiltros(): void {
+
     this.formularioFiltros.reset();
+
+    this.clienteFiltro.setValue('');
+
+    this.clientes =
+      [...this.clientesOriginales];
+
     this.dataSource.filter = '';
 
     if (this.dataSource.paginator) {
+
       this.dataSource.paginator.firstPage();
+
     }
+
   }
 
   private convertirFechaLocal(
@@ -436,8 +494,8 @@ export class IncidenciasFinalizadasComponent
       'Fecha finalización':
         item.fechaFinalizado
           ? this.formatearFechaHora(
-              item.fechaFinalizado
-            )
+            item.fechaFinalizado
+          )
           : '-'
     }));
 
